@@ -1,0 +1,4 @@
+date,team,player,status,expected_return,notes
+# status: out | doubtful | available
+# expected_return: ISO date or 'unknown'
+# Update daily during the tournament. Star-player 'out' triggers -0.5 attack rating in the Bayesian model (see METHODOLOGY.md).

@@ -1,0 +1,28 @@
+name: live-update
+
+on:
+  workflow_dispatch:
+    inputs:
+      match_id:
+        description: "Match ID that just finished (optional)"
+        required: false
+        type: string
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    if: false  # disabled until pipeline is implemented (Day 13)
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+      - run: uv sync
+      - env:
+          KALSHI_API_KEY: ${{ secrets.KALSHI_API_KEY }}
+        run: uv run make live-update
+      - name: Commit updated picks
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/sims data/processed web/assets
+          git diff --cached --quiet || git commit -m "chore(live): post-match update"
+          git push

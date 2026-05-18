@@ -1,0 +1,88 @@
+[project]
+name = "wc2026-quiniela"
+version = "0.1.0"
+description = "Ensemble ML system (Dixon-Coles + Hierarchical Bayesian + LightGBM + Kalshi markets) to predict every FIFA World Cup 2026 match and optimize quiniela entries."
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.11,<3.13"
+authors = [{ name = "Daniel Regalado", email = "dxr1491@miami.edu" }]
+keywords = ["football", "soccer", "world-cup", "bayesian", "dixon-coles", "prediction", "quiniela", "monte-carlo"]
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    "pymc>=5.16",
+    "penaltyblog>=1.3",
+    "soccerdata>=1.8",
+    "statsbombpy>=1.14",
+    "mplsoccer>=1.4",
+    "lightgbm>=4.5",
+    "optuna>=4.0",
+    "scikit-learn>=1.5",
+    "duckdb>=1.1",
+    "polars>=1.12",
+    "pandas>=2.2",
+    "numpy>=1.26",
+    "pyarrow>=17.0",
+    "gradio>=4.44",
+    "plotly>=5.24",
+    "pulp>=2.9",
+    "requests>=2.32",
+    "httpx>=0.27",
+    "beautifulsoup4>=4.12",
+    "lxml>=4.9,<6",
+    "wikipedia-api>=0.7",
+    "kaggle>=1.6",
+    "tenacity>=9.0",
+    "typer>=0.12",
+    "pyyaml>=6.0",
+    "python-dateutil>=2.9",
+]
+
+[project.optional-dependencies]
+# Optional possession-value features (VAEP / xT). Pinned to old lxml; install only if needed.
+possession = [
+    "socceraction>=1.5",
+]
+dev = [
+    "pytest>=8.3",
+    "pytest-cov>=5.0",
+    "ruff>=0.7",
+    "mypy>=1.13",
+    "pre-commit>=4.0",
+    "ipykernel>=6.29",
+    "jupyter>=1.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/DanielRegaladoUMiami/wc2026-quiniela"
+Repository = "https://github.com/DanielRegaladoUMiami/wc2026-quiniela"
+Issues = "https://github.com/DanielRegaladoUMiami/wc2026-quiniela/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "N", "SIM", "RUF"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra -q --strict-markers"
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+warn_unused_ignores = true

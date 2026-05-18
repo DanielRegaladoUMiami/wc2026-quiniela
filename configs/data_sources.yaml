@@ -1,0 +1,50 @@
+# Catalog of free data sources. Each entry consumed by the matching src/data/fetch_*.py module.
+
+kaggle_martj42:
+  dataset: martj42/international-football-results-from-1872-to-2017
+  files: [results.csv, shootouts.csv, goalscorers.csv]
+  out_dir: data/raw/matches/
+
+rsssf:
+  base_url: http://www.rsssf.org/tablesi/
+  index: index.html
+  out_dir: data/raw/matches/rsssf/
+
+elo:
+  world_tsv: https://www.eloratings.net/World.tsv
+  teams_tsv: https://www.eloratings.net/teams.tsv
+  out_dir: data/raw/elo/
+
+fifa_ranking:
+  api: https://inside.fifa.com/api/ranking-overview
+  out_dir: data/raw/fifa/
+
+statsbomb:
+  package: statsbombpy
+  competitions:
+    - { id: 43, season: 3 }   # WC 2018
+    - { id: 43, season: 106 } # WC 2022
+    - { id: 55, season: 43 }  # Euro 2020
+    - { id: 55, season: 282 } # Euro 2024
+    - { id: 223, season: 282 } # Copa 2024
+  out_dir: data/raw/statsbomb/
+
+fbref:
+  package: soccerdata
+  leagues: [INT-World Cup, INT-European Championships, INT-Copa America]
+  out_dir: data/raw/fbref/
+
+transfermarkt:
+  wrapper: https://transfermarkt-api.fly.dev
+  out_dir: data/raw/transfermarkt/
+
+wikipedia:
+  package: wikipedia-api
+  pages: [2026 FIFA World Cup, 2026 FIFA World Cup squads]
+  out_dir: data/raw/wikipedia/
+
+kalshi:
+  api_base: https://trading-api.kalshi.com/trade-api/v2
+  event_tickers: [WORLDCUP-2026, WC2026-WINNER]
+  snapshot_dir: data/raw/kalshi/
+  timeseries: data/raw/kalshi/markets_timeseries.parquet

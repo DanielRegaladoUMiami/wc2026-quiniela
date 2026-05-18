@@ -1,0 +1,3 @@
+match_date,team,player,position,starting
+# starting: true | false (substitutes flagged false)
+# Source: manager press conferences, beat reporters. Used to compute starting-XI Transfermarkt value.
