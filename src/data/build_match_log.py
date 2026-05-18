@@ -15,6 +15,7 @@ from __future__ import annotations
 import hashlib
 from pathlib import Path
 
+import pandas as pd
 import polars as pl
 
 KAGGLE_RESULTS = Path("data/raw/matches/kaggle_martj42/results.csv")
@@ -49,12 +50,12 @@ def load_kaggle_martj42() -> pl.DataFrame:
         raise FileNotFoundError(
             f"{KAGGLE_RESULTS} missing. Run `python -m src.data.fetch_kaggle_martj42` first."
         )
-    df = pl.read_csv(KAGGLE_RESULTS, try_parse_dates=True)
+    # Pandas handles the mixed-quoting / TRUE-FALSE booleans in this file more leniently than Polars.
+    pdf = pd.read_csv(KAGGLE_RESULTS, dtype={"neutral": "string", "date": "string"})
+    df = pl.from_pandas(pdf)
     return (
         df.rename(
             {
-                "home_team": "home_team",
-                "away_team": "away_team",
                 "home_score": "home_goals",
                 "away_score": "away_goals",
                 "tournament": "competition",
@@ -64,7 +65,9 @@ def load_kaggle_martj42() -> pl.DataFrame:
             }
         )
         .with_columns(
-            pl.col("date").cast(pl.Date).cast(pl.Utf8).alias("date_str"),
+            pl.col("neutral_venue").str.to_lowercase().is_in(["true", "1", "t"]).alias("neutral_venue"),
+            pl.col("date").alias("date_str"),
+            pl.col("date").str.strptime(pl.Date, "%Y-%m-%d").alias("date"),
         )
         .with_columns(
             pl.struct(["date_str", "home_team", "away_team"])
