@@ -1,0 +1,16 @@
+# Mexican-style FIFA quiniela rubric.
+# Pick the 1X2 result AND the total-goals over/under 2.5.
+# Points awarded per match:
+#   - 3 pts: correct 1X2 (home / draw / away)
+#   - 2 pts: correct total-goals bracket (over 2.5 vs under-or-equal 2.5)
+# Sum across all picked matches.
+name: fifa_quiniela_mx
+type: composite_1x2_totals
+fields:
+  - name: result_1x2
+    domain: [H, D, A]
+    points_correct: 3
+  - name: totals
+    domain: [OVER, UNDER]   # split on 2.5 goals
+    threshold: 2.5
+    points_correct: 2

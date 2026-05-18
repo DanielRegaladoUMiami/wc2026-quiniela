@@ -1,0 +1,14 @@
+# ESPN-style knockout bracket scoring.
+# Points double each round. A wrong R32 pick does NOT zero the bracket,
+# but the team is no longer available downstream (cannot earn points
+# for rounds the team would have reached).
+name: espn_bracket
+type: knockout_bracket
+rounds:
+  - { name: R32, points: 32 }
+  - { name: R16, points: 64 }
+  - { name: QF,  points: 128 }
+  - { name: SF,  points: 256 }
+  - { name: F,   points: 512 }
+  - { name: W,   points: 1024 }
+stop_on_wrong: false

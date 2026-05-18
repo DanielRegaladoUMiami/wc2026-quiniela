@@ -1,0 +1,13 @@
+# Exact-score rubric (e.g. Mexican "quiniela exacta").
+# Tiered points:
+#   - 5 pts: exact score (home_goals, away_goals)
+#   - 3 pts: correct goal-difference AND correct winner
+#   - 1 pt:  correct 1X2 (winner / draw) only
+# Picks are (home_goals, away_goals) in [0..5] x [0..5] domain.
+name: exact_score
+type: exact_score_tiered
+max_goals: 5
+points:
+  exact: 5
+  gd_and_winner: 3
+  winner_only: 1
