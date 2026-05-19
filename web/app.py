@@ -10,7 +10,7 @@ if str(ROOT) not in sys.path:
 
 import gradio as gr
 
-from web.pages import about, bracket, home, methodology, model_vs_market, picks, standings
+from web.pages import about, bracket, home, methodology, model_vs_market, picks, standings, teams
 
 THEME = gr.themes.Soft(
     primary_hue="green",
@@ -28,9 +28,24 @@ footer { display: none !important; }
 
 def build_app() -> gr.Blocks:
     with gr.Blocks(title="WC2026 Quiniela") as demo:
+        gr.HTML(
+            """
+<div style="background: linear-gradient(135deg, #16a34a 0%, #059669 50%, #0d9488 100%); padding: 28px 32px; border-radius: 16px; margin-bottom: 24px; color: white;">
+  <div style="display: flex; align-items: center; gap: 16px;">
+    <div style="font-size: 48px;">⚽</div>
+    <div>
+      <h1 style="margin: 0; font-size: 28px; letter-spacing: -0.5px; color: white;">FIFA World Cup 2026 — Probabilistic Predictions</h1>
+      <p style="margin: 4px 0 0 0; font-size: 14px; opacity: 0.92;">Dixon-Coles · Hierarchical Bayesian (PyMC) · LightGBM · Monte Carlo bracket · pool-EV strategy</p>
+    </div>
+  </div>
+</div>
+"""
+        )
         with gr.Tabs():
             with gr.Tab("Home"):
                 home.build_page()
+            with gr.Tab("Teams"):
+                teams.build_page()
             with gr.Tab("Bracket"):
                 bracket.build_page()
             with gr.Tab("Standings"):
