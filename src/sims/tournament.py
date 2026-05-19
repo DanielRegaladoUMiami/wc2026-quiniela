@@ -301,50 +301,36 @@ class TournamentSim:
         master_rng = np.random.default_rng(seed)
         seeds = master_rng.integers(0, 2**63 - 1, size=n_sims)
 
+        stage_idx_map = {s: i for i, s in enumerate(STAGES_ORDER)}
         for s_i in range(n_sims):
             rng = np.random.default_rng(seeds[s_i])
             out = self.simulate_tournament(rng)
-            adv = out["advancement"]
-            # tally stages
-            for _, row in adv.iterrows():
-                ti = team_idx[row["team"]]
-                stage_counts[ti, STAGES_ORDER.index(row["reached_stage"])] += 1
+            reached = out["advancement"]
+            for t, stage in reached.items():
+                stage_counts[team_idx[t], stage_idx_map[stage]] += 1
             ch = out["champion"]
             if ch in team_idx:
                 champion_counts[team_idx[ch]] += 1
             tpw = out["third_place_winner"]
             if tpw in team_idx:
                 third_place_counts[team_idx[tpw]] += 1
-            # match-level
-            for _, row in out["matches"].iterrows():
+            for row in out["matches"]:
                 i = match_num_idx[row["num"]]
-                hg = int(row["home_goals"])
-                ag = int(row["away_goals"])
-                if row["stage"] == "group":
-                    mp[i, 3] += hg
-                    mp[i, 4] += ag
-                    if hg > ag:
-                        mp[i, 0] += 1
-                    elif ag > hg:
-                        mp[i, 2] += 1
-                    else:
-                        mp[i, 1] += 1
-                    mp_played[i] += 1
-                # knockout: home/away varies; just count goals/wins descriptively
+                hg = row["home_goals"]
+                ag = row["away_goals"]
+                mp[i, 3] += hg
+                mp[i, 4] += ag
+                if hg > ag:
+                    mp[i, 0] += 1
+                elif ag > hg:
+                    mp[i, 2] += 1
                 else:
-                    mp[i, 3] += hg
-                    mp[i, 4] += ag
-                    if hg > ag:
-                        mp[i, 0] += 1
-                    elif ag > hg:
-                        mp[i, 2] += 1
-                    else:
-                        mp[i, 1] += 1
-                    mp_played[i] += 1
+                    mp[i, 1] += 1
+                mp_played[i] += 1
 
             if s_i < 100:
-                for _, row in out["matches"].iterrows():
-                    sample_brackets_rows.append({"sim_id": s_i, **row.to_dict()})
+                for row in out["matches"]:
+                    sample_brackets_rows.append({"sim_id": s_i, **row})
 
         # build advancement DataFrame with cumulative P(reach >= stage)
         # reached_stage is the FURTHEST stage. So P(reach R16) = sum of counts for R16 or later.
@@ -408,6 +394,40 @@ class TournamentSim:
 # ----------------------------------------------------------------------
 # Helpers
 # ----------------------------------------------------------------------
+
+
+def _tiebreak_group(
+    rows: list[tuple[str, int, int, int]],
+    h2h_results: list[tuple[str, str, int, int]],
+    rng: np.random.Generator,
+) -> list[tuple[str, int, int, int]]:
+    """FIFA tiebreakers, pure-Python. rows = list of (team, PTS, GD, GF)."""
+    # primary sort
+    ordered = sorted(rows, key=lambda r: (-r[1], -r[2], -r[3]))
+    # break (PTS,GD,GF) ties using H2H GD then rng
+    out: list[tuple[str, int, int, int]] = []
+    i = 0
+    while i < len(ordered):
+        j = i + 1
+        while (
+            j < len(ordered)
+            and ordered[j][1] == ordered[i][1]
+            and ordered[j][2] == ordered[i][2]
+            and ordered[j][3] == ordered[i][3]
+        ):
+            j += 1
+        block = ordered[i:j]
+        if len(block) > 1:
+            tied = {r[0] for r in block}
+            h2h_gd = dict.fromkeys(tied, 0)
+            for h, a, hg, ag in h2h_results:
+                if h in tied and a in tied:
+                    h2h_gd[h] += hg - ag
+                    h2h_gd[a] += ag - hg
+            block = sorted(block, key=lambda r: (-h2h_gd[r[0]], rng.random()))
+        out.extend(block)
+        i = j
+    return out
 
 
 def _apply_tiebreakers(

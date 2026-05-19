@@ -37,7 +37,7 @@ def test_uniform_simulator_advancement_counts() -> None:
     for st in STAGES_ORDER:
         idx = STAGES_ORDER.index(st)
         deeper = [s for s in STAGES_ORDER if STAGES_ORDER.index(s) >= idx]
-        reached_at_least[st] = int(adv["reached_stage"].isin(deeper).sum())
+        reached_at_least[st] = sum(1 for v in adv.values() if v in deeper)
 
     assert reached_at_least["R32"] == 32
     assert reached_at_least["R16"] == 16
