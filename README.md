@@ -1,8 +1,21 @@
+---
+title: WC2026 Quiniela
+emoji: ⚽
+colorFrom: green
+colorTo: orange
+sdk: gradio
+sdk_version: 6.14.0
+app_file: web/app.py
+pinned: false
+license: apache-2.0
+---
+
 # wc2026-quiniela
 
 State-of-the-art ML ensemble to predict every match of the **FIFA World Cup 2026** (kickoff June 11, 2026) and optimize quiniela / pool entries across multiple scoring formats (1X2, exact score, bracket).
 
-> **Status**: Day 1 — repo scaffolding. v1 ships before **June 8, 2026**.
+> **Live dashboard**: https://huggingface.co/spaces/DanielRegaladoCardoso/wc2026-quiniela
+> **Source**: https://github.com/DanielRegaladoUMiami/wc2026-quiniela
 > **Live picks site**: TBD (HF Spaces). **Backtest report**: TBD (`METHODOLOGY.md`).
 
 ## What this is

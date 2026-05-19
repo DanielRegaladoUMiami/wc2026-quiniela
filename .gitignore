@@ -24,12 +24,16 @@ uv.lock
 .ipynb_checkpoints/
 *.ipynb_meta
 
-# Data — keep manual overrides versioned, everything else local-only
+# Data — keep manual overrides + WC2026 fixtures + latest sim/backtests versioned
 data/raw/
 data/processed/
 data/sims/
-data/fixtures/*.parquet
 !data/manual/
+!data/fixtures/
+!data/fixtures/*.parquet
+!data/sims/sim_run_*/
+!data/sims/sim_run_*/*.parquet
+!data/sims/backtest_*.parquet
 
 # Secrets
 .env

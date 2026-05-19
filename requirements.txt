@@ -1,0 +1,7 @@
+gradio>=4.44
+plotly>=5.24
+polars>=1.12
+pandas>=2.2
+numpy>=1.26
+pyarrow>=17.0
+pyyaml>=6.0
