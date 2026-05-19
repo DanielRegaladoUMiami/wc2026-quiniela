@@ -80,6 +80,8 @@ def build_historical() -> pd.DataFrame:
 
 def build_wc2026(historical: pd.DataFrame) -> pd.DataFrame:
     """One-row-per-WC2026-fixture frame with the *latest* features for each team."""
+    from src.features.elo import expected_score, HOME_ADVANTAGE
+
     fixtures = all_fixtures_df()
     venue_map = {v["key"]: v for v in VENUES}
 
@@ -87,7 +89,6 @@ def build_wc2026(historical: pd.DataFrame) -> pd.DataFrame:
     form = pl.read_parquet("data/processed/team_form.parquet").to_pandas()
     cutoff = fixtures["date"].min()
 
-    # Latest known per-team form (most recent before cutoff)
     form = form[form["date"] < cutoff].sort_values("date")
     latest_form = form.groupby("team").tail(1).set_index("team")
 
@@ -105,11 +106,17 @@ def build_wc2026(historical: pd.DataFrame) -> pd.DataFrame:
             "venue_country": venue.get("country"),
             "venue_altitude_m": venue.get("altitude_m"),
             "venue_indoor": venue.get("indoor"),
+            "importance": 4.0,  # WC matches
         }
         if r.home and r.away:
             row["home_elo_pre"] = elo_as_of(elo_history, r.home, r.date)
             row["away_elo_pre"] = elo_as_of(elo_history, r.away, r.date)
             row["elo_diff"] = row["home_elo_pre"] - row["away_elo_pre"]
+            # neutral venue for everyone except host playing in own country (USA/MEX/CAN)
+            host_country = {"United States": "USA", "Mexico": "Mexico", "Canada": "Canada"}.get(r.home)
+            is_home_field = host_country == venue.get("country")
+            home_eff = row["home_elo_pre"] + (HOME_ADVANTAGE if is_home_field else 0.0)
+            row["p_home_win_elo"] = expected_score(home_eff, row["away_elo_pre"])
             for side, team in (("h_", r.home), ("a_", r.away)):
                 if team in latest_form.index:
                     src = latest_form.loc[team]
@@ -117,6 +124,13 @@ def build_wc2026(historical: pd.DataFrame) -> pd.DataFrame:
                         if col in ("match_id", "team", "side", "date"):
                             continue
                         row[f"{side}{col}"] = src[col]
+            for w in (5, 10, 20):
+                hp = row.get(f"h_ppg_{w}")
+                ap = row.get(f"a_ppg_{w}")
+                hg = row.get(f"h_gd_pm_{w}")
+                ag = row.get(f"a_gd_pm_{w}")
+                row[f"form_diff_ppg_{w}"] = (hp - ap) if pd.notna(hp) and pd.notna(ap) else None
+                row[f"form_diff_gd_{w}"] = (hg - ag) if pd.notna(hg) and pd.notna(ag) else None
         rows.append(row)
     return pd.DataFrame(rows)
 
