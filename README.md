@@ -2,7 +2,7 @@
 title: WC2026 Quiniela
 emoji: ⚽
 colorFrom: green
-colorTo: orange
+colorTo: yellow
 sdk: gradio
 sdk_version: 6.14.0
 app_file: web/app.py
