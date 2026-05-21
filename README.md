@@ -14,9 +14,10 @@ license: apache-2.0
 
 State-of-the-art ML ensemble to predict every match of the **FIFA World Cup 2026** (kickoff June 11, 2026) and optimize quiniela / pool entries across multiple scoring formats (1X2, exact score, bracket).
 
-> **Live dashboard**: https://huggingface.co/spaces/DanielRegaladoCardoso/wc2026-quiniela
-> **Source**: https://github.com/DanielRegaladoUMiami/wc2026-quiniela
-> **Live picks site**: TBD (HF Spaces). **Backtest report**: TBD (`METHODOLOGY.md`).
+> 🌐 **Static site (Next.js)**: https://danielregaladoumiami.github.io/wc2026-quiniela/
+> 🤗 **Interactive dashboard (Gradio + HF Spaces)**: https://huggingface.co/spaces/DanielRegaladoCardoso/wc2026-quiniela
+> 📂 **Source**: https://github.com/DanielRegaladoUMiami/wc2026-quiniela
+> 📄 **Methodology paper**: [`METHODOLOGY.md`](METHODOLOGY.md)
 
 ## What this is
 
