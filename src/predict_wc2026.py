@@ -25,12 +25,12 @@ import polars as pl
 from src.models import bayesian as bay
 from src.models import dixon_coles as dc
 from src.models import gbm as gbm_mod
-from src.models.stacker import reweight_score_matrix
+from src.models.stacker import reweight_score_matrix, load as load_stacker
 from src.sims.tournament import TournamentSim
 from src.features.elo import elo_as_of
 
 
-def build_predictor(asof: date, gbm_path: str, bayesian_path: str | None, xi: float = 0.0019):
+def build_predictor(asof: date, gbm_path: str, bayesian_path: str | None, xi: float = 0.0019, stacker_path: str | None = None):
     matches = pl.read_parquet("data/processed/matches.parquet").to_pandas()
     print(f"  Fitting Dixon-Coles on {len(matches):,} matches with asof={asof}…")
     dc_model = dc.fit(matches, asof_date=asof, xi=xi, min_team_matches=3)
@@ -42,6 +42,11 @@ def build_predictor(asof: date, gbm_path: str, bayesian_path: str | None, xi: fl
     if bayesian_path and Path(bayesian_path).exists():
         print(f"  Loading Bayesian from {bayesian_path}…")
         bay_model = bay.BayesianModel.load(bayesian_path)
+
+    stacker = None
+    if stacker_path and Path(stacker_path).exists():
+        print(f"  Loading trained stacker from {stacker_path}…")
+        stacker = load_stacker(stacker_path)
 
     features_wc = pl.read_parquet("data/processed/features_wc2026.parquet").to_pandas()
     feat_by_pair = {(r["home_team"], r["away_team"]): r for _, r in features_wc.iterrows() if pd.notna(r.get("home_team"))}
@@ -57,8 +62,7 @@ def build_predictor(asof: date, gbm_path: str, bayesian_path: str | None, xi: fl
             sm = np.full((n, n), 1.0 / (n * n))
             dc_1x2 = np.array([0.34, 0.32, 0.34])
 
-        probs_stack = [dc_1x2]
-
+        gbm_1x2 = None
         feat_row = feat_by_pair.get((home, away))
         if feat_row is not None:
             row_df = pd.DataFrame([feat_row]).copy()
@@ -66,22 +70,34 @@ def build_predictor(asof: date, gbm_path: str, bayesian_path: str | None, xi: fl
                 if col not in row_df.columns:
                     row_df[col] = np.nan
             try:
-                gbm_probs = gbm.predict_proba(row_df)[0]
-                probs_stack.append(gbm_probs)
+                gbm_1x2 = gbm.predict_proba(row_df)[0]
             except Exception:
                 pass
 
+        bay_1x2 = None
         if bay_model is not None:
             try:
                 vc = venue_country_by_pair.get((home, away))
                 bay_pred = bay.predict(bay_model, home, away, venue_country=vc, max_goals=sm.shape[0] - 1)
                 bay_1x2 = np.array([bay_pred.p_home_win, bay_pred.p_draw, bay_pred.p_away_win])
-                probs_stack.append(bay_1x2)
             except Exception:
                 pass
 
-        blended = np.mean(probs_stack, axis=0)
-        blended = blended / blended.sum()
+        if stacker is not None and gbm_1x2 is not None and bay_1x2 is not None:
+            base_probs = {
+                "dc": dc_1x2.reshape(1, 3),
+                "gbm": gbm_1x2.reshape(1, 3),
+                "bay": bay_1x2.reshape(1, 3),
+            }
+            blended = stacker.predict_proba(base_probs)[0]
+        else:
+            probs_stack = [dc_1x2]
+            if gbm_1x2 is not None:
+                probs_stack.append(gbm_1x2)
+            if bay_1x2 is not None:
+                probs_stack.append(bay_1x2)
+            blended = np.mean(probs_stack, axis=0)
+            blended = blended / blended.sum()
         sm = reweight_score_matrix(sm, blended)
         return sm
 
@@ -97,13 +113,14 @@ def main() -> int:
     p.add_argument("--n", type=int, default=10000)
     p.add_argument("--asof", default="2026-05-18")
     p.add_argument("--gbm-path", default="data/models/lgbm_pre_euro24.txt")
-    p.add_argument("--bayesian-path", default="data/models/bayesian_test.nc")
+    p.add_argument("--bayesian-path", default="data/models/bayesian_wc2026.nc")
+    p.add_argument("--stacker-path", default="data/models/stacker.pkl")
     p.add_argument("--seed", type=int, default=42)
     args = p.parse_args()
 
     asof = pd.Timestamp(args.asof).date()
-    print(f"Building blended predictor (DC + LightGBM + Bayesian) asof={asof}…")
-    predict, strength = build_predictor(asof, args.gbm_path, args.bayesian_path)
+    print(f"Building stacked predictor (DC + LightGBM + Bayesian + Stacker) asof={asof}…")
+    predict, strength = build_predictor(asof, args.gbm_path, args.bayesian_path, stacker_path=args.stacker_path)
 
     print(f"Running {args.n:,} Monte Carlo tournament simulations…")
     sim = TournamentSim(predict_fn=predict, strength_fn=strength)

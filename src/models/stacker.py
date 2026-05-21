@@ -19,21 +19,36 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from sklearn.isotonic import IsotonicRegression
 from sklearn.linear_model import LogisticRegression
+
+
+class IdentityCalibrator:
+    """No-op calibrator that exposes a sklearn-like predict_proba on a single feature."""
+
+    def predict_proba(self, x: np.ndarray) -> np.ndarray:
+        p = np.asarray(x).reshape(-1)
+        p = np.clip(p, 1e-6, 1 - 1e-6)
+        return np.column_stack([1 - p, p])
 
 
 @dataclass
 class Stacker:
     base_names: list[str]
     meta: LogisticRegression
-    calibrators: list[IsotonicRegression]
+    calibrators: list  # one binary LogisticRegression per class for Platt scaling
 
     def predict_proba(self, base_probs: dict[str, np.ndarray]) -> np.ndarray:
         """base_probs: {name: (n,3) array}. Returns (n,3) blended + calibrated."""
         X = np.concatenate([base_probs[n] for n in self.base_names], axis=1)
         blended = self.meta.predict_proba(X)
-        cal = np.column_stack([self.calibrators[k].predict(blended[:, k]) for k in range(3)])
+        cal_cols = []
+        for k in range(3):
+            cal_k = self.calibrators[k]
+            if hasattr(cal_k, "predict_proba"):
+                cal_cols.append(cal_k.predict_proba(blended[:, k].reshape(-1, 1))[:, 1])
+            else:  # legacy isotonic
+                cal_cols.append(cal_k.predict(blended[:, k]))
+        cal = np.column_stack(cal_cols)
         cal = np.clip(cal, 1e-6, 1 - 1e-6)
         cal /= cal.sum(axis=1, keepdims=True)
         return cal
@@ -44,7 +59,7 @@ def fit(base_probs_train: dict[str, np.ndarray], y_train: np.ndarray,
     names = list(base_probs_train.keys())
     X_tr = np.concatenate([base_probs_train[n] for n in names], axis=1)
     X_cal = np.concatenate([base_probs_cal[n] for n in names], axis=1)
-    meta = LogisticRegression(C=1.0, max_iter=2000, multi_class="multinomial")
+    meta = LogisticRegression(C=1.0, max_iter=2000)
     meta.fit(X_tr, y_tr)
     blended = meta.predict_proba(X_cal)
     cals = []
