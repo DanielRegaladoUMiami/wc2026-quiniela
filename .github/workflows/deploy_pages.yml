@@ -44,7 +44,7 @@ jobs:
 
       - name: Install site deps
         working-directory: site
-        run: npm ci
+        run: npm install --no-audit --no-fund
 
       - name: Build static export
         working-directory: site
