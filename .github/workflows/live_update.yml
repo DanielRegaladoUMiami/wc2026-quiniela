@@ -3,26 +3,45 @@ name: live-update
 on:
   workflow_dispatch:
     inputs:
-      match_id:
-        description: "Match ID that just finished (optional)"
+      n_sims:
+        description: "Number of Monte Carlo simulations"
         required: false
         type: string
+        default: "5000"
 
 jobs:
   update:
     runs-on: ubuntu-latest
-    if: false  # disabled until pipeline is implemented (Day 13)
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v3
-      - run: uv sync
-      - env:
-          KALSHI_API_KEY: ${{ secrets.KALSHI_API_KEY }}
-        run: uv run make live-update
-      - name: Commit updated picks
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Set up Python 3.12
+        run: uv python install 3.12
+
+      - name: Sync dependencies
+        run: uv sync
+
+      - name: Refit + re-simulate
+        run: |
+          uv run python -m src.features.elo
+          uv run python -m src.features.form
+          uv run python -m src.features.build_table
+          uv run python -m src.models.bayesian --fit --asof $(date -u +%Y-%m-%d) --out data/models/bayesian_latest.nc --fast
+          uv run python -m src.predict_wc2026 --n ${{ inputs.n_sims }} --bayesian-path data/models/bayesian_latest.nc
+
+      - name: Commit updated predictions
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/sims data/processed web/assets
-          git diff --cached --quiet || git commit -m "chore(live): post-match update"
-          git push
+          git add data/sims/sim_run_*/ data/processed/*.parquet
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore(live): post-match update ($(date -u +%Y-%m-%d_%H:%MZ))"
+            git push
+          fi

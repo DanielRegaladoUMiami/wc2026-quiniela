@@ -1,0 +1,33 @@
+name: deploy-hf-space
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "web/**"
+      - "data/fixtures/**"
+      - "data/sims/sim_run_*/**"
+      - "data/sims/backtest_*.parquet"
+      - "requirements.txt"
+      - "README.md"
+      - "METHODOLOGY.md"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ secrets.HF_TOKEN != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+      - run: uv pip install --system "huggingface_hub>=0.30"
+      - name: Push to HF Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          hf upload DanielRegaladoCardoso/wc2026-quiniela . --repo-type space \
+            --commit-message "Auto-sync from GitHub main @ $(git rev-parse --short HEAD)" \
+            --exclude ".git/*" --exclude ".venv/*" --exclude "data/raw/*" \
+            --exclude "data/processed/*" --exclude "data/models/*" \
+            --exclude "**/__pycache__/*" --exclude "**/*.pyc" \
+            --exclude ".pytest_cache/*" --exclude ".ruff_cache/*"
