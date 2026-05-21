@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# wc2026-quiniela · site
 
-## Getting Started
+Production Next.js 16 (App Router) front-end for the [wc2026-quiniela](https://github.com/DanielRegaladoUMiami/wc2026-quiniela) project. Replaces the Gradio dashboard living in `../web/` with a Vercel-deployable static site inspired by ESPN soccer / Linear / Vercel design quality.
 
-First, run the development server:
+## Stack
+- **Next.js 16** + **TypeScript** (App Router, Turbopack)
+- **Tailwind CSS 4** (theme tokens: emerald / amber / slate)
+- **Framer Motion** for probability bar animations
+- **Recharts** for donut + cumulative log-loss charts
+- **react-katex** for math rendering on `/methodology`
+- **Geist** + **Space Grotesk** via `next/font`
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Data pipeline
+Parquet → JSON happens **at build time** via `scripts/parquet_to_json.py`, executed by the npm `prebuild` hook. The Next app reads only static JSON at runtime — no parquet libs ship to the client.
+
+```
+/data/sims/sim_run_202605190049/*.parquet
+    │  python3 scripts/parquet_to_json.py
+    ▼
+/site/public/data/*.json    (~100 KB total)
+    │  fs.readFileSync (server-only via lib/data.ts)
+    ▼
+React Server Components → static HTML
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Develop / build
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cd site
+npm install
+npm run dev               # http://localhost:3000
+npm run build && npm run start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The build produces 163 statically prerendered routes (1 home + 48 teams + 104 matches + 10 other pages).
 
-## Learn More
+## Pages
+- `/` — Hero, countdown to 2026-06-11 kickoff, top-8 champion bars, opening fixtures.
+- `/teams` — All 48 cards, confederation chips, sort/search.
+- `/teams/[fifa_code]` — Team profile, advancement waterfall, group fixtures, rivals.
+- `/groups` — 12 group cards with advancement bars.
+- `/matches` — Sortable / filterable table of all 104 matches.
+- `/matches/[num]` — 1X2 donut, Dixon-Coles score-matrix heatmap, venue card.
+- `/bracket` — Custom-SVG funnel of P(reach round) for top 16.
+- `/backtest` — RPS / log-loss for WC22 + Euro24, cumulative log-loss chart.
+- `/methodology` — KaTeX-rendered model write-up.
+- `/about` — Daniel Regalado, Apache 2.0, disclaimer.
 
-To learn more about Next.js, take a look at the following resources:
+## Deploy to Vercel
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm i -g vercel
+cd site
+vercel link
+vercel deploy --prod
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Build command: `npm run build`. Python 3 must be available on the build container to run the parquet→JSON step (Vercel images include it). Alternatively, commit `site/public/data/*.json` so the `prebuild` step is a no-op on the Vercel runner.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+Apache 2.0 — see repository root.

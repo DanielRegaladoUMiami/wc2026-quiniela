@@ -1,7 +1,7 @@
 "use client";
 import { useMemo, useState } from "react";
 import MatchRow from "@/components/MatchRow";
-import { Fixture, MatchProb, Team } from "@/lib/data";
+import { Fixture, MatchProb, Team } from "@/lib/types";
 
 export default function MatchesTable({
   fixtures,

@@ -1,0 +1,7 @@
+tournament,model,runtime_sec,cache_hit,n_skipped
+wc22,dc,193.6796190738678,False,0
+wc22,gbm,0.8316950798034668,False,0
+euro24,dc,131.5206789970398,False,0
+euro24,gbm,0.5587480068206787,False,0
+copa24,dc,116.00890803337097,False,0
+copa24,gbm,0.54494309425354,False,0

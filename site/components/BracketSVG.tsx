@@ -1,5 +1,5 @@
 "use client";
-import { Advancement, Team, fmtPct } from "@/lib/data";
+import { Advancement, Team, fmtPct } from "@/lib/types";
 
 // Renders a clean horizontal funnel of P(reach round) for the top N teams.
 // Rounds: R32 → R16 → QF → SF → Final → Champion

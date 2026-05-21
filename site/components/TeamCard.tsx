@@ -2,7 +2,7 @@ import Link from "next/link";
 import FlagImg from "./FlagImg";
 import ConfederationChip from "./ConfederationChip";
 import ProbabilityBar from "./ProbabilityBar";
-import { Team, fmtPct } from "@/lib/data";
+import { Team, fmtPct } from "@/lib/types";
 
 export default function TeamCard({ team, priority }: { team: Team; priority?: boolean }) {
   return (

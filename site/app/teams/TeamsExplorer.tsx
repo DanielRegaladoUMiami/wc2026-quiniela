@@ -1,7 +1,7 @@
 "use client";
 import { useMemo, useState } from "react";
 import TeamCard from "@/components/TeamCard";
-import { Team } from "@/lib/data";
+import { Team } from "@/lib/types";
 import { CONFEDERATIONS } from "@/lib/utils";
 
 type SortKey = "champion" | "advance" | "rank" | "name";

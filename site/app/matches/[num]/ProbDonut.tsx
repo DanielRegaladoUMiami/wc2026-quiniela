@@ -37,7 +37,7 @@ export default function ProbDonut({
           </Pie>
           <Tooltip
             contentStyle={{ background: "#0b1220", border: "1px solid rgba(148,163,184,0.2)", borderRadius: 8, fontSize: 12 }}
-            formatter={(v: number) => `${(v * 100).toFixed(1)}%`}
+            formatter={(v) => (typeof v === "number" ? `${(v * 100).toFixed(1)}%` : String(v))}
           />
         </PieChart>
       </ResponsiveContainer>

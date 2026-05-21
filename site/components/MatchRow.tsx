@@ -1,6 +1,6 @@
 import Link from "next/link";
 import FlagImg from "./FlagImg";
-import { fmtPct, MatchProb, Fixture, Team } from "@/lib/data";
+import { fmtPct, MatchProb, Fixture, Team } from "@/lib/types";
 import { fmtDate } from "@/lib/utils";
 
 export default function MatchRow({
