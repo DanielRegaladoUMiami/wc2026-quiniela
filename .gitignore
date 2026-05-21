@@ -53,3 +53,9 @@ data/sims/
 trackio_logs/
 mlruns/
 wandb/
+
+# Node / Next.js
+site/node_modules/
+site/.next/
+site/out/
+site/.vercel/

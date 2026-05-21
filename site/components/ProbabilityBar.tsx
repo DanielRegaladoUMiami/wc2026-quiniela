@@ -1,6 +1,4 @@
-"use client";
-import { motion } from "framer-motion";
-
+// Pure-CSS animated probability bar. Server-renderable, zero client JS.
 export default function ProbabilityBar({
   value,
   max = 1,
@@ -39,14 +37,18 @@ export default function ProbabilityBar({
         className="relative overflow-hidden rounded-full bg-white/5 ring-1 ring-white/5"
         style={{ height }}
       >
-        <motion.div
-          className={`h-full rounded-full bg-gradient-to-r ${palette}`}
-          initial={{ width: 0 }}
-          whileInView={{ width: `${pct}%` }}
-          viewport={{ once: true, margin: "-50px" }}
-          transition={{ duration: 0.9, delay, ease: [0.16, 1, 0.3, 1] }}
+        <div
+          className={`h-full rounded-full bg-gradient-to-r ${palette} pb-anim`}
+          style={{
+            width: `${pct}%`,
+            animationDelay: `${delay}s`,
+          }}
         />
       </div>
+      <style>{`
+        @keyframes pb-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+        .pb-anim { transform-origin: left center; animation: pb-grow 0.9s cubic-bezier(0.16, 1, 0.3, 1) both; }
+      `}</style>
     </div>
   );
 }
