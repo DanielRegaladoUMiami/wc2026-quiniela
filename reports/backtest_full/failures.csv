@@ -1,0 +1,10 @@
+tournament,model,error
+wc14,gbm,No suitable pre-tournament GBM snapshot for wc14 (would leak — tournament start=2014-06-12).
+wc18,gbm,No suitable pre-tournament GBM snapshot for wc18 (would leak — tournament start=2018-06-14).
+euro16,gbm,No suitable pre-tournament GBM snapshot for euro16 (would leak — tournament start=2016-06-10).
+euro20,gbm,No suitable pre-tournament GBM snapshot for euro20 (would leak — tournament start=2021-06-11).
+copa19,gbm,No suitable pre-tournament GBM snapshot for copa19 (would leak — tournament start=2019-06-14).
+copa21,gbm,No suitable pre-tournament GBM snapshot for copa21 (would leak — tournament start=2021-06-13).
+afcon19,gbm,No suitable pre-tournament GBM snapshot for afcon19 (would leak — tournament start=2019-06-21).
+afcon21,gbm,No suitable pre-tournament GBM snapshot for afcon21 (would leak — tournament start=2022-01-09).
+asian19,gbm,No suitable pre-tournament GBM snapshot for asian19 (would leak — tournament start=2019-01-05).
