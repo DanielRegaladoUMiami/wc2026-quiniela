@@ -10,8 +10,6 @@ Requires `KAGGLE_USERNAME` and `KAGGLE_KEY` env vars (or `~/.kaggle/kaggle.json`
 from __future__ import annotations
 
 import os
-import shutil
-import subprocess
 import sys
 import zipfile
 from pathlib import Path
@@ -23,12 +21,6 @@ OUT_DIR = Path("data/raw/matches/kaggle_martj42")
 def main() -> int:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    if shutil.which("kaggle") is None:
-        print(
-            "ERROR: kaggle CLI not found. Install with `uv sync` (kaggle is a dep).",
-            file=sys.stderr,
-        )
-        return 1
     if not (os.environ.get("KAGGLE_KEY") or Path.home().joinpath(".kaggle/kaggle.json").exists()):
         print(
             "ERROR: Kaggle credentials missing. Set KAGGLE_USERNAME + KAGGLE_KEY or place kaggle.json.",
@@ -36,14 +28,23 @@ def main() -> int:
         )
         return 1
 
-    print(f"Downloading {DATASET} → {OUT_DIR}")
-    subprocess.run(
-        ["kaggle", "datasets", "download", "-d", DATASET, "-p", str(OUT_DIR), "--force"],
-        check=True,
-    )
+    # Use the Kaggle Python API rather than the `kaggle` CLI: portable across
+    # environments (no PATH / console-script dependency) and works the same in CI.
+    try:
+        from kaggle.api.kaggle_api_extended import KaggleApi
+    except ImportError:
+        print("ERROR: kaggle package not installed. Run `uv sync`.", file=sys.stderr)
+        return 1
 
+    api = KaggleApi()
+    api.authenticate()
+
+    print(f"Downloading {DATASET} → {OUT_DIR}")
+    api.dataset_download_files(DATASET, path=str(OUT_DIR), unzip=True, quiet=False)
+
+    # dataset_download_files(unzip=True) usually removes the zip, but clean up any leftover.
     for zip_path in OUT_DIR.glob("*.zip"):
-        print(f"Unzipping {zip_path.name}")
+        print(f"Unzipping leftover {zip_path.name}")
         with zipfile.ZipFile(zip_path) as zf:
             zf.extractall(OUT_DIR)
         zip_path.unlink()

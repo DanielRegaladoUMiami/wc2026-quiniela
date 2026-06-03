@@ -13,6 +13,8 @@ Canonical schema:
 from __future__ import annotations
 
 import hashlib
+import os
+from datetime import UTC, datetime
 from pathlib import Path
 
 import pandas as pd
@@ -20,6 +22,34 @@ import polars as pl
 
 KAGGLE_RESULTS = Path("data/raw/matches/kaggle_martj42/results.csv")
 OUT = Path("data/processed/matches.parquet")
+
+# Fail the build if the raw results source hasn't been refreshed within this many days.
+# International matches are sparse (they only happen in FIFA windows), so we guard on
+# *source-refresh* recency — "did we actually re-pull?" — rather than match-date recency,
+# which legitimately lags by weeks between windows and would false-alarm.
+MAX_SOURCE_AGE_DAYS = int(os.environ.get("WC2026_MAX_SOURCE_AGE_DAYS", "3"))
+
+
+def assert_source_fresh() -> None:
+    """Loudly refuse to build the canonical log from a stale source pull.
+
+    Bypass with WC2026_ALLOW_STALE=1 (e.g. offline reproducibility runs).
+    """
+    if os.environ.get("WC2026_ALLOW_STALE") == "1":
+        print("freshness check skipped (WC2026_ALLOW_STALE=1)")
+        return
+    if not KAGGLE_RESULTS.exists():
+        return  # load_kaggle_martj42 raises a clearer error downstream
+    mtime = datetime.fromtimestamp(KAGGLE_RESULTS.stat().st_mtime, tz=UTC)
+    age_days = (datetime.now(UTC) - mtime).total_seconds() / 86400
+    if age_days > MAX_SOURCE_AGE_DAYS:
+        raise SystemExit(
+            f"STALE SOURCE: {KAGGLE_RESULTS} last refreshed {age_days:.1f}d ago "
+            f"(> {MAX_SOURCE_AGE_DAYS}d). Run `python -m src.data.fetch_kaggle_martj42` first, "
+            f"or set WC2026_ALLOW_STALE=1 to bypass."
+        )
+    print(f"source freshness OK: results.csv refreshed {age_days:.1f}d ago")
+
 
 CANONICAL_COLS = [
     "match_id",
@@ -99,10 +129,15 @@ def build() -> pl.DataFrame:
 
 def main() -> int:
     OUT.parent.mkdir(parents=True, exist_ok=True)
+    assert_source_fresh()
     matches = build()
     matches.write_parquet(OUT, compression="zstd")
+    played = matches.filter(pl.col("home_goals").is_not_null())
     print(f"Wrote {len(matches):,} matches → {OUT}")
     print(f"Date range: {matches['date'].min()} → {matches['date'].max()}")
+    print(
+        f"Played: {len(played):,} (latest played: {played['date'].max()}) | upcoming: {len(matches) - len(played):,}"
+    )
     print(
         f"Distinct teams: {matches['home_team'].n_unique()} home, {matches['away_team'].n_unique()} away"
     )
