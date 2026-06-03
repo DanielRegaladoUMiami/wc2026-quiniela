@@ -5,6 +5,7 @@ INT-European Championship). We use the 2022 World Cup as the canonical
 recent-international-tournament source. Per-team data is filtered from the
 all-players read.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -19,11 +20,38 @@ STATE = Path("data/raw/fbref/intl_state.txt")
 
 # FBref / soccerdata team-name mapping; WC2022 only — non-2022 teams will be absent.
 WC2022 = {
-    "Argentina", "Australia", "Belgium", "Brazil", "Cameroon", "Canada", "Costa Rica",
-    "Croatia", "Denmark", "Ecuador", "England", "France", "Germany", "Ghana",
-    "Iran", "Japan", "Mexico", "Morocco", "Netherlands", "Poland", "Portugal",
-    "Qatar", "Saudi Arabia", "Senegal", "Serbia", "South Korea", "Spain",
-    "Switzerland", "Tunisia", "United States", "Uruguay", "Wales",
+    "Argentina",
+    "Australia",
+    "Belgium",
+    "Brazil",
+    "Cameroon",
+    "Canada",
+    "Costa Rica",
+    "Croatia",
+    "Denmark",
+    "Ecuador",
+    "England",
+    "France",
+    "Germany",
+    "Ghana",
+    "Iran",
+    "Japan",
+    "Mexico",
+    "Morocco",
+    "Netherlands",
+    "Poland",
+    "Portugal",
+    "Qatar",
+    "Saudi Arabia",
+    "Senegal",
+    "Serbia",
+    "South Korea",
+    "Spain",
+    "Switzerland",
+    "Tunisia",
+    "United States",
+    "Uruguay",
+    "Wales",
 }
 
 STAT_TYPES = ["standard", "shooting", "keeper", "playing_time", "misc"]
@@ -66,7 +94,11 @@ def fetch_player_stats(teams: list[str]) -> pd.DataFrame:
         if f is base:
             continue
         f2 = f.drop(columns=["_stat_type"])
-        merge_keys = [k for k in ("team", "player", "league", "season") if k in out.columns and k in f2.columns]
+        merge_keys = [
+            k
+            for k in ("team", "player", "league", "season")
+            if k in out.columns and k in f2.columns
+        ]
         if not merge_keys:
             continue
         # avoid duplicate-column collisions
@@ -81,14 +113,13 @@ def fetch_player_stats(teams: list[str]) -> pd.DataFrame:
 
 def main() -> Path:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--teams", type=str, default="", help="comma-separated subset; default=all WC2026")
+    ap.add_argument(
+        "--teams", type=str, default="", help="comma-separated subset; default=all WC2026"
+    )
     args = ap.parse_args()
 
     teams_meta = pd.read_parquet("data/fixtures/team_metadata.parquet")["team"].tolist()
-    if args.teams:
-        wanted = [t.strip() for t in args.teams.split(",") if t.strip()]
-    else:
-        wanted = teams_meta
+    wanted = [t.strip() for t in args.teams.split(",") if t.strip()] if args.teams else teams_meta
     # only teams that participated in WC2022 will produce data
     fetchable = [t for t in wanted if t in WC2022]
     missing = [t for t in wanted if t not in WC2022]

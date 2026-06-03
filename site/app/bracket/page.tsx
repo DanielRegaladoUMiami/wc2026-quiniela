@@ -1,4 +1,4 @@
-import { getAdvancement, getTeams, fmtPct } from "@/lib/data";
+import { getAdvancement, getTeams, getMeta, fmtPct } from "@/lib/data";
 import BracketSVG from "@/components/BracketSVG";
 
 export const metadata = { title: "Bracket" };
@@ -14,7 +14,7 @@ export default function BracketPage() {
       <header className="mb-8">
         <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight">Probabilistic bracket</h1>
         <p className="text-slate-400 mt-2 max-w-2xl">
-          Per-round survival rates from 5,000 Monte Carlo simulations. Reading: P(reach Round of 16) →
+          Per-round survival rates from {getMeta().n_sims.toLocaleString()} Monte Carlo simulations. Reading: P(reach Round of 16) →
           P(reach Quarterfinal) → … → P(lift the trophy).
         </p>
       </header>

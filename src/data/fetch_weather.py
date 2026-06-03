@@ -66,10 +66,15 @@ def heat_index_c(temp_c: float, humidity_pct: float) -> float:
     t = temp_c * 9 / 5 + 32  # to F
     rh = humidity_pct
     hi = (
-        -42.379 + 2.04901523 * t + 10.14333127 * rh
-        - 0.22475541 * t * rh - 6.83783e-3 * t * t
-        - 5.481717e-2 * rh * rh + 1.22874e-3 * t * t * rh
-        + 8.5282e-4 * t * rh * rh - 1.99e-6 * t * t * rh * rh
+        -42.379
+        + 2.04901523 * t
+        + 10.14333127 * rh
+        - 0.22475541 * t * rh
+        - 6.83783e-3 * t * t
+        - 5.481717e-2 * rh * rh
+        + 1.22874e-3 * t * t * rh
+        + 8.5282e-4 * t * rh * rh
+        - 1.99e-6 * t * t * rh * rh
     )
     return float((hi - 32) * 5 / 9)
 
@@ -93,16 +98,21 @@ def _pick_hour(payload: dict, target_iso_hour: str) -> dict[str, float] | None:
 
 def fetch_forecast(lat: float, lon: float, kickoff: pd.Timestamp) -> dict[str, float] | None:
     params = {
-        "latitude": lat, "longitude": lon, "hourly": HOURLY_VARS,
-        "timezone": "UTC", "windspeed_unit": "kmh", "forecast_days": 16,
+        "latitude": lat,
+        "longitude": lon,
+        "hourly": HOURLY_VARS,
+        "timezone": "UTC",
+        "windspeed_unit": "kmh",
+        "forecast_days": 16,
     }
     payload = _get(FORECAST_URL, params)
     target = kickoff.strftime("%Y-%m-%dT%H:00")
     return _pick_hour(payload, target)
 
 
-def fetch_climatology(lat: float, lon: float, kickoff: pd.Timestamp,
-                      years_back: int = 5, window_days: int = 3) -> dict[str, float] | None:
+def fetch_climatology(
+    lat: float, lon: float, kickoff: pd.Timestamp, years_back: int = 5, window_days: int = 3
+) -> dict[str, float] | None:
     """Average each hourly variable across the last `years_back` years over a
     +/- window_days range around the same calendar day at the kickoff hour."""
     samples: list[dict[str, float]] = []
@@ -115,8 +125,13 @@ def fetch_climatology(lat: float, lon: float, kickoff: pd.Timestamp,
         start = (date - pd.Timedelta(days=window_days)).strftime("%Y-%m-%d")
         end = (date + pd.Timedelta(days=window_days)).strftime("%Y-%m-%d")
         params = {
-            "latitude": lat, "longitude": lon, "start_date": start, "end_date": end,
-            "hourly": HOURLY_VARS, "timezone": "UTC", "windspeed_unit": "kmh",
+            "latitude": lat,
+            "longitude": lon,
+            "start_date": start,
+            "end_date": end,
+            "hourly": HOURLY_VARS,
+            "timezone": "UTC",
+            "windspeed_unit": "kmh",
         }
         try:
             payload = _get(ARCHIVE_URL, params)
@@ -126,13 +141,15 @@ def fetch_climatology(lat: float, lon: float, kickoff: pd.Timestamp,
         times = hourly.get("time", [])
         for i, t in enumerate(times):
             if t.endswith(f"T{kickoff.hour:02d}:00"):
-                samples.append({
-                    "temp_c": hourly["temperature_2m"][i],
-                    "humidity_pct": hourly["relativehumidity_2m"][i],
-                    "precip_mm": hourly["precipitation"][i],
-                    "wind_kph": hourly["windspeed_10m"][i],
-                    "cloud_pct": hourly["cloudcover"][i],
-                })
+                samples.append(
+                    {
+                        "temp_c": hourly["temperature_2m"][i],
+                        "humidity_pct": hourly["relativehumidity_2m"][i],
+                        "precip_mm": hourly["precipitation"][i],
+                        "wind_kph": hourly["windspeed_10m"][i],
+                        "cloud_pct": hourly["cloudcover"][i],
+                    }
+                )
         time.sleep(0.3)
     if not samples:
         return None
@@ -140,13 +157,23 @@ def fetch_climatology(lat: float, lon: float, kickoff: pd.Timestamp,
     return {c: float(np.nanmean(df[c])) for c in df.columns}
 
 
-def fetch_for_fixture(num: int, venue: str, lat: float, lon: float,
-                      kickoff: pd.Timestamp, today: pd.Timestamp | None = None) -> WeatherRow | None:
+def fetch_for_fixture(
+    num: int,
+    venue: str,
+    lat: float,
+    lon: float,
+    kickoff: pd.Timestamp,
+    today: pd.Timestamp | None = None,
+) -> WeatherRow | None:
     today = today or pd.Timestamp.utcnow().tz_localize(None).normalize()
     horizon_end = today + pd.Timedelta(days=16)
     src = "forecast" if (today <= kickoff <= horizon_end) else "climatology"
     try:
-        vals = fetch_forecast(lat, lon, kickoff) if src == "forecast" else fetch_climatology(lat, lon, kickoff)
+        vals = (
+            fetch_forecast(lat, lon, kickoff)
+            if src == "forecast"
+            else fetch_climatology(lat, lon, kickoff)
+        )
     except Exception:
         vals = None
     if vals is None and src == "forecast":
@@ -156,15 +183,24 @@ def fetch_for_fixture(num: int, venue: str, lat: float, lon: float,
         return None
     hi = heat_index_c(vals["temp_c"], vals["humidity_pct"])
     return WeatherRow(
-        match_num=num, venue=venue, kickoff_utc=kickoff, source=src,
-        temp_c=vals["temp_c"], humidity_pct=vals["humidity_pct"],
-        wind_kph=vals["wind_kph"], precip_mm=vals["precip_mm"],
-        cloud_pct=vals["cloud_pct"], heat_index_c=hi,
+        match_num=num,
+        venue=venue,
+        kickoff_utc=kickoff,
+        source=src,
+        temp_c=vals["temp_c"],
+        humidity_pct=vals["humidity_pct"],
+        wind_kph=vals["wind_kph"],
+        precip_mm=vals["precip_mm"],
+        cloud_pct=vals["cloud_pct"],
+        heat_index_c=hi,
     )
 
 
-def build(max_fixtures: int | None = None, kickoff_hour: int = 19,
-          fixtures_path: str = "data/fixtures/wc2026_fixtures.parquet") -> pd.DataFrame:
+def build(
+    max_fixtures: int | None = None,
+    kickoff_hour: int = 19,
+    fixtures_path: str = "data/fixtures/wc2026_fixtures.parquet",
+) -> pd.DataFrame:
     fx = pd.read_parquet(fixtures_path).sort_values("num")
     if max_fixtures:
         fx = fx.head(max_fixtures)
@@ -172,8 +208,9 @@ def build(max_fixtures: int | None = None, kickoff_hour: int = 19,
     for _, r in fx.iterrows():
         kickoff = pd.Timestamp(r["date"]).normalize() + pd.Timedelta(hours=kickoff_hour)
         kickoff = kickoff.tz_localize(None)
-        row = fetch_for_fixture(int(r["num"]), str(r["venue"]),
-                                float(r["lat"]), float(r["lon"]), kickoff)
+        row = fetch_for_fixture(
+            int(r["num"]), str(r["venue"]), float(r["lat"]), float(r["lon"]), kickoff
+        )
         if row:
             rows.append(row)
         time.sleep(0.4)

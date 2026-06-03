@@ -15,7 +15,7 @@ def _pipeline_fig() -> go.Figure:
         "LightGBM",
         "Market features",
         "Stacker + isotonic",
-        "Monte Carlo (50k sims)",
+        "Monte Carlo bracket",
         "Strategy / Quiniela",
     ]
     x = [0.02, 0.18, 0.40, 0.40, 0.40, 0.40, 0.62, 0.80, 0.96]

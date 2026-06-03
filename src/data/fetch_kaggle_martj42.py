@@ -24,10 +24,16 @@ def main() -> int:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     if shutil.which("kaggle") is None:
-        print("ERROR: kaggle CLI not found. Install with `uv sync` (kaggle is a dep).", file=sys.stderr)
+        print(
+            "ERROR: kaggle CLI not found. Install with `uv sync` (kaggle is a dep).",
+            file=sys.stderr,
+        )
         return 1
     if not (os.environ.get("KAGGLE_KEY") or Path.home().joinpath(".kaggle/kaggle.json").exists()):
-        print("ERROR: Kaggle credentials missing. Set KAGGLE_USERNAME + KAGGLE_KEY or place kaggle.json.", file=sys.stderr)
+        print(
+            "ERROR: Kaggle credentials missing. Set KAGGLE_USERNAME + KAGGLE_KEY or place kaggle.json.",
+            file=sys.stderr,
+        )
         return 1
 
     print(f"Downloading {DATASET} → {OUT_DIR}")

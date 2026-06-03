@@ -15,14 +15,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 import polars as pl
 
 from src.eval.rps import outcome_1x2
-from src.features.elo import compute_elo, elo_as_of
+from src.features.elo import elo_as_of
 from src.sims.bracket_2026 import VENUES, all_fixtures_df
-
 
 TOURNAMENT_IMPORTANCE = {
     "friendly": 1.0,
@@ -80,7 +78,7 @@ def build_historical() -> pd.DataFrame:
 
 def build_wc2026(historical: pd.DataFrame) -> pd.DataFrame:
     """One-row-per-WC2026-fixture frame with the *latest* features for each team."""
-    from src.features.elo import expected_score, HOME_ADVANTAGE
+    from src.features.elo import HOME_ADVANTAGE, expected_score
 
     fixtures = all_fixtures_df()
     venue_map = {v["key"]: v for v in VENUES}
@@ -113,7 +111,9 @@ def build_wc2026(historical: pd.DataFrame) -> pd.DataFrame:
             row["away_elo_pre"] = elo_as_of(elo_history, r.away, r.date)
             row["elo_diff"] = row["home_elo_pre"] - row["away_elo_pre"]
             # neutral venue for everyone except host playing in own country (USA/MEX/CAN)
-            host_country = {"United States": "USA", "Mexico": "Mexico", "Canada": "Canada"}.get(r.home)
+            host_country = {"United States": "USA", "Mexico": "Mexico", "Canada": "Canada"}.get(
+                r.home
+            )
             is_home_field = host_country == venue.get("country")
             home_eff = row["home_elo_pre"] + (HOME_ADVANTAGE if is_home_field else 0.0)
             row["p_home_win_elo"] = expected_score(home_eff, row["away_elo_pre"])

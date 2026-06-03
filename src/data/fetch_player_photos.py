@@ -3,6 +3,7 @@
 Uses one batched SPARQL query per ~80 player names to keep request count low.
 Image URLs use the Commons Special:FilePath redirect so the site can lazy-load.
 """
+
 from __future__ import annotations
 
 import time
@@ -71,17 +72,19 @@ def main() -> Path:
         chunk = names[i : i + BATCH]
         got = query_batch(chunk)
         resolved.update(got)
-        print(f"  batch {i//BATCH + 1}: matched {len(got)}/{len(chunk)} (cum {len(resolved)})")
+        print(f"  batch {i // BATCH + 1}: matched {len(got)}/{len(chunk)} (cum {len(resolved)})")
         time.sleep(1.5)
     rows = []
     for _, r in keys.iterrows():
         qid, url = resolved.get(r["player_name"], ("", ""))
-        rows.append({
-            "team": r["team"],
-            "player_name": r["player_name"],
-            "wikidata_id": qid,
-            "image_url": url,
-        })
+        rows.append(
+            {
+                "team": r["team"],
+                "player_name": r["player_name"],
+                "wikidata_id": qid,
+                "image_url": url,
+            }
+        )
     df = pd.DataFrame(rows)
     df.to_parquet(OUT, index=False)
     print(f"wrote {OUT} ({len(df)} rows, {df['image_url'].astype(bool).sum()} with photos)")

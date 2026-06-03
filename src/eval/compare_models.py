@@ -6,15 +6,11 @@ accuracy / ECE and produce a markdown + CSV summary.
 
 from __future__ import annotations
 
-from pathlib import Path
-
-import numpy as np
 import pandas as pd
 
 from src.eval.bootstrap import bootstrap_ci
 from src.eval.calibration import brier_decomposition, expected_calibration_error
 from src.eval.rps import log_loss_1x2, mean_rps
-
 
 METRIC_COLS = ["n", "rps", "rps_ci_lo", "rps_ci_hi", "log_loss", "brier", "accuracy", "ece"]
 
@@ -38,9 +34,7 @@ def _metrics_for(preds: pd.DataFrame, n_bootstrap: int) -> dict:
     }
 
 
-def build_results_table(
-    all_preds: pd.DataFrame, n_bootstrap: int = 1000
-) -> pd.DataFrame:
+def build_results_table(all_preds: pd.DataFrame, n_bootstrap: int = 1000) -> pd.DataFrame:
     """all_preds must have cols: tournament, model, p_home, p_draw, p_away, outcome."""
     rows = []
     for (tour, model), g in all_preds.groupby(["tournament", "model"], sort=True):
@@ -69,9 +63,9 @@ def to_markdown(results: pd.DataFrame) -> str:
         if c in df.columns:
             df[c] = df[c].astype(float).round(4)
     df["rps_95ci"] = df.apply(
-        lambda r: f"[{r['rps_ci_lo']:.4f}, {r['rps_ci_hi']:.4f}]"
-        if pd.notna(r["rps_ci_lo"])
-        else "",
+        lambda r: (
+            f"[{r['rps_ci_lo']:.4f}, {r['rps_ci_hi']:.4f}]" if pd.notna(r["rps_ci_lo"]) else ""
+        ),
         axis=1,
     )
     cols = ["tournament", "model", "n", "rps", "rps_95ci", "log_loss", "brier", "accuracy", "ece"]

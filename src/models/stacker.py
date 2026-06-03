@@ -18,7 +18,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
+from sklearn.isotonic import IsotonicRegression
 from sklearn.linear_model import LogisticRegression
 
 
@@ -54,13 +54,17 @@ class Stacker:
         return cal
 
 
-def fit(base_probs_train: dict[str, np.ndarray], y_train: np.ndarray,
-        base_probs_cal: dict[str, np.ndarray], y_cal: np.ndarray) -> Stacker:
+def fit(
+    base_probs_train: dict[str, np.ndarray],
+    y_train: np.ndarray,
+    base_probs_cal: dict[str, np.ndarray],
+    y_cal: np.ndarray,
+) -> Stacker:
     names = list(base_probs_train.keys())
     X_tr = np.concatenate([base_probs_train[n] for n in names], axis=1)
     X_cal = np.concatenate([base_probs_cal[n] for n in names], axis=1)
     meta = LogisticRegression(C=1.0, max_iter=2000)
-    meta.fit(X_tr, y_tr)
+    meta.fit(X_tr, y_train)
     blended = meta.predict_proba(X_cal)
     cals = []
     for k in range(3):
@@ -81,7 +85,11 @@ def reweight_score_matrix(score_matrix: np.ndarray, target_1x2: np.ndarray) -> n
     mask_draw = np.eye(n)
     mask_away = np.triu(np.ones((n, n)), k=1)
     cur = np.array(
-        [(score_matrix * mask_home).sum(), (score_matrix * mask_draw).sum(), (score_matrix * mask_away).sum()]
+        [
+            (score_matrix * mask_home).sum(),
+            (score_matrix * mask_draw).sum(),
+            (score_matrix * mask_away).sum(),
+        ]
     )
     cur = np.clip(cur, 1e-9, 1.0)
     scale = target_1x2 / cur

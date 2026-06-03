@@ -1,6 +1,7 @@
 """Unify wiki squads + FBref intl + TM market values + Wikidata photos into one
 row-per-player processed table.
 """
+
 from __future__ import annotations
 
 from datetime import date
@@ -68,7 +69,11 @@ def main() -> Path:
     if not tm.empty:
         tcols = ["team", "player_name", "market_value_eur", "contract_until"]
         tcols = [c for c in tcols if c in tm.columns]
-        base = base.merge(tm[tcols].drop_duplicates(subset=["team", "player_name"]), on=["team", "player_name"], how="left")
+        base = base.merge(
+            tm[tcols].drop_duplicates(subset=["team", "player_name"]),
+            on=["team", "player_name"],
+            how="left",
+        )
     if "market_value_eur" not in base.columns:
         base["market_value_eur"] = pd.NA
     if "contract_until" not in base.columns:
@@ -76,17 +81,32 @@ def main() -> Path:
 
     # Photos
     if not photos.empty:
-        base = base.merge(photos[["team", "player_name", "image_url"]].rename(columns={"image_url": "photo_url"}),
-                          on=["team", "player_name"], how="left")
+        base = base.merge(
+            photos[["team", "player_name", "image_url"]].rename(columns={"image_url": "photo_url"}),
+            on=["team", "player_name"],
+            how="left",
+        )
     else:
         base["photo_url"] = ""
 
     base = base.merge(meta, on="team", how="left")
 
     cols = [
-        "team", "fifa_code", "player_name", "position", "age", "dob", "club",
-        "caps", "goals", "intl_xg", "intl_goals_per_match",
-        "market_value_eur", "contract_until", "photo_url", "shirt_number",
+        "team",
+        "fifa_code",
+        "player_name",
+        "position",
+        "age",
+        "dob",
+        "club",
+        "caps",
+        "goals",
+        "intl_xg",
+        "intl_goals_per_match",
+        "market_value_eur",
+        "contract_until",
+        "photo_url",
+        "shirt_number",
     ]
     for c in cols:
         if c not in base.columns:

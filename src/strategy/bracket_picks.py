@@ -54,7 +54,9 @@ def pick_bracket(
     rounds = rubric.config["rounds"]
     pub_by_team: dict[str, float] = {}
     if public_picks is not None and "public_p_champion" in public_picks.columns:
-        pub_by_team = dict(zip(public_picks["team"], public_picks["public_p_champion"], strict=False))
+        pub_by_team = dict(
+            zip(public_picks["team"], public_picks["public_p_champion"], strict=False)
+        )
 
     picks_by_round: dict[str, list[str]] = {}
     total_ev = 0.0
@@ -62,7 +64,7 @@ def pick_bracket(
 
     # Map rubric round name -> column in advancement.
     col_map = {
-        "R32": "p_advance",   # made it out of groups
+        "R32": "p_advance",  # made it out of groups
         "R16": "p_R16",
         "QF": "p_QF",
         "SF": "p_SF",

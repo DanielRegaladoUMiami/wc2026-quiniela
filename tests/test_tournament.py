@@ -58,12 +58,14 @@ def test_uniform_match_probs_unbiased() -> None:
 
 
 def test_tiebreaker_points_gd_gf() -> None:
-    df = pd.DataFrame([
-        {"group": "X", "team": "A", "PTS": 6, "GF": 4, "GA": 2, "GD": 2},
-        {"group": "X", "team": "B", "PTS": 6, "GF": 5, "GA": 2, "GD": 3},
-        {"group": "X", "team": "C", "PTS": 3, "GF": 2, "GA": 4, "GD": -2},
-        {"group": "X", "team": "D", "PTS": 0, "GF": 0, "GA": 3, "GD": -3},
-    ])
+    df = pd.DataFrame(
+        [
+            {"group": "X", "team": "A", "PTS": 6, "GF": 4, "GA": 2, "GD": 2},
+            {"group": "X", "team": "B", "PTS": 6, "GF": 5, "GA": 2, "GD": 3},
+            {"group": "X", "team": "C", "PTS": 3, "GF": 2, "GA": 4, "GD": -2},
+            {"group": "X", "team": "D", "PTS": 0, "GF": 0, "GA": 3, "GD": -3},
+        ]
+    )
     out = _apply_tiebreakers(df, [], np.random.default_rng(0))
     assert out.iloc[0]["team"] == "B"  # higher GD breaks tie
     assert out.iloc[1]["team"] == "A"
@@ -73,11 +75,13 @@ def test_tiebreaker_points_gd_gf() -> None:
 
 def test_tiebreaker_head_to_head() -> None:
     # A and B tied on PTS=6, GD=2, GF=4; H2H A beat B 2-1 -> A first
-    df = pd.DataFrame([
-        {"group": "X", "team": "A", "PTS": 6, "GF": 4, "GA": 2, "GD": 2},
-        {"group": "X", "team": "B", "PTS": 6, "GF": 4, "GA": 2, "GD": 2},
-        {"group": "X", "team": "C", "PTS": 0, "GF": 1, "GA": 5, "GD": -4},
-    ])
+    df = pd.DataFrame(
+        [
+            {"group": "X", "team": "A", "PTS": 6, "GF": 4, "GA": 2, "GD": 2},
+            {"group": "X", "team": "B", "PTS": 6, "GF": 4, "GA": 2, "GD": 2},
+            {"group": "X", "team": "C", "PTS": 0, "GF": 1, "GA": 5, "GD": -4},
+        ]
+    )
     h2h = [("A", "B", 2, 1)]
     out = _apply_tiebreakers(df, h2h, np.random.default_rng(0))
     assert out.iloc[0]["team"] == "A"

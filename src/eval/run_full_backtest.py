@@ -10,19 +10,15 @@ Example:
 from __future__ import annotations
 
 import argparse
-import json
 import pickle
 import time
 from datetime import date, datetime
 from pathlib import Path
-from typing import Optional
 
-import numpy as np
 import pandas as pd
 import polars as pl
 
 from src.eval.calibration import (
-    brier_decomposition,
     expected_calibration_error,
     plot_reliability_png,
 )
@@ -63,7 +59,7 @@ def _load_features() -> pd.DataFrame:
     return pl.read_parquet(FEATURES_PATH).to_pandas()
 
 
-def _gbm_path_for(t_key: str) -> Optional[str]:
+def _gbm_path_for(t_key: str) -> str | None:
     """Pick a GBM snapshot whose training cutoff is strictly before the tournament start.
 
     We use lgbm_pre_wc22.txt (train_end ~ 2022-11-20) for everything ≤ Nov 2022,
@@ -185,7 +181,7 @@ def main() -> int:
                 failures.append({"tournament": t_key, "model": model, "error": str(exc)})
                 continue
             if preds.empty:
-                print(f"  WARN: no predictions produced")
+                print("  WARN: no predictions produced")
                 failures.append({"tournament": t_key, "model": model, "error": "no predictions"})
                 continue
             all_preds.append(preds)
@@ -196,9 +192,7 @@ def main() -> int:
             probs = preds[["p_home", "p_draw", "p_away"]].to_numpy()
             outs = preds["outcome"].astype(int).to_numpy()
             plot_path = out_dir / "calibration_plots" / f"{t_key}_{model}.png"
-            plot_reliability_png(
-                probs, outs, plot_path, title=f"{t_key} – {model}"
-            )
+            plot_reliability_png(probs, outs, plot_path, title=f"{t_key} – {model}")
             ece = expected_calibration_error(probs, outs)
             print(f"  n={len(preds)}  ECE={ece:.3f}  runtime={meta['runtime_sec']:.1f}s")
 
@@ -226,8 +220,8 @@ def main() -> int:
     with open(md_path, "w") as f:
         f.write(_methodology_md(results, reldec, runtimes, failures, args))
     print(f"\nWrote {md_path}")
-    print(f"Wrote {out_dir/'results.csv'}")
-    print(f"Wrote {out_dir/'reliability_decomposition.csv'}")
+    print(f"Wrote {out_dir / 'results.csv'}")
+    print(f"Wrote {out_dir / 'reliability_decomposition.csv'}")
     print("\n" + to_markdown(results))
     return 0
 
@@ -246,17 +240,23 @@ def _methodology_md(
     lines.append("")
     lines.append("## Design")
     lines.append("")
-    lines.append("- **Walk-forward refit**: Dixon–Coles and Bayesian-MAP are re-fit "
-                 "before every distinct match date in each tournament; the harness "
-                 "asserts `predictor.fit_asof_date == match_date` and the predictors "
-                 "filter their training set to `date < asof_date`.")
-    lines.append("- **GBM**: uses a pre-trained snapshot whose training cutoff is "
-                 "strictly before the tournament start (e.g. `lgbm_pre_wc22.txt` for "
-                 "WC2022, `lgbm_pre_euro24.txt` for Euro 2024 / Copa 2024). For older "
-                 "tournaments without a leakage-safe snapshot, GBM is skipped.")
-    lines.append("- **Bayesian fast mode**: backtest uses `pm.find_MAP()` per refit "
-                 "rather than full NUTS (refitting NUTS hundreds of times across "
-                 "tournaments is infeasible). The final WC2026 forecast uses full HMC.")
+    lines.append(
+        "- **Walk-forward refit**: Dixon–Coles and Bayesian-MAP are re-fit "
+        "before every distinct match date in each tournament; the harness "
+        "asserts `predictor.fit_asof_date == match_date` and the predictors "
+        "filter their training set to `date < asof_date`."
+    )
+    lines.append(
+        "- **GBM**: uses a pre-trained snapshot whose training cutoff is "
+        "strictly before the tournament start (e.g. `lgbm_pre_wc22.txt` for "
+        "WC2022, `lgbm_pre_euro24.txt` for Euro 2024 / Copa 2024). For older "
+        "tournaments without a leakage-safe snapshot, GBM is skipped."
+    )
+    lines.append(
+        "- **Bayesian fast mode**: backtest uses `pm.find_MAP()` per refit "
+        "rather than full NUTS (refitting NUTS hundreds of times across "
+        "tournaments is infeasible). The final WC2026 forecast uses full HMC."
+    )
     lines.append(f"- **Bootstrap**: {args.bootstrap} resamples for RPS 95% CI.")
     lines.append("")
     lines.append("## Results table")

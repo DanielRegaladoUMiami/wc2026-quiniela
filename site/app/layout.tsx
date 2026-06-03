@@ -12,7 +12,7 @@ const spaceGrotesk = Space_Grotesk({ variable: "--font-space-grotesk", subsets: 
 export const metadata: Metadata = {
   title: { default: "WC2026 Quiniela — Probabilistic World Cup Predictions", template: "%s · WC2026 Quiniela" },
   description:
-    "Open-source probabilistic predictions for the 2026 FIFA World Cup. 104 matches, 5,000 Monte Carlo simulations, calibrated 1X2 + advancement probabilities for all 48 nations.",
+    "Open-source probabilistic predictions for the 2026 FIFA World Cup. 104 matches, a four-model ensemble and Monte Carlo bracket simulation, calibrated 1X2 + advancement probabilities for all 48 nations.",
   metadataBase: new URL("https://wc2026-quiniela.vercel.app"),
   openGraph: {
     title: "WC2026 Quiniela",

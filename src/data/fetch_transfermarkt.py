@@ -4,6 +4,7 @@ Endpoint: https://transfermarkt-api.fly.dev/  (FastAPI proxy; rate-limited & som
 Strategy: try /clubs/<id>/players for each hardcoded national-team ID. Failures are
 recorded and the script writes whatever it gathers.
 """
+
 from __future__ import annotations
 
 import time
@@ -99,29 +100,47 @@ def main() -> Path:
             time.sleep(2)
             continue
         for p in data["players"]:
-            rows.append({
-                "team": t,
-                "tm_id": TM_IDS[t],
-                "player_id": p.get("id"),
-                "player_name": p.get("name"),
-                "position": p.get("position"),
-                "dob": p.get("dateOfBirth"),
-                "age": p.get("age"),
-                "nationality": ",".join(p.get("nationality") or []) if isinstance(p.get("nationality"), list) else p.get("nationality"),
-                "club": (p.get("club") or {}).get("name") if isinstance(p.get("club"), dict) else None,
-                "market_value_eur": p.get("marketValue"),
-                "contract_until": p.get("contract"),
-                "shirt_number": p.get("shirtNumber"),
-            })
+            rows.append(
+                {
+                    "team": t,
+                    "tm_id": TM_IDS[t],
+                    "player_id": p.get("id"),
+                    "player_name": p.get("name"),
+                    "position": p.get("position"),
+                    "dob": p.get("dateOfBirth"),
+                    "age": p.get("age"),
+                    "nationality": ",".join(p.get("nationality") or [])
+                    if isinstance(p.get("nationality"), list)
+                    else p.get("nationality"),
+                    "club": (p.get("club") or {}).get("name")
+                    if isinstance(p.get("club"), dict)
+                    else None,
+                    "market_value_eur": p.get("marketValue"),
+                    "contract_until": p.get("contract"),
+                    "shirt_number": p.get("shirtNumber"),
+                }
+            )
         print(f"  {t}: {len(data['players'])} players")
         time.sleep(2)
     df = pd.DataFrame(rows)
     if df.empty:
         # still write empty parquet with expected schema for downstream tests
-        df = pd.DataFrame(columns=[
-            "team", "tm_id", "player_id", "player_name", "position", "dob",
-            "age", "nationality", "club", "market_value_eur", "contract_until", "shirt_number",
-        ])
+        df = pd.DataFrame(
+            columns=[
+                "team",
+                "tm_id",
+                "player_id",
+                "player_name",
+                "position",
+                "dob",
+                "age",
+                "nationality",
+                "club",
+                "market_value_eur",
+                "contract_until",
+                "shirt_number",
+            ]
+        )
     df.to_parquet(OUT, index=False)
     print(f"wrote {OUT} ({len(df)} rows, {df['team'].nunique() if not df.empty else 0} teams)")
     print(f"TODO manual TM-id mapping needed for: {missing}")

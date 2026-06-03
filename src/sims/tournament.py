@@ -134,9 +134,7 @@ class TournamentSim:
                 agg[a]["PTS"] += 1
         for t in teams:
             agg[t]["GD"] = agg[t]["GF"] - agg[t]["GA"]
-        df = pd.DataFrame(
-            [{"group": group_letter, "team": t, **agg[t]} for t in teams]
-        )
+        df = pd.DataFrame([{"group": group_letter, "team": t, **agg[t]} for t in teams])
         return _apply_tiebreakers(df, results, rng)
 
     # ---- full tournament --------------------------------------------------
@@ -144,8 +142,7 @@ class TournamentSim:
     def simulate_tournament(self, rng: np.random.Generator) -> dict[str, Any]:
         match_rows: list[dict] = []
         agg_by_group: dict[str, dict[str, dict[str, int]]] = {
-            g: {t: {"PTS": 0, "GF": 0, "GA": 0, "GD": 0} for t in ts}
-            for g, ts in GROUPS.items()
+            g: {t: {"PTS": 0, "GF": 0, "GA": 0, "GD": 0} for t in ts} for g, ts in GROUPS.items()
         }
         h2h_by_group: dict[str, list[tuple[str, str, int, int]]] = {g: [] for g in GROUPS}
         for m in GROUP_MATCHES:
@@ -164,8 +161,17 @@ class TournamentSim:
                 agg_by_group[g][h]["PTS"] += 1
                 agg_by_group[g][a]["PTS"] += 1
             h2h_by_group[g].append((h, a, hg, ag))
-            match_rows.append({"num": m["num"], "stage": "group", "home": h, "away": a,
-                               "home_goals": hg, "away_goals": ag, "winner": h if hg > ag else a if ag > hg else "draw"})
+            match_rows.append(
+                {
+                    "num": m["num"],
+                    "stage": "group",
+                    "home": h,
+                    "away": a,
+                    "home_goals": hg,
+                    "away_goals": ag,
+                    "winner": h if hg > ag else a if ag > hg else "draw",
+                }
+            )
 
         # finalize standings + tiebreakers (pure-Python; no DataFrames in hot path)
         position_map: dict[str, str] = {}
@@ -186,9 +192,7 @@ class TournamentSim:
             thirds.append((g, t3[0], t3[1], t3[2], t3[3]))
 
         # rank third-placed teams (PTS -> GD -> GF -> rng); take top 8
-        thirds_sorted = sorted(
-            thirds, key=lambda r: (-r[2], -r[3], -r[4], rng.random())
-        )
+        thirds_sorted = sorted(thirds, key=lambda r: (-r[2], -r[3], -r[4], rng.random()))
         qualifying = thirds_sorted[:8]
         qualifying_groups = {r[0] for r in qualifying}
         third_team_by_group = {r[0]: r[1] for r in qualifying}
@@ -196,7 +200,8 @@ class TournamentSim:
         # third-place placeholder assignment (approximation)
         ko_fixtures = [dict(m) for m in KNOCKOUT_FIXTURES]
         third_slots = [
-            (i, m["away_pos"]) for i, m in enumerate(ko_fixtures)
+            (i, m["away_pos"])
+            for i, m in enumerate(ko_fixtures)
             if m["stage"] == "R32" and "/" in str(m["away_pos"])
         ]
         # Approximation: assign qualifying third-placed groups to slots uniformly
@@ -206,7 +211,7 @@ class TournamentSim:
 
         # advancement tracker
         reached: dict[str, str] = {t: "group" for ts in GROUPS.values() for t in ts}
-        for g, ordered in standings_per_group.items():
+        for _g, ordered in standings_per_group.items():
             reached[ordered[0][0]] = "R32"
             reached[ordered[1][0]] = "R32"
         for g in qualifying_groups:
@@ -216,14 +221,22 @@ class TournamentSim:
         winners: dict[int, str] = {}  # match num -> winner
         losers: dict[int, str] = {}
         stage_after: dict[str, str] = {
-            "R32": "R16", "R16": "QF", "QF": "SF", "SF": "final", "final": "champion",
+            "R32": "R16",
+            "R16": "QF",
+            "QF": "SF",
+            "SF": "final",
+            "final": "champion",
         }
 
         for idx, m in enumerate(ko_fixtures):
             home_pos = m["home_pos"]
             away_pos = m["away_pos"]
-            home = _resolve_pos(home_pos, position_map, winners, losers, slot_assignment, idx, third_team_by_group)
-            away = _resolve_pos(away_pos, position_map, winners, losers, slot_assignment, idx, third_team_by_group)
+            home = _resolve_pos(
+                home_pos, position_map, winners, losers, slot_assignment, idx, third_team_by_group
+            )
+            away = _resolve_pos(
+                away_pos, position_map, winners, losers, slot_assignment, idx, third_team_by_group
+            )
             if home is None or away is None:
                 # missed third-placed (shouldn't happen if assignment succeeded)
                 continue
@@ -231,11 +244,17 @@ class TournamentSim:
             loser = away if winner == home else home
             winners[m["num"]] = winner
             losers[m["num"]] = loser
-            match_rows.append({
-                "num": m["num"], "stage": m["stage"],
-                "home": home, "away": away,
-                "home_goals": hg, "away_goals": ag, "winner": winner,
-            })
+            match_rows.append(
+                {
+                    "num": m["num"],
+                    "stage": m["stage"],
+                    "home": home,
+                    "away": away,
+                    "home_goals": hg,
+                    "away_goals": ag,
+                    "winner": winner,
+                }
+            )
             # advancement
             if m["stage"] == "final":
                 reached[winner] = "champion"
@@ -339,34 +358,40 @@ class TournamentSim:
         prob = cum / n_sims
         adv_rows = []
         for t, i in team_idx.items():
-            adv_rows.append({
-                "team": t,
-                "p_advance_group": prob[i, STAGES_ORDER.index("R32")],
-                "p_R32_win": prob[i, STAGES_ORDER.index("R16")],
-                "p_R16_win": prob[i, STAGES_ORDER.index("QF")],
-                "p_QF_win": prob[i, STAGES_ORDER.index("SF")],
-                "p_SF_win": prob[i, STAGES_ORDER.index("final")],
-                "p_final_win": prob[i, STAGES_ORDER.index("champion")],
-                "p_champion": champion_counts[i] / n_sims,
-                "p_third_place": third_place_counts[i] / n_sims,
-            })
-        adv_df = pd.DataFrame(adv_rows).sort_values("p_champion", ascending=False).reset_index(drop=True)
+            adv_rows.append(
+                {
+                    "team": t,
+                    "p_advance_group": prob[i, STAGES_ORDER.index("R32")],
+                    "p_R32_win": prob[i, STAGES_ORDER.index("R16")],
+                    "p_R16_win": prob[i, STAGES_ORDER.index("QF")],
+                    "p_QF_win": prob[i, STAGES_ORDER.index("SF")],
+                    "p_SF_win": prob[i, STAGES_ORDER.index("final")],
+                    "p_final_win": prob[i, STAGES_ORDER.index("champion")],
+                    "p_champion": champion_counts[i] / n_sims,
+                    "p_third_place": third_place_counts[i] / n_sims,
+                }
+            )
+        adv_df = (
+            pd.DataFrame(adv_rows).sort_values("p_champion", ascending=False).reset_index(drop=True)
+        )
 
         # match probabilities
         mp_rows = []
         for num, i in match_num_idx.items():
             played = max(int(mp_played[i]), 1)
-            mp_rows.append({
-                "num": num,
-                "home": mp_home[i],
-                "away": mp_away[i],
-                "n_played": int(mp_played[i]),
-                "p_home_win": mp[i, 0] / played,
-                "p_draw": mp[i, 1] / played,
-                "p_away_win": mp[i, 2] / played,
-                "expected_home_goals": mp[i, 3] / played,
-                "expected_away_goals": mp[i, 4] / played,
-            })
+            mp_rows.append(
+                {
+                    "num": num,
+                    "home": mp_home[i],
+                    "away": mp_away[i],
+                    "n_played": int(mp_played[i]),
+                    "p_home_win": mp[i, 0] / played,
+                    "p_draw": mp[i, 1] / played,
+                    "p_away_win": mp[i, 2] / played,
+                    "expected_home_goals": mp[i, 3] / played,
+                    "expected_away_goals": mp[i, 4] / played,
+                }
+            )
         match_df = pd.DataFrame(mp_rows).sort_values("num").reset_index(drop=True)
         sample_df = pd.DataFrame(sample_brackets_rows)
 
@@ -462,9 +487,9 @@ def _apply_tiebreakers(
             block = block.copy()
             block["_h2h"] = block["team"].map(h2h_gd)
             block["_rng"] = rng.random(len(block))
-            block = block.sort_values(
-                ["_h2h", "_rng"], ascending=[False, False]
-            ).drop(columns=["_h2h", "_rng"])
+            block = block.sort_values(["_h2h", "_rng"], ascending=[False, False]).drop(
+                columns=["_h2h", "_rng"]
+            )
         out_rows.extend(block.to_dict("records"))
         i = j
     return pd.DataFrame(out_rows).reset_index(drop=True)
@@ -482,8 +507,7 @@ def _assign_thirds_to_slots(
     each slot's candidate group list. Falls back to greedy if random fails.
     """
     candidate_lists = {
-        slot_idx: [g for g in pos.split("/") if g in qualifying_groups]
-        for slot_idx, pos in slots
+        slot_idx: [g for g in pos.split("/") if g in qualifying_groups] for slot_idx, pos in slots
     }
     # Random matching: shuffle slot order, pick uniformly
     for _ in range(50):
@@ -566,7 +590,8 @@ def _build_dixon_coles_predictor(asof: str) -> tuple[PredictFn, StrengthFn]:
     fallback_dim = 9
     _x = np.arange(fallback_dim)
     import math
-    _p = np.exp(-1.3) * (1.3 ** _x) / np.array([math.factorial(i) for i in _x])
+
+    _p = np.exp(-1.3) * (1.3**_x) / np.array([math.factorial(i) for i in _x])
     _p /= _p.sum()
     fallback = np.outer(_p, _p)
     known_teams = set(getattr(model, "teams", []))
@@ -574,7 +599,7 @@ def _build_dixon_coles_predictor(asof: str) -> tuple[PredictFn, StrengthFn]:
         # introspect from params
         for k in getattr(model, "params", {}):
             if k.startswith("attack_"):
-                known_teams.add(k[len("attack_"):])
+                known_teams.add(k[len("attack_") :])
 
     def predict_fn(home: str, away: str) -> np.ndarray:
         if home not in known_teams or away not in known_teams:

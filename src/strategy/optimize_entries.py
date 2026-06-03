@@ -39,9 +39,7 @@ class Entry:
 # ---------------------------------------------------------------------------
 
 
-def _enumerate_1x2(
-    row: pd.Series, rubric: Rubric
-) -> list[tuple[str, float]]:
+def _enumerate_1x2(row: pd.Series, rubric: Rubric) -> list[tuple[str, float]]:
     """Return list[(pick, EV)] for the 3 possible 1X2 picks."""
     out = []
     for cand in ("H", "D", "A"):
@@ -56,9 +54,7 @@ def _enumerate_1x2(
     return out
 
 
-def _enumerate_fifa_mx(
-    row: pd.Series, rubric: Rubric
-) -> list[tuple[tuple[str, str], float]]:
+def _enumerate_fifa_mx(row: pd.Series, rubric: Rubric) -> list[tuple[tuple[str, str], float]]:
     dist = score_matrix_to_dist(row["score_matrix"])
     out = []
     for r in ("H", "D", "A"):
@@ -68,9 +64,7 @@ def _enumerate_fifa_mx(
     return out
 
 
-def _enumerate_exact_score(
-    row: pd.Series, rubric: Rubric
-) -> list[tuple[tuple[int, int], float]]:
+def _enumerate_exact_score(row: pd.Series, rubric: Rubric) -> list[tuple[tuple[int, int], float]]:
     dist = score_matrix_to_dist(row["score_matrix"])
     max_g = int(rubric.config.get("max_goals", 5))
     out = []
@@ -80,9 +74,7 @@ def _enumerate_exact_score(
     return out
 
 
-def _candidates_for_match(
-    row: pd.Series, rubric: Rubric
-) -> list[tuple[object, float]]:
+def _candidates_for_match(row: pd.Series, rubric: Rubric) -> list[tuple[object, float]]:
     if rubric.type == "composite_1x2_totals":
         return _enumerate_fifa_mx(row, rubric)
     if rubric.type == "exact_score_tiered":
@@ -96,9 +88,7 @@ def _candidates_for_match(
 # ---------------------------------------------------------------------------
 
 
-def _public_overlap(
-    pick: object, public_row: pd.Series, rubric_type: str
-) -> float:
+def _public_overlap(pick: object, public_row: pd.Series, rubric_type: str) -> float:
     """Approximate P(a public entry picks the same thing) for one match."""
     if rubric_type == "composite_1x2_totals":
         result, _totals = pick  # type: ignore[misc]

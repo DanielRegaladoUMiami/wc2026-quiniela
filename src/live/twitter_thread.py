@@ -14,7 +14,7 @@ Format:
 from __future__ import annotations
 
 import argparse
-from datetime import date as Date, datetime
+from datetime import date as Date
 from pathlib import Path
 
 import pandas as pd
@@ -22,20 +22,55 @@ import polars as pl
 
 from src.sims.bracket_2026 import all_fixtures_df
 
-
 FLAG_EMOJI = {
-    "MX": "🇲🇽", "ZA": "🇿🇦", "KR": "🇰🇷", "CZ": "🇨🇿",
-    "CA": "🇨🇦", "BA": "🇧🇦", "QA": "🇶🇦", "CH": "🇨🇭",
-    "BR": "🇧🇷", "MA": "🇲🇦", "HT": "🇭🇹", "GB-SCT": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
-    "US": "🇺🇸", "PY": "🇵🇾", "AU": "🇦🇺", "TR": "🇹🇷",
-    "DE": "🇩🇪", "CW": "🇨🇼", "CI": "🇨🇮", "EC": "🇪🇨",
-    "NL": "🇳🇱", "JP": "🇯🇵", "SE": "🇸🇪", "TN": "🇹🇳",
-    "BE": "🇧🇪", "EG": "🇪🇬", "IR": "🇮🇷", "NZ": "🇳🇿",
-    "ES": "🇪🇸", "CV": "🇨🇻", "SA": "🇸🇦", "UY": "🇺🇾",
-    "FR": "🇫🇷", "SN": "🇸🇳", "IQ": "🇮🇶", "NO": "🇳🇴",
-    "AR": "🇦🇷", "DZ": "🇩🇿", "AT": "🇦🇹", "JO": "🇯🇴",
-    "PT": "🇵🇹", "CD": "🇨🇩", "UZ": "🇺🇿", "CO": "🇨🇴",
-    "GB-ENG": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "HR": "🇭🇷", "GH": "🇬🇭", "PA": "🇵🇦",
+    "MX": "🇲🇽",
+    "ZA": "🇿🇦",
+    "KR": "🇰🇷",
+    "CZ": "🇨🇿",
+    "CA": "🇨🇦",
+    "BA": "🇧🇦",
+    "QA": "🇶🇦",
+    "CH": "🇨🇭",
+    "BR": "🇧🇷",
+    "MA": "🇲🇦",
+    "HT": "🇭🇹",
+    "GB-SCT": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+    "US": "🇺🇸",
+    "PY": "🇵🇾",
+    "AU": "🇦🇺",
+    "TR": "🇹🇷",
+    "DE": "🇩🇪",
+    "CW": "🇨🇼",
+    "CI": "🇨🇮",
+    "EC": "🇪🇨",
+    "NL": "🇳🇱",
+    "JP": "🇯🇵",
+    "SE": "🇸🇪",
+    "TN": "🇹🇳",
+    "BE": "🇧🇪",
+    "EG": "🇪🇬",
+    "IR": "🇮🇷",
+    "NZ": "🇳🇿",
+    "ES": "🇪🇸",
+    "CV": "🇨🇻",
+    "SA": "🇸🇦",
+    "UY": "🇺🇾",
+    "FR": "🇫🇷",
+    "SN": "🇸🇳",
+    "IQ": "🇮🇶",
+    "NO": "🇳🇴",
+    "AR": "🇦🇷",
+    "DZ": "🇩🇿",
+    "AT": "🇦🇹",
+    "JO": "🇯🇴",
+    "PT": "🇵🇹",
+    "CD": "🇨🇩",
+    "UZ": "🇺🇿",
+    "CO": "🇨🇴",
+    "GB-ENG": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    "HR": "🇭🇷",
+    "GH": "🇬🇭",
+    "PA": "🇵🇦",
 }
 
 
@@ -72,13 +107,17 @@ def build_thread(target_date: Date) -> list[str]:
     top5 = adv.sort_values("p_champion", ascending=False).head(5).reset_index(drop=True)
     lines = ["🏆 Champion top 5:"]
     for _, r in top5.iterrows():
-        lines.append(f"  {_flag(r['team'], meta)} {r['team']}: {r['p_champion']*100:.1f}%")
+        lines.append(f"  {_flag(r['team'], meta)} {r['team']}: {r['p_champion'] * 100:.1f}%")
     tweets.append("\n".join(lines))
 
     today_matches = fixtures[fixtures["date"] == target_date]
     if not today_matches.empty:
         lines = [f"⚽ Today's matches ({len(today_matches)}):"]
-        mp_by_num = {int(r["match_num"]): r for _, r in match_probs.iterrows()} if "match_num" in match_probs.columns else {}
+        mp_by_num = (
+            {int(r["match_num"]): r for _, r in match_probs.iterrows()}
+            if "match_num" in match_probs.columns
+            else {}
+        )
         for _, m in today_matches.iterrows():
             home = m.get("home")
             away = m.get("away")
@@ -91,7 +130,7 @@ def build_thread(target_date: Date) -> list[str]:
                 pa = mp.get("p_away_win", 0.0)
                 pick = "HOME" if ph > max(pd_, pa) else ("DRAW" if pd_ > pa else "AWAY")
                 lines.append(
-                    f"  {_flag(home, meta)} {home} vs {_flag(away, meta)} {away}: {ph*100:.0f}/{pd_*100:.0f}/{pa*100:.0f} → {pick}"
+                    f"  {_flag(home, meta)} {home} vs {_flag(away, meta)} {away}: {ph * 100:.0f}/{pd_ * 100:.0f}/{pa * 100:.0f} → {pick}"
                 )
             else:
                 lines.append(f"  {_flag(home, meta)} {home} vs {_flag(away, meta)} {away}")

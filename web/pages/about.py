@@ -15,7 +15,7 @@ def build_page() -> None:
         **License** — Apache 2.0
 
         **Stack** — Dixon-Coles · Hierarchical Bayesian (PyMC) · LightGBM · Kalshi market features ·
-        Stacker w/ isotonic calibration · 50k Monte Carlo bracket sims.
+        Stacker w/ isotonic calibration · Monte Carlo bracket sims.
 
         ---
 

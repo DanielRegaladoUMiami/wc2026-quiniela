@@ -20,6 +20,7 @@ Columns: date, home_team, away_team, p_home_market, p_draw_market, p_away_market
 from __future__ import annotations
 
 import argparse
+import contextlib
 import re
 import time
 from dataclasses import dataclass
@@ -118,10 +119,8 @@ def parse_results_html(html: str, tournament: str) -> list[OddsRow]:
         txt = tr.get_text(" ", strip=True)
         m = date_re.search(txt)
         if m and len(tr.find_all("td")) <= 2:
-            try:
+            with contextlib.suppress(Exception):
                 current_date = pd.to_datetime(m.group(1))
-            except Exception:
-                pass
             continue
         tds = [td.get_text(strip=True) for td in tr.find_all("td")]
         if len(tds) < 5:
@@ -140,12 +139,22 @@ def parse_results_html(html: str, tournament: str) -> list[OddsRow]:
         home, away = (s.strip() for s in teams_cell.split(sep, 1))
         ph, pd_, pa = shin_devig(o_h, o_d, o_a)
         vig = (1 / o_h + 1 / o_d + 1 / o_a) - 1
-        rows.append(OddsRow(
-            date=current_date or pd.NaT, home_team=home, away_team=away,
-            odds_home=o_h, odds_draw=o_d, odds_away=o_a,
-            p_home_market=ph, p_draw_market=pd_, p_away_market=pa,
-            source="oddsportal", tournament=tournament, vig_pct=float(vig * 100),
-        ))
+        rows.append(
+            OddsRow(
+                date=current_date or pd.NaT,
+                home_team=home,
+                away_team=away,
+                odds_home=o_h,
+                odds_draw=o_d,
+                odds_away=o_a,
+                p_home_market=ph,
+                p_draw_market=pd_,
+                p_away_market=pa,
+                source="oddsportal",
+                tournament=tournament,
+                vig_pct=float(vig * 100),
+            )
+        )
     return rows
 
 

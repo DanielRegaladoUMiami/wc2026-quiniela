@@ -1,0 +1,21 @@
+# Pre-commit hooks for wc2026-quiniela.
+# Install once:  uv run pre-commit install
+# Ruff version is pinned to match uv.lock so local hooks and CI never drift.
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.13
+    hooks:
+      - id: ruff
+        args: [--fix]
+        files: ^(src|tests|web)/
+      - id: ruff-format
+        files: ^(src|tests|web)/
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-yaml
+      - id: check-added-large-files
+        args: [--maxkb=2048]

@@ -65,7 +65,10 @@ def load_kaggle_martj42() -> pl.DataFrame:
             }
         )
         .with_columns(
-            pl.col("neutral_venue").str.to_lowercase().is_in(["true", "1", "t"]).alias("neutral_venue"),
+            pl.col("neutral_venue")
+            .str.to_lowercase()
+            .is_in(["true", "1", "t"])
+            .alias("neutral_venue"),
             pl.col("date").alias("date_str"),
             pl.col("date").str.strptime(pl.Date, "%Y-%m-%d").alias("date"),
         )
@@ -100,7 +103,9 @@ def main() -> int:
     matches.write_parquet(OUT, compression="zstd")
     print(f"Wrote {len(matches):,} matches → {OUT}")
     print(f"Date range: {matches['date'].min()} → {matches['date'].max()}")
-    print(f"Distinct teams: {matches['home_team'].n_unique()} home, {matches['away_team'].n_unique()} away")
+    print(
+        f"Distinct teams: {matches['home_team'].n_unique()} home, {matches['away_team'].n_unique()} away"
+    )
     return 0
 
 

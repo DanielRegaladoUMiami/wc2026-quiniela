@@ -19,11 +19,10 @@ Filter logic (`select_tournament`) requires:
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from datetime import date
-from typing import Iterable
 
 import pandas as pd
-
 
 TOURNAMENTS: dict[str, dict] = {
     # World Cups

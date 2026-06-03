@@ -19,27 +19,46 @@ import lightgbm as lgb
 import numpy as np
 import pandas as pd
 import polars as pl
-from sklearn.calibration import _SigmoidCalibration
 from sklearn.isotonic import IsotonicRegression
 
 from src.eval.rps import log_loss_1x2, mean_rps
 
-
 FEATURE_COLS = [
-    "elo_diff", "home_elo_pre", "away_elo_pre", "p_home_win_elo",
+    "elo_diff",
+    "home_elo_pre",
+    "away_elo_pre",
+    "p_home_win_elo",
     "importance",
-    "h_ppg_5", "h_ppg_10", "h_ppg_20",
-    "a_ppg_5", "a_ppg_10", "a_ppg_20",
-    "h_gd_pm_5", "h_gd_pm_10", "h_gd_pm_20",
-    "a_gd_pm_5", "a_gd_pm_10", "a_gd_pm_20",
-    "h_gf_pm_10", "a_gf_pm_10",
-    "h_ga_pm_10", "a_ga_pm_10",
-    "h_win_rate_10", "a_win_rate_10",
-    "h_ppg_vs_top_10", "a_ppg_vs_top_10",
-    "h_gd_pm_vs_top_10", "a_gd_pm_vs_top_10",
-    "h_days_since_last", "a_days_since_last",
-    "form_diff_ppg_5", "form_diff_ppg_10", "form_diff_ppg_20",
-    "form_diff_gd_5", "form_diff_gd_10", "form_diff_gd_20",
+    "h_ppg_5",
+    "h_ppg_10",
+    "h_ppg_20",
+    "a_ppg_5",
+    "a_ppg_10",
+    "a_ppg_20",
+    "h_gd_pm_5",
+    "h_gd_pm_10",
+    "h_gd_pm_20",
+    "a_gd_pm_5",
+    "a_gd_pm_10",
+    "a_gd_pm_20",
+    "h_gf_pm_10",
+    "a_gf_pm_10",
+    "h_ga_pm_10",
+    "a_ga_pm_10",
+    "h_win_rate_10",
+    "a_win_rate_10",
+    "h_ppg_vs_top_10",
+    "a_ppg_vs_top_10",
+    "h_gd_pm_vs_top_10",
+    "a_gd_pm_vs_top_10",
+    "h_days_since_last",
+    "a_days_since_last",
+    "form_diff_ppg_5",
+    "form_diff_ppg_10",
+    "form_diff_ppg_20",
+    "form_diff_gd_5",
+    "form_diff_gd_10",
+    "form_diff_gd_20",
 ]
 
 DEFAULT_PARAMS = {
@@ -64,7 +83,9 @@ class GBMModel:
     feature_cols: list[str]
 
     def predict_proba(self, X: pd.DataFrame) -> np.ndarray:
-        raw = self.booster.predict(X[self.feature_cols].to_numpy(), num_iteration=self.booster.best_iteration)
+        raw = self.booster.predict(
+            X[self.feature_cols].to_numpy(), num_iteration=self.booster.best_iteration
+        )
         if raw.ndim == 1:
             raw = raw.reshape(-1, 3)
         cal = np.column_stack([self.calibrators[k].predict(raw[:, k]) for k in range(3)])
@@ -145,7 +166,9 @@ def load(path: str | Path) -> GBMModel:
     booster = lgb.Booster(model_file=str(path))
     with open(path.with_suffix(".calibrators.pkl"), "rb") as f:
         meta = pickle.load(f)
-    return GBMModel(booster=booster, calibrators=meta["calibrators"], feature_cols=meta["feature_cols"])
+    return GBMModel(
+        booster=booster, calibrators=meta["calibrators"], feature_cols=meta["feature_cols"]
+    )
 
 
 def main() -> int:

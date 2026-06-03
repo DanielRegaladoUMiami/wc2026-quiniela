@@ -22,7 +22,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import date
-from typing import Callable, Optional, Protocol
+from typing import Protocol
 
 import numpy as np
 import pandas as pd
@@ -32,12 +32,10 @@ from src.eval.tournaments import TOURNAMENTS, select_tournament
 
 
 class Predictor(Protocol):
-    fit_asof_date: Optional[date]
+    fit_asof_date: date | None
 
     def refit(self, asof_date: date) -> None: ...
-    def predict(
-        self, home: str, away: str, venue_country: Optional[str] = None
-    ) -> dict: ...
+    def predict(self, home: str, away: str, venue_country: str | None = None) -> dict: ...
 
 
 @dataclass
@@ -70,7 +68,7 @@ def walk_forward(
 
     preds_log: list[dict] = []
     skipped: list[dict] = []
-    last_fit_date: Optional[date] = None
+    last_fit_date: date | None = None
 
     for _, m in tourney.iterrows():
         d = m["date"]
@@ -101,7 +99,7 @@ def walk_forward(
             if verbose:
                 print(f"  skip {m['home_team']} vs {m['away_team']}: {exc}")
             continue
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             skipped.append(
                 {
                     "date": d,
@@ -151,7 +149,7 @@ class DixonColesPredictor:
         self.xi = xi
         self.min_team_matches = min_team_matches
         self.model = None
-        self.fit_asof_date: Optional[date] = None
+        self.fit_asof_date: date | None = None
 
     def refit(self, asof_date: date) -> None:
         self.model = self._dc.fit(
@@ -162,7 +160,7 @@ class DixonColesPredictor:
         )
         self.fit_asof_date = asof_date
 
-    def predict(self, home: str, away: str, venue_country: Optional[str] = None) -> dict:
+    def predict(self, home: str, away: str, venue_country: str | None = None) -> dict:
         p = self._dc.predict(self.model, home, away)
         return {"p_home": p.p_home_win, "p_draw": p.p_draw, "p_away": p.p_away_win}
 
@@ -187,7 +185,7 @@ class GBMPredictor:
         self.features_all["date"] = pd.to_datetime(self.features_all["date"]).dt.date
         self.model = gbm_mod.load(model_path)
         self.tournament_start = tournament_start
-        self.fit_asof_date: Optional[date] = None
+        self.fit_asof_date: date | None = None
         # Index by (home, away, date) for fast lookup.
         self._lookup = {
             (r["home_team"], r["away_team"], r["date"]): idx
@@ -199,7 +197,7 @@ class GBMPredictor:
         # Pretrained model was fit with data < tournament_start; we attest that here.
         self.fit_asof_date = asof_date
 
-    def predict(self, home: str, away: str, venue_country: Optional[str] = None) -> dict:
+    def predict(self, home: str, away: str, venue_country: str | None = None) -> dict:
         # Find the feature row for this match date.
         key_date = self.fit_asof_date
         idx = self._lookup.get((home, away, key_date))
@@ -217,14 +215,16 @@ class BayesianPredictor:
     50+ times per tournament. This is documented as a limitation.
     """
 
-    def __init__(self, matches_all: pd.DataFrame, lookback_years: int = 4, cache_dir: Optional[str] = None):
+    def __init__(
+        self, matches_all: pd.DataFrame, lookback_years: int = 4, cache_dir: str | None = None
+    ):
         from src.models import bayesian as bayes_mod
 
         self._bayes = bayes_mod
         self.matches_all = matches_all
         self.lookback_years = lookback_years
         self.model = None
-        self.fit_asof_date: Optional[date] = None
+        self.fit_asof_date: date | None = None
 
     def refit(self, asof_date: date) -> None:
         self.model = self._bayes.fit(
@@ -235,6 +235,6 @@ class BayesianPredictor:
         )
         self.fit_asof_date = asof_date
 
-    def predict(self, home: str, away: str, venue_country: Optional[str] = None) -> dict:
+    def predict(self, home: str, away: str, venue_country: str | None = None) -> dict:
         p = self._bayes.predict(self.model, home, away, venue_country=venue_country)
         return {"p_home": p.p_home_win, "p_draw": p.p_draw, "p_away": p.p_away_win}

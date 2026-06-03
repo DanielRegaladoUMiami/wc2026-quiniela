@@ -13,9 +13,9 @@ For backtesting we *must* call `fit` with `asof_date` so only past matches are u
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import date, datetime
-from typing import Iterable
 
 import numpy as np
 import pandas as pd

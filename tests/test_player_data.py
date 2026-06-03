@@ -1,4 +1,5 @@
 """Structural tests for the player-data pipeline. No network calls."""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -18,7 +19,17 @@ META = Path("data/fixtures/team_metadata.parquet")
 @pytest.mark.skipif(not WIKI.exists(), reason="run fetch_wiki_squads first")
 def test_wiki_squads_schema():
     df = pd.read_parquet(WIKI)
-    assert {"team", "player_name", "position", "dob", "club", "caps", "goals", "shirt_number", "source_url"}.issubset(df.columns)
+    assert {
+        "team",
+        "player_name",
+        "position",
+        "dob",
+        "club",
+        "caps",
+        "goals",
+        "shirt_number",
+        "source_url",
+    }.issubset(df.columns)
     assert df["team"].notna().all()
     assert df["player_name"].notna().all()
     assert len(df) > 500
@@ -49,9 +60,21 @@ def test_photos_schema():
 def test_players_processed():
     df = pd.read_parquet(PLAYERS)
     expected = {
-        "team", "fifa_code", "player_name", "position", "age", "dob", "club",
-        "caps", "goals", "intl_xg", "intl_goals_per_match",
-        "market_value_eur", "contract_until", "photo_url", "shirt_number",
+        "team",
+        "fifa_code",
+        "player_name",
+        "position",
+        "age",
+        "dob",
+        "club",
+        "caps",
+        "goals",
+        "intl_xg",
+        "intl_goals_per_match",
+        "market_value_eur",
+        "contract_until",
+        "photo_url",
+        "shirt_number",
     }
     assert expected.issubset(df.columns)
     assert df["team"].notna().all()
@@ -65,9 +88,15 @@ def test_players_processed():
 def test_team_stats():
     df = pd.read_parquet(TEAM_STATS)
     assert len(df) == 48
-    assert {"avg_age", "median_age", "squad_market_value_eur_total",
-            "squad_market_value_top11", "n_top5_league_players",
-            "manager_name", "manager_tenure_days"}.issubset(df.columns)
+    assert {
+        "avg_age",
+        "median_age",
+        "squad_market_value_eur_total",
+        "squad_market_value_top11",
+        "n_top5_league_players",
+        "manager_name",
+        "manager_tenure_days",
+    }.issubset(df.columns)
     # Joined with team_metadata
     assert {"fifa_code", "fifa_rank", "conf"}.issubset(df.columns)
 

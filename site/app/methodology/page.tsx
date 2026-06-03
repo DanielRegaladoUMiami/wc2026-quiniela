@@ -1,4 +1,5 @@
 import MathBlock from "./MathBlock";
+import { getMeta } from "@/lib/data";
 
 export const metadata = { title: "Methodology" };
 
@@ -52,7 +53,7 @@ export default function MethodologyPage() {
       </Section>
 
       <Section title="6 · Monte Carlo bracket">
-        <p>50,000 full-tournament simulations sampling scorelines from the calibrated joint distribution, with a
+        <p>{getMeta().n_sims.toLocaleString()} full-tournament simulations sampling scorelines from the calibrated joint distribution, with a
           penalty-shootout model for knockout draws.</p>
       </Section>
 

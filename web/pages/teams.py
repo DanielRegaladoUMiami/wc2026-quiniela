@@ -88,7 +88,7 @@ def build_page() -> None:
         gr.Markdown(no_sim_banner())
     gr.Markdown("# Equipos · WC 2026 · 48 selecciones")
     gr.Markdown(
-        "Sorted by **P(champion)** from our 5k Monte Carlo simulation (DC + LightGBM + "
+        "Sorted by **P(champion)** from our Monte Carlo simulation (DC + LightGBM + "
         "Bayesian blend). Click a confederation chip to filter."
     )
     confs = ["All"] + sorted(df["conf"].dropna().unique().tolist())

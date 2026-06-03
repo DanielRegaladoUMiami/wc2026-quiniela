@@ -15,7 +15,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import date, timedelta
-from typing import Optional
 
 import numpy as np
 import pandas as pd
@@ -83,7 +82,7 @@ class RecorderPredictor:
     """A predictor that records what training data it 'saw' at each refit."""
 
     matches_all: pd.DataFrame
-    fit_asof_date: Optional[date] = None
+    fit_asof_date: date | None = None
     seen_max_dates: list[date] = field(default_factory=list)
     cheat: bool = False  # if True, sets fit_asof_date to wrong value
 
@@ -110,7 +109,7 @@ def test_walk_forward_filters_strictly_before_match_date():
     assert len(res.predictions) == 4
     # Every recorded max-training-date must be strictly < the corresponding match date.
     tourney_dates = sorted(set(res.predictions["date"]))
-    for match_date, max_train_date in zip(tourney_dates, pred.seen_max_dates):
+    for match_date, max_train_date in zip(tourney_dates, pred.seen_max_dates, strict=False):
         assert max_train_date < match_date, (
             f"Training data leaked: saw date {max_train_date} >= match date {match_date}"
         )
@@ -133,7 +132,7 @@ def test_walk_forward_future_outcome_feature_detected():
     matches = _toy_match_log()
 
     class FutureLeakPredictor:
-        fit_asof_date: Optional[date] = None
+        fit_asof_date: date | None = None
 
         def refit(self, asof_date):
             # Pretend we trained on data up to TOMORROW (post-match leak).

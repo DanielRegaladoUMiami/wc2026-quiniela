@@ -68,6 +68,10 @@ export default function ScoreHeatmap({ lambdaH, lambdaA }: { lambdaH: number; la
         <span className="text-slate-600 mx-2">·</span>
         <span>{(max * 100).toFixed(2)}% mass</span>
       </div>
+      <div className="text-[10px] text-slate-600 mt-1">
+        Independent-Poisson approximation (λ<sub>home</sub> × λ<sub>away</sub>). The correlated
+        Dixon-Coles / Monte-Carlo joint is served on match pages in the live build.
+      </div>
     </div>
   );
 }

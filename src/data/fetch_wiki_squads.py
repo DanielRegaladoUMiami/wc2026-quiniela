@@ -3,6 +3,7 @@
 Falls back to per-team national-team articles when the aggregate page lacks a team
 (e.g. before official rosters are announced for that team).
 """
+
 from __future__ import annotations
 
 import re
@@ -80,6 +81,7 @@ def _parse_table(team: str, table: bs4.Tag, src: str) -> list[Player]:
     if not rows:
         return []
     header = [th.get_text(" ", strip=True).lower() for th in rows[0].find_all(["th", "td"])]
+
     # Identify column indices
     def idx(*names: str) -> int:
         for i, h in enumerate(header):
@@ -104,7 +106,7 @@ def _parse_table(team: str, table: bs4.Tag, src: str) -> list[Player]:
             continue
         txts = [c.get_text(" ", strip=True) for c in cells]
 
-        def at(i: int) -> str:
+        def at(i: int, txts: list[str] = txts) -> str:
             return txts[i] if 0 <= i < len(txts) else ""
 
         name = at(i_player)
@@ -171,7 +173,9 @@ def scrape_team_article(team: str) -> list[Player]:
             soup = _get(url)
         except Exception:
             continue
-        content = soup.find("div", id="mw-content-text") or soup.find("div", class_="mw-parser-output")
+        content = soup.find("div", id="mw-content-text") or soup.find(
+            "div", class_="mw-parser-output"
+        )
         if not content:
             continue
         # Strategy 1: take squad/call-up section tables
@@ -179,7 +183,9 @@ def scrape_team_article(team: str) -> list[Player]:
         for el in content.find_all(["h2", "h3", "h4", "table"]):
             if el.name in {"h2", "h3", "h4"}:
                 txt = el.get_text(" ", strip=True).lower()
-                take = any(k in txt for k in ("current squad", "recent call", "latest squad", "squad"))
+                take = any(
+                    k in txt for k in ("current squad", "recent call", "latest squad", "squad")
+                )
             elif take and "wikitable" in (el.get("class") or []):
                 parsed = _parse_table(team, el, url)
                 if parsed:
@@ -189,7 +195,9 @@ def scrape_team_article(team: str) -> list[Player]:
             head = tbl.find("tr")
             if not head:
                 continue
-            cols = " ".join(c.get_text(" ", strip=True).lower() for c in head.find_all(["th", "td"]))
+            cols = " ".join(
+                c.get_text(" ", strip=True).lower() for c in head.find_all(["th", "td"])
+            )
             if "player" in cols and ("caps" in cols or "club" in cols) and "pos" in cols:
                 parsed = _parse_table(team, tbl, url)
                 if parsed:

@@ -104,6 +104,7 @@ def test_fetch_for_fixture_skips_when_network_fails(monkeypatch: pytest.MonkeyPa
     monkeypatch.setattr(fetch_weather, "fetch_forecast", boom)
     monkeypatch.setattr(fetch_weather, "fetch_climatology", lambda *a, **kw: None)
     kickoff = pd.Timestamp("2026-06-11 19:00")
-    row = fetch_weather.fetch_for_fixture(1, "mexico_city", 19.30, -99.15, kickoff,
-                                          today=pd.Timestamp("2026-06-10"))
+    row = fetch_weather.fetch_for_fixture(
+        1, "mexico_city", 19.30, -99.15, kickoff, today=pd.Timestamp("2026-06-10")
+    )
     assert row is None

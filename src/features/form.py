@@ -18,7 +18,6 @@ from pathlib import Path
 import pandas as pd
 import polars as pl
 
-
 WINDOWS = (5, 10, 20)
 TOP_ELO_THRESHOLD = 1900.0
 
@@ -45,8 +44,20 @@ def compute_form(matches: pd.DataFrame, elo_pre: pd.DataFrame) -> pd.DataFrame:
 
     for r in df.itertuples(index=False):
         for side, team, gf, ga, opp_elo in (
-            ("home", r.home_team, r.home_goals, r.away_goals, elo_lookup.get(r.match_id, {}).get("away_elo_pre", 1500.0)),
-            ("away", r.away_team, r.away_goals, r.home_goals, elo_lookup.get(r.match_id, {}).get("home_elo_pre", 1500.0)),
+            (
+                "home",
+                r.home_team,
+                r.home_goals,
+                r.away_goals,
+                elo_lookup.get(r.match_id, {}).get("away_elo_pre", 1500.0),
+            ),
+            (
+                "away",
+                r.away_team,
+                r.away_goals,
+                r.home_goals,
+                elo_lookup.get(r.match_id, {}).get("home_elo_pre", 1500.0),
+            ),
         ):
             hist = state.setdefault(team, deque(maxlen=max(WINDOWS) + 5))
             row = {"match_id": r.match_id, "date": r.date, "team": team, "side": side}
@@ -61,8 +72,8 @@ def compute_form(matches: pd.DataFrame, elo_pre: pd.DataFrame) -> pd.DataFrame:
                     strong = [x for x in last if x["opp_elo"] >= TOP_ELO_THRESHOLD]
                     if strong:
                         row[f"ppg_vs_top_{w}"] = sum(x["ppg"] for x in strong) / len(strong)
-                        row[f"gd_pm_vs_top_{w}"] = (
-                            sum(x["gf"] - x["ga"] for x in strong) / len(strong)
+                        row[f"gd_pm_vs_top_{w}"] = sum(x["gf"] - x["ga"] for x in strong) / len(
+                            strong
                         )
                     else:
                         row[f"ppg_vs_top_{w}"] = None
@@ -78,11 +89,11 @@ def compute_form(matches: pd.DataFrame, elo_pre: pd.DataFrame) -> pd.DataFrame:
                         f"gd_pm_vs_top_{w}",
                     ):
                         row[k] = None
-            row["days_since_last"] = (
-                (r.date - hist[-1]["date"]).days if hist else None
-            )
+            row["days_since_last"] = (r.date - hist[-1]["date"]).days if hist else None
             rows.append(row)
-            hist.append({"date": r.date, "gf": gf, "ga": ga, "ppg": _ppg(gf, ga), "opp_elo": opp_elo})
+            hist.append(
+                {"date": r.date, "gf": gf, "ga": ga, "ppg": _ppg(gf, ga), "opp_elo": opp_elo}
+            )
 
     return pd.DataFrame(rows)
 

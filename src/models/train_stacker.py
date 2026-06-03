@@ -21,24 +21,28 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import polars as pl
-from sklearn.isotonic import IsotonicRegression
 from sklearn.linear_model import LogisticRegression
-from sklearn.calibration import CalibratedClassifierCV
 
 from src.eval.rps import log_loss_1x2, mean_rps
-from src.models.stacker import Stacker, IdentityCalibrator, save as save_stacker
-
+from src.models.stacker import IdentityCalibrator, Stacker
+from src.models.stacker import save as save_stacker
 
 BASE_COLS = [
-    "p_dc_h", "p_dc_d", "p_dc_a",
-    "p_gbm_h", "p_gbm_d", "p_gbm_a",
-    "p_bay_h", "p_bay_d", "p_bay_a",
+    "p_dc_h",
+    "p_dc_d",
+    "p_dc_a",
+    "p_gbm_h",
+    "p_gbm_d",
+    "p_gbm_a",
+    "p_bay_h",
+    "p_bay_d",
+    "p_bay_a",
 ]
 
 
 def _to_matrix(df: pd.DataFrame) -> tuple[np.ndarray, np.ndarray, dict[str, np.ndarray]]:
     df = df.copy()
-    df = df.dropna(subset=BASE_COLS + ["outcome"])
+    df = df.dropna(subset=[*BASE_COLS, "outcome"])
     X = df[BASE_COLS].to_numpy(dtype=float)
     y = df["outcome"].astype(int).to_numpy()
     base = {
@@ -50,11 +54,16 @@ def _to_matrix(df: pd.DataFrame) -> tuple[np.ndarray, np.ndarray, dict[str, np.n
 
 
 def _evaluate(name: str, probs: np.ndarray, y: np.ndarray) -> dict:
-    res = {"name": name, "n": len(y),
-           "rps": mean_rps(probs, y),
-           "log_loss": log_loss_1x2(probs, y),
-           "accuracy": float((probs.argmax(axis=1) == y).mean())}
-    print(f"  {name:30s}  RPS={res['rps']:.4f}  LL={res['log_loss']:.4f}  acc={res['accuracy']:.3f}")
+    res = {
+        "name": name,
+        "n": len(y),
+        "rps": mean_rps(probs, y),
+        "log_loss": log_loss_1x2(probs, y),
+        "accuracy": float((probs.argmax(axis=1) == y).mean()),
+    }
+    print(
+        f"  {name:30s}  RPS={res['rps']:.4f}  LL={res['log_loss']:.4f}  acc={res['accuracy']:.3f}"
+    )
     return res
 
 
@@ -69,7 +78,7 @@ def main() -> int:
     val_df = df[df["tournament"].isin(val_keys)]
     print(f"Train: {len(train_df)} ({train_keys}). Val: {len(val_df)} ({val_keys}).")
 
-    X_tr, y_tr, base_tr = _to_matrix(train_df)
+    X_tr, y_tr, _base_tr = _to_matrix(train_df)
     X_va, y_va, base_va = _to_matrix(val_df)
 
     print("\n=== Validation metrics ===")
@@ -92,7 +101,9 @@ def main() -> int:
         c = LogisticRegression(C=1.0, max_iter=2000)
         c.fit(blended_va[:, k].reshape(-1, 1), (y_va == k).astype(int))
         sig_cals.append(c)
-    cal_va = np.column_stack([sig_cals[k].predict_proba(blended_va[:, k].reshape(-1, 1))[:, 1] for k in range(3)])
+    cal_va = np.column_stack(
+        [sig_cals[k].predict_proba(blended_va[:, k].reshape(-1, 1))[:, 1] for k in range(3)]
+    )
     cal_va = np.clip(cal_va, 1e-6, 1 - 1e-6)
     cal_va /= cal_va.sum(axis=1, keepdims=True)
     _evaluate("logistic stack + sigmoid", cal_va, y_va)
@@ -104,7 +115,9 @@ def main() -> int:
     cals_final = [IdentityCalibrator() for _ in range(3)]
 
     print("\nLogReg weights (sign + magnitude per (input, output class)):")
-    print(pd.DataFrame(lr.coef_, columns=BASE_COLS, index=["home_win", "draw", "away_win"]).round(2))
+    print(
+        pd.DataFrame(lr.coef_, columns=BASE_COLS, index=["home_win", "draw", "away_win"]).round(2)
+    )
 
     stacker = Stacker(
         base_names=["dc", "gbm", "bay"],

@@ -28,26 +28,33 @@ from src.models import bayesian as bay
 from src.models import dixon_coles as dc
 from src.models import gbm as gbm_mod
 
-
 TOURNAMENTS = {
-    "wc18":    {"start": Date(2018, 6, 14), "end": Date(2018, 7, 15), "competition": "FIFA World Cup"},
-    "wc22":    {"start": Date(2022, 11, 20), "end": Date(2022, 12, 18), "competition": "FIFA World Cup"},
-    "euro20":  {"start": Date(2021, 6, 11), "end": Date(2021, 7, 11), "competition": "UEFA Euro"},
-    "euro24":  {"start": Date(2024, 6, 14), "end": Date(2024, 7, 14), "competition": "UEFA Euro"},
-    "copa19":  {"start": Date(2019, 6, 14), "end": Date(2019, 7, 7),  "competition": "Copa América"},
-    "copa21":  {"start": Date(2021, 6, 13), "end": Date(2021, 7, 10), "competition": "Copa América"},
-    "copa24":  {"start": Date(2024, 6, 20), "end": Date(2024, 7, 14), "competition": "Copa América"},
+    "wc18": {"start": Date(2018, 6, 14), "end": Date(2018, 7, 15), "competition": "FIFA World Cup"},
+    "wc22": {
+        "start": Date(2022, 11, 20),
+        "end": Date(2022, 12, 18),
+        "competition": "FIFA World Cup",
+    },
+    "euro20": {"start": Date(2021, 6, 11), "end": Date(2021, 7, 11), "competition": "UEFA Euro"},
+    "euro24": {"start": Date(2024, 6, 14), "end": Date(2024, 7, 14), "competition": "UEFA Euro"},
+    "copa19": {"start": Date(2019, 6, 14), "end": Date(2019, 7, 7), "competition": "Copa América"},
+    "copa21": {"start": Date(2021, 6, 13), "end": Date(2021, 7, 10), "competition": "Copa América"},
+    "copa24": {"start": Date(2024, 6, 20), "end": Date(2024, 7, 14), "competition": "Copa América"},
 }
 
 
 def _select(matches: pd.DataFrame, t: dict) -> pd.DataFrame:
     m = matches.copy()
     m["date"] = pd.to_datetime(m["date"]).dt.date
-    return m[
-        (m["date"] >= t["start"])
-        & (m["date"] <= t["end"])
-        & m["competition"].str.contains(t["competition"], case=False, na=False)
-    ].sort_values("date").reset_index(drop=True)
+    return (
+        m[
+            (m["date"] >= t["start"])
+            & (m["date"] <= t["end"])
+            & m["competition"].str.contains(t["competition"], case=False, na=False)
+        ]
+        .sort_values("date")
+        .reset_index(drop=True)
+    )
 
 
 def _bay_or_fit(cutoff: Date) -> bay.BayesianModel | None:
@@ -65,7 +72,9 @@ def _bay_or_fit(cutoff: Date) -> bay.BayesianModel | None:
     return model
 
 
-def generate(tournament_keys: list[str], out_path: str = "data/processed/oof_predictions.parquet") -> pd.DataFrame:
+def generate(
+    tournament_keys: list[str], out_path: str = "data/processed/oof_predictions.parquet"
+) -> pd.DataFrame:
     matches = pl.read_parquet("data/processed/matches.parquet").to_pandas()
     features = pl.read_parquet("data/processed/features_match_level.parquet").to_pandas()
     features["date"] = pd.to_datetime(features["date"])
@@ -93,6 +102,7 @@ def generate(tournament_keys: list[str], out_path: str = "data/processed/oof_pre
         dc_cache = Path(f"data/models/cache/dc_{cutoff}.pkl")
         if dc_cache.exists():
             import pickle
+
             with open(dc_cache, "rb") as f:
                 dc_model = pickle.load(f)
         else:
@@ -100,6 +110,7 @@ def generate(tournament_keys: list[str], out_path: str = "data/processed/oof_pre
             dc_model = dc.fit(matches, asof_date=cutoff, xi=0.0019, min_team_matches=5)
             dc_cache.parent.mkdir(parents=True, exist_ok=True)
             import pickle
+
             with open(dc_cache, "wb") as f:
                 pickle.dump(dc_model, f)
 
@@ -147,12 +158,23 @@ def generate(tournament_keys: list[str], out_path: str = "data/processed/oof_pre
 
             all_rows.append(
                 {
-                    "match_id": mid, "date": match["date"], "tournament": tkey,
-                    "home_team": home, "away_team": away,
-                    "home_goals": hg, "away_goals": ag, "outcome": outcome,
-                    "p_dc_h": p_dc[0], "p_dc_d": p_dc[1], "p_dc_a": p_dc[2],
-                    "p_gbm_h": p_gbm[0], "p_gbm_d": p_gbm[1], "p_gbm_a": p_gbm[2],
-                    "p_bay_h": p_bay[0], "p_bay_d": p_bay[1], "p_bay_a": p_bay[2],
+                    "match_id": mid,
+                    "date": match["date"],
+                    "tournament": tkey,
+                    "home_team": home,
+                    "away_team": away,
+                    "home_goals": hg,
+                    "away_goals": ag,
+                    "outcome": outcome,
+                    "p_dc_h": p_dc[0],
+                    "p_dc_d": p_dc[1],
+                    "p_dc_a": p_dc[2],
+                    "p_gbm_h": p_gbm[0],
+                    "p_gbm_d": p_gbm[1],
+                    "p_gbm_a": p_gbm[2],
+                    "p_bay_h": p_bay[0],
+                    "p_bay_d": p_bay[1],
+                    "p_bay_a": p_bay[2],
                 }
             )
 
@@ -167,6 +189,7 @@ def generate(tournament_keys: list[str], out_path: str = "data/processed/oof_pre
 
 def main() -> int:
     import argparse
+
     p = argparse.ArgumentParser()
     p.add_argument("--tournaments", nargs="+", default=list(TOURNAMENTS))
     p.add_argument("--out", default="data/processed/oof_predictions.parquet")

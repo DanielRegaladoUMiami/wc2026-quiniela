@@ -21,7 +21,7 @@ import yaml
 # Types
 # ---------------------------------------------------------------------------
 
-Pick = Any            # e.g. "H" | (i, j) | "BRA"
+Pick = Any  # e.g. "H" | (i, j) | "BRA"
 Outcome = Any
 ScoreFn = Callable[[Pick, Outcome], int]
 
@@ -170,9 +170,7 @@ def best_exact_score_pick(
     return best_pick, float(best_ev)
 
 
-def best_1x2_pick(
-    p_home: float, p_draw: float, p_away: float, rubric: Rubric
-) -> tuple[str, float]:
+def best_1x2_pick(p_home: float, p_draw: float, p_away: float, rubric: Rubric) -> tuple[str, float]:
     """Best 1X2 pick under any rubric whose actual-outcome is a (h,a) tuple."""
     # Marginalize via representative outcomes since 1X2 is winner-only here.
     dist_by_res = {"H": p_home, "D": p_draw, "A": p_away}
@@ -192,9 +190,7 @@ def best_1x2_pick(
     return best_pick, float(best_ev)
 
 
-def best_fifa_mx_pick(
-    score_matrix: np.ndarray, rubric: Rubric
-) -> tuple[tuple[str, str], float]:
+def best_fifa_mx_pick(score_matrix: np.ndarray, rubric: Rubric) -> tuple[tuple[str, str], float]:
     """Joint best pick (1X2, OVER/UNDER) for the Mexican composite rubric."""
     dist = score_matrix_to_dist(score_matrix)
     best_pick: tuple[str, str] = ("H", "UNDER")

@@ -2,6 +2,7 @@
 
 Outputs data/processed/team_stats.parquet joined with team_metadata.
 """
+
 from __future__ import annotations
 
 import re
@@ -76,17 +77,23 @@ def main() -> Path:
     for team, sub in g:
         ages = pd.to_numeric(sub["age"], errors="coerce")
         mv = pd.to_numeric(sub["market_value_eur"], errors="coerce")
-        in_top5 = sub["club"].fillna("").str.contains(TOP5_LEAGUES_CLUBS_HINT.pattern, regex=True, flags=re.I)
+        in_top5 = (
+            sub["club"]
+            .fillna("")
+            .str.contains(TOP5_LEAGUES_CLUBS_HINT.pattern, regex=True, flags=re.I)
+        )
         top11_mv = mv.sort_values(ascending=False).head(11).sum() if mv.notna().any() else 0.0
-        rows.append({
-            "team": team,
-            "n_players": len(sub),
-            "avg_age": float(ages.mean()) if ages.notna().any() else float("nan"),
-            "median_age": float(ages.median()) if ages.notna().any() else float("nan"),
-            "squad_market_value_eur_total": float(mv.sum()) if mv.notna().any() else 0.0,
-            "squad_market_value_top11": float(top11_mv),
-            "n_top5_league_players": int(in_top5.sum()),
-        })
+        rows.append(
+            {
+                "team": team,
+                "n_players": len(sub),
+                "avg_age": float(ages.mean()) if ages.notna().any() else float("nan"),
+                "median_age": float(ages.median()) if ages.notna().any() else float("nan"),
+                "squad_market_value_eur_total": float(mv.sum()) if mv.notna().any() else 0.0,
+                "squad_market_value_top11": float(top11_mv),
+                "n_top5_league_players": int(in_top5.sum()),
+            }
+        )
     stats = pd.DataFrame(rows)
 
     # Managers

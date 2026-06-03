@@ -14,7 +14,6 @@ import warnings
 from dataclasses import dataclass, field
 from datetime import date, datetime
 from pathlib import Path
-from typing import Optional
 
 import arviz as az
 import numpy as np
@@ -47,14 +46,16 @@ class BayesianModel:
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
         self.idata.attrs["team_to_idx"] = ",".join(f"{t}={i}" for t, i in self.team_to_idx.items())
-        self.idata.attrs["venue_to_idx"] = ",".join(f"{v}={i}" for v, i in self.venue_to_idx.items())
+        self.idata.attrs["venue_to_idx"] = ",".join(
+            f"{v}={i}" for v, i in self.venue_to_idx.items()
+        )
         self.idata.attrs["asof_date"] = self.asof_date.isoformat()
         self.idata.attrs["lookback_years"] = self.lookback_years
         self.idata.attrs["dropped_teams"] = "|".join(self.dropped_teams)
         self.idata.to_netcdf(str(path))
 
     @classmethod
-    def load(cls, path: str | Path) -> "BayesianModel":
+    def load(cls, path: str | Path) -> BayesianModel:
         idata = az.from_netcdf(str(path))
 
         def _parse_map(s: str) -> dict[str, int]:
@@ -80,7 +81,7 @@ class BayesianModel:
 class BayesianPrediction:
     home_team: str
     away_team: str
-    venue_country: Optional[str]
+    venue_country: str | None
     p_home_win: float
     p_draw: float
     p_away_win: float
@@ -160,9 +161,7 @@ def _build_model(
 
     # Per-venue host prior: shape (n_venues,). Looked up by venue country name.
     venue_country_names = [v for v, _ in sorted(venue_to_idx.items(), key=lambda kv: kv[1])]
-    host_prior_mu = np.array(
-        [HOST_PRIORS.get(v, DEFAULT_HOST_PRIOR) for v in venue_country_names]
-    )
+    host_prior_mu = np.array([HOST_PRIORS.get(v, DEFAULT_HOST_PRIOR) for v in venue_country_names])
 
     with pm.Model() as model:
         mu = pm.Normal("mu", mu=0.0, sigma=1.0)
@@ -179,9 +178,7 @@ def _build_model(
         sigma_gamma = pm.HalfNormal("sigma_gamma", sigma=0.5)
         # γ[team, venue]: full (n_teams, n_venues) is large; we model as additive
         # team-agnostic venue effect centered on host prior, plus team×venue noise.
-        gamma_venue = pm.Normal(
-            "gamma_venue", mu=host_prior_mu, sigma=sigma_gamma, shape=n_venues
-        )
+        gamma_venue = pm.Normal("gamma_venue", mu=host_prior_mu, sigma=sigma_gamma, shape=n_venues)
 
         log_lambda_home = mu + att[home_idx] + def_[away_idx] + gamma_venue[venue_idx]
         log_lambda_away = mu + att[away_idx] + def_[home_idx]
@@ -255,7 +252,7 @@ def predict(
     model: BayesianModel,
     home_team: str,
     away_team: str,
-    venue_country: Optional[str] = None,
+    venue_country: str | None = None,
     max_goals: int = 10,
 ) -> BayesianPrediction:
     if home_team not in model.team_to_idx:
@@ -318,8 +315,8 @@ def predict(
 def predict_many(model: BayesianModel, fixtures: pd.DataFrame, max_goals: int = 10) -> pd.DataFrame:
     rows = []
     for r in fixtures.itertuples(index=False):
-        h = getattr(r, "home_team")
-        a = getattr(r, "away_team")
+        h = r.home_team
+        a = r.away_team
         vc = getattr(r, "venue_country", None)
         try:
             rows.append(predict(model, h, a, venue_country=vc, max_goals=max_goals).asdict())
@@ -359,7 +356,9 @@ def _cli() -> int:
     )
     dt = (datetime.now() - t0).total_seconds()
     model.save(args.out)
-    print(f"Fit complete in {dt:.1f}s. teams={len(model.team_to_idx)} dropped={len(model.dropped_teams)}")
+    print(
+        f"Fit complete in {dt:.1f}s. teams={len(model.team_to_idx)} dropped={len(model.dropped_teams)}"
+    )
     print(f"Saved → {args.out}")
     return 0
 

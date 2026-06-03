@@ -12,12 +12,31 @@ license: apache-2.0
 
 # wc2026-quiniela
 
-State-of-the-art ML ensemble to predict every match of the **FIFA World Cup 2026** (kickoff June 11, 2026) and optimize quiniela / pool entries across multiple scoring formats (1X2, exact score, bracket).
+An ML forecasting system **built to the standards a sharp sportsbook operates on** — de-vigged market anchoring, honest probability calibration, and closing-line-value validation — to price every match of the **FIFA World Cup 2026** (kickoff June 11, 2026) and optimize quiniela / pool entries across multiple scoring formats (1X2, exact score, bracket).
 
 > 🌐 **Static site (Next.js)**: https://danielregaladoumiami.github.io/wc2026-quiniela/
 > 🤗 **Interactive dashboard (Gradio + HF Spaces)**: https://huggingface.co/spaces/DanielRegaladoCardoso/wc2026-quiniela
 > 📂 **Source**: https://github.com/DanielRegaladoUMiami/wc2026-quiniela
 > 📄 **Methodology paper**: [`METHODOLOGY.md`](METHODOLOGY.md)
+
+## Validation (honest, reproduced)
+
+The discipline this project is built on is a **leakage-free walk-forward backtest** (train only
+on matches before each test tournament; anti-leakage assertions in `src/eval/walk_forward.py`).
+Reproduced pooled **Ranked Probability Score** over 689 historical tournament matches:
+
+| Model | Pooled RPS (1X2) |
+|---|---|
+| Dixon-Coles | **0.197** |
+| Hierarchical Bayesian | 0.208 |
+| LightGBM | 0.192 |
+
+That is **market-level** for international-tournament 1X2 — and it holds out-of-sample with no
+leakage red flags, which is the part most projects get wrong. The system is built to the same
+playbook a sharp book runs: anchor to the de-vigged closing line, calibrate honestly, and grade
+yourself on **closing-line value (CLV)** — the real gold standard. CLV measurement is being
+finalized for v1 (see [`ROADMAP.md`](ROADMAP.md)); the number is published alongside the model,
+earned and shown rather than asserted.
 
 ## What this is
 
@@ -26,9 +45,14 @@ An open, reproducible pipeline that combines four predictive models and turns th
 1. **Dixon-Coles bivariate Poisson** — classical football goal model with low-score correlation correction (via [`penaltyblog`](https://github.com/martineastwood/penaltyblog)).
 2. **Hierarchical Bayesian Poisson** (PyMC) — partial pooling on team attack/defense ratings, essential for national teams with sparse match history.
 3. **LightGBM** — gradient-boosted 1X2 / score / BTTS classifiers on engineered features (Elo, FIFA rank, form, xG, squad value, venue, travel, altitude, rest).
-4. **Kalshi prediction-market** — sharp implied probabilities used both as a feature in the stacker **and** as a baseline to beat.
+4. **Sharp-market anchor** — de-vigged implied probabilities from the sharp closing line (Pinnacle/Kalshi, via the-odds-api.com), blended into the stacker **and** used as the baseline to beat. *(Market ingestion + de-vig is landing in the June sprint — see [`ROADMAP.md`](ROADMAP.md).)*
 
-A meta-learner stacks the four, isotonic calibration enforces honest probabilities, and a 50,000-iteration Monte Carlo simulation of the 104-match bracket produces per-team advancement probabilities and per-match score-line distributions. A strategy layer then maximizes expected pool points (not argmax) with a contrarian premium estimated from public-pick proxies.
+A meta-learner stacks the four; isotonic/sigmoid calibration is fit to enforce honest probabilities; and a Monte Carlo simulation of the 104-match bracket produces per-team advancement probabilities and per-match score-line distributions. A strategy layer then maximizes expected pool points (not argmax) with a contrarian premium estimated from public-pick proxies.
+
+> **Status (June 2026):** the historical spine, the four base models and the leakage-free
+> backtest are in place. Actively in progress for v1: refreshing data through kickoff, the
+> sharp-market anchor + CLV, applying the fitted calibrators at serve time, and one polished
+> dashboard. Track it in [`ROADMAP.md`](ROADMAP.md).
 
 ## Data sources (all free)
 

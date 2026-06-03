@@ -17,9 +17,6 @@ dist/
 .coverage
 htmlcov/
 
-# uv
-uv.lock
-
 # Notebooks
 .ipynb_checkpoints/
 *.ipynb_meta

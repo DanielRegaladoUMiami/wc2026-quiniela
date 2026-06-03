@@ -22,9 +22,22 @@ OUT_DIR = Path("data/raw/kalshi")
 HEADERS = {"User-Agent": "wc2026-quiniela/0.1 (github.com/DanielRegaladoUMiami/wc2026-quiniela)"}
 
 SCHEMA_COLS = [
-    "ticker", "event_ticker", "series_ticker", "title", "subtitle", "status",
-    "yes_bid", "yes_ask", "no_bid", "no_ask", "last_price", "volume",
-    "open_interest", "open_time", "close_time", "expected_expiration_time",
+    "ticker",
+    "event_ticker",
+    "series_ticker",
+    "title",
+    "subtitle",
+    "status",
+    "yes_bid",
+    "yes_ask",
+    "no_bid",
+    "no_ask",
+    "last_price",
+    "volume",
+    "open_interest",
+    "open_time",
+    "close_time",
+    "expected_expiration_time",
     "snapshot_utc",
 ]
 
@@ -51,7 +64,11 @@ def list_event_tickers(prefix: str = "WORLDCUP") -> list[str]:
             return events
         for ev in payload.get("events", []):
             tk = ev.get("event_ticker", "")
-            if prefix.upper() in tk.upper() or "WORLD-CUP" in tk.upper() or "WORLDCUP" in tk.upper():
+            if (
+                prefix.upper() in tk.upper()
+                or "WORLD-CUP" in tk.upper()
+                or "WORLDCUP" in tk.upper()
+            ):
                 events.append(tk)
         cursor = payload.get("cursor") or None
         if not cursor:
@@ -81,25 +98,27 @@ def fetch_markets_for_event(event_ticker: str) -> list[dict]:
 def normalize(markets: list[dict], snapshot_utc: str) -> pd.DataFrame:
     rows = []
     for m in markets:
-        rows.append({
-            "ticker": m.get("ticker"),
-            "event_ticker": m.get("event_ticker"),
-            "series_ticker": m.get("series_ticker"),
-            "title": m.get("title"),
-            "subtitle": m.get("subtitle"),
-            "status": m.get("status"),
-            "yes_bid": m.get("yes_bid"),
-            "yes_ask": m.get("yes_ask"),
-            "no_bid": m.get("no_bid"),
-            "no_ask": m.get("no_ask"),
-            "last_price": m.get("last_price"),
-            "volume": m.get("volume"),
-            "open_interest": m.get("open_interest"),
-            "open_time": m.get("open_time"),
-            "close_time": m.get("close_time"),
-            "expected_expiration_time": m.get("expected_expiration_time"),
-            "snapshot_utc": snapshot_utc,
-        })
+        rows.append(
+            {
+                "ticker": m.get("ticker"),
+                "event_ticker": m.get("event_ticker"),
+                "series_ticker": m.get("series_ticker"),
+                "title": m.get("title"),
+                "subtitle": m.get("subtitle"),
+                "status": m.get("status"),
+                "yes_bid": m.get("yes_bid"),
+                "yes_ask": m.get("yes_ask"),
+                "no_bid": m.get("no_bid"),
+                "no_ask": m.get("no_ask"),
+                "last_price": m.get("last_price"),
+                "volume": m.get("volume"),
+                "open_interest": m.get("open_interest"),
+                "open_time": m.get("open_time"),
+                "close_time": m.get("close_time"),
+                "expected_expiration_time": m.get("expected_expiration_time"),
+                "snapshot_utc": snapshot_utc,
+            }
+        )
     if not rows:
         return pd.DataFrame(columns=SCHEMA_COLS)
     return pd.DataFrame(rows)[SCHEMA_COLS]

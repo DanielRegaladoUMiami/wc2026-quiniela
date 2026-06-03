@@ -1,3 +1,5 @@
+import { getMeta } from "@/lib/data";
+
 export const metadata = { title: "About" };
 
 export default function AboutPage() {
@@ -18,7 +20,7 @@ export default function AboutPage() {
         <p>
           This project closes that gap with a transparent four-model ensemble — Dixon-Coles, a hierarchical Bayesian
           Poisson, gradient boosting, and Kalshi market features — stacked, isotonically calibrated, and propagated
-          through 50,000 Monte Carlo bracket simulations.
+          through {getMeta().n_sims.toLocaleString()} Monte Carlo bracket simulations.
         </p>
         <p>
           Everything is reproducible. The repository ships the data fetchers, the model fits, the backtest harness

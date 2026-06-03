@@ -9,6 +9,7 @@ import {
   getAdvancement,
   getFixtures,
   getMatchProbs,
+  getMeta,
   fmtPct,
 } from "@/lib/data";
 import { fmtDate } from "@/lib/utils";
@@ -76,7 +77,7 @@ export default async function TeamPage({ params }: { params: Promise<{ code: str
           <div className="md:text-right">
             <div className="text-xs uppercase tracking-wider text-slate-500">P(Champion)</div>
             <div className="font-display text-5xl font-bold gradient-text">{fmtPct(team.p_champion ?? 0, 1)}</div>
-            <div className="text-xs text-slate-500 mt-1">across 5,000 sims</div>
+            <div className="text-xs text-slate-500 mt-1">across {getMeta().n_sims.toLocaleString()} sims</div>
           </div>
         </div>
       </section>

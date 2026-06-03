@@ -10,13 +10,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 import polars as pl
-import shap
 
 from src.models import gbm as gbm_mod
-
 
 CLASSES = ["home_win", "draw", "away_win"]
 
@@ -62,6 +59,7 @@ def top_k_per_match(shap_df: pd.DataFrame, k: int = 5) -> pd.DataFrame:
 
 def main() -> int:
     import argparse
+
     p = argparse.ArgumentParser()
     p.add_argument("--features", default="data/processed/features_wc2026.parquet")
     p.add_argument("--gbm-path", default="data/models/lgbm_pre_euro24.txt")

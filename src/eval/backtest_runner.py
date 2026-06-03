@@ -18,7 +18,7 @@ import numpy as np
 import pandas as pd
 import polars as pl
 
-from src.eval.rps import mean_rps, log_loss_1x2, outcome_1x2
+from src.eval.rps import log_loss_1x2, mean_rps, outcome_1x2
 from src.models import dixon_coles as dc
 from src.models import gbm as gbm_mod
 
@@ -56,11 +56,15 @@ TOURNAMENTS = {
 def select_tournament(matches: pd.DataFrame, t: dict) -> pd.DataFrame:
     m = matches.copy()
     m["date"] = pd.to_datetime(m["date"]).dt.date
-    return m[
-        (m["date"] >= t["start"])
-        & (m["date"] <= t["end"])
-        & m["competition"].str.contains(t["competition_match"], case=False, na=False)
-    ].sort_values("date").reset_index(drop=True)
+    return (
+        m[
+            (m["date"] >= t["start"])
+            & (m["date"] <= t["end"])
+            & m["competition"].str.contains(t["competition_match"], case=False, na=False)
+        ]
+        .sort_values("date")
+        .reset_index(drop=True)
+    )
 
 
 def backtest_dixon_coles(matches: pd.DataFrame, tournament_key: str, xi: float = 0.0019) -> dict:

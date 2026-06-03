@@ -10,17 +10,15 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
 
 import numpy as np
 import pandas as pd
-
 
 DEFAULT_BINS = np.linspace(0.0, 1.0, 11)  # 10 bins of width 0.1
 
 
 def _pool_probs_outcomes(probs: np.ndarray, outcomes: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    n, k = probs.shape
+    n, _k = probs.shape
     one_hot = np.zeros_like(probs)
     one_hot[np.arange(n), outcomes.astype(int)] = 1.0
     return probs.ravel(), one_hot.ravel()
@@ -152,7 +150,9 @@ def plot_reliability_png(
 
 
 def plot_reliability_plotly(
-    probs: np.ndarray, outcomes: np.ndarray, title: str = "Reliability diagram",
+    probs: np.ndarray,
+    outcomes: np.ndarray,
+    title: str = "Reliability diagram",
     bins: np.ndarray = DEFAULT_BINS,
 ):
     """Return a plotly.graph_objects.Figure."""
@@ -160,14 +160,34 @@ def plot_reliability_plotly(
 
     tbl = reliability_table(probs, outcomes, bins)
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=[0, 1], y=[0, 1], mode="lines",
-                             line=dict(dash="dash", color="black"),
-                             name="perfect calibration"))
+    fig.add_trace(
+        go.Scatter(
+            x=[0, 1],
+            y=[0, 1],
+            mode="lines",
+            line=dict(dash="dash", color="black"),
+            name="perfect calibration",
+        )
+    )
     sub = tbl.dropna(subset=["mean_predicted", "observed_frequency"])
-    fig.add_trace(go.Scatter(x=sub["mean_predicted"], y=sub["observed_frequency"],
-                             mode="markers+lines", name="observed"))
-    fig.add_trace(go.Bar(x=tbl["bin_mid"], y=tbl["n"], yaxis="y2",
-                         opacity=0.25, name="bin n", marker_color="gray"))
+    fig.add_trace(
+        go.Scatter(
+            x=sub["mean_predicted"],
+            y=sub["observed_frequency"],
+            mode="markers+lines",
+            name="observed",
+        )
+    )
+    fig.add_trace(
+        go.Bar(
+            x=tbl["bin_mid"],
+            y=tbl["n"],
+            yaxis="y2",
+            opacity=0.25,
+            name="bin n",
+            marker_color="gray",
+        )
+    )
     ece = expected_calibration_error(probs, outcomes, bins)
     fig.update_layout(
         title=f"{title} | ECE={ece:.3f}",

@@ -15,7 +15,6 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
 
 import pandas as pd
 import requests
@@ -55,7 +54,9 @@ SYNONYMS: dict[str, list[str]] = {
     "capacity": ["capacity"],
 }
 
-DIM_RE = re.compile(r"(\d{2,3})\s*(?:m|metres|meters)?\s*[x×]\s*(\d{2,3})\s*(?:m|metres|meters)?", re.I)
+DIM_RE = re.compile(
+    r"(\d{2,3})\s*(?:m|metres|meters)?\s*[x×]\s*(\d{2,3})\s*(?:m|metres|meters)?", re.I
+)
 YEAR_RE = re.compile(r"(19\d{2}|20\d{2})")
 
 
@@ -63,15 +64,15 @@ YEAR_RE = re.compile(r"(19\d{2}|20\d{2})")
 class VenueExtras:
     key: str
     wiki_url: str
-    surface: Optional[str] = None
-    pitch_length_m: Optional[float] = None
-    pitch_width_m: Optional[float] = None
-    year_opened: Optional[int] = None
-    owner: Optional[str] = None
-    attendance_avg: Optional[int] = None
-    record_attendance: Optional[int] = None
-    wiki_capacity: Optional[int] = None
-    indoor_confirmed: Optional[bool] = None
+    surface: str | None = None
+    pitch_length_m: float | None = None
+    pitch_width_m: float | None = None
+    year_opened: int | None = None
+    owner: str | None = None
+    attendance_avg: int | None = None
+    record_attendance: int | None = None
+    wiki_capacity: int | None = None
+    indoor_confirmed: bool | None = None
 
 
 @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=2, min=2, max=15))
@@ -81,7 +82,7 @@ def _fetch(url: str) -> str:
     return r.text
 
 
-def _parse_int(s: str) -> Optional[int]:
+def _parse_int(s: str) -> int | None:
     """Grab the first integer-like token (handles commas) from the head of a string."""
     s = s.split("(")[0].split("[")[0]
     m = re.search(r"\d{1,3}(?:,\d{3})+|\d{2,7}", s)
@@ -107,7 +108,7 @@ def parse_infobox(html: str) -> dict[str, str]:
     return out
 
 
-def _match(fields: dict[str, str], keys: list[str]) -> Optional[str]:
+def _match(fields: dict[str, str], keys: list[str]) -> str | None:
     for k in keys:
         for label, val in fields.items():
             if k in label:
@@ -127,13 +128,11 @@ def extract(key: str, title: str) -> VenueExtras:
 
     if surf := _match(fields, SYNONYMS["surface"]):
         extras.surface = surf.lower().split("(")[0].strip()
-    if dims := _match(fields, SYNONYMS["pitch_size_raw"]):
-        if m := DIM_RE.search(dims):
-            extras.pitch_length_m = float(m.group(1))
-            extras.pitch_width_m = float(m.group(2))
-    if yo := _match(fields, SYNONYMS["year_opened"]):
-        if m := YEAR_RE.search(yo):
-            extras.year_opened = int(m.group(1))
+    if (dims := _match(fields, SYNONYMS["pitch_size_raw"])) and (m := DIM_RE.search(dims)):
+        extras.pitch_length_m = float(m.group(1))
+        extras.pitch_width_m = float(m.group(2))
+    if (yo := _match(fields, SYNONYMS["year_opened"])) and (m := YEAR_RE.search(yo)):
+        extras.year_opened = int(m.group(1))
     if owner := _match(fields, SYNONYMS["owner"]):
         extras.owner = owner.split("[")[0].strip()
     if att := _match(fields, ["average attendance"]):

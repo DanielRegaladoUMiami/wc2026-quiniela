@@ -1,9 +1,12 @@
 import Link from "next/link";
 import Countdown from "./Countdown";
-import { getMeta } from "@/lib/data";
+import { getMeta, getBacktestWC, getBacktestEU, averageRPS } from "@/lib/data";
 
 export default function Hero() {
   const meta = getMeta();
+  // Compute the headline RPS from the same shipped backtest data as /backtest —
+  // never hardcode it, so Hero and the Backtest page can never disagree.
+  const rpsAll = averageRPS([...getBacktestWC(), ...getBacktestEU()]);
   return (
     <section className="relative overflow-hidden">
       <div className="absolute inset-0 -z-10">
@@ -14,11 +17,8 @@ export default function Hero() {
       <div className="mx-auto max-w-7xl px-6 pt-20 pb-16 sm:pt-28 sm:pb-24">
         <div className="flex flex-col items-start gap-6 max-w-3xl">
           <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/5 px-3 py-1 text-xs text-emerald-300">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
-            </span>
-            Live simulations · sim_run_202605190049
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            Updated {meta.generated_at.slice(0, 10)} · {meta.sim_run}
           </span>
 
           <h1 className="font-display text-5xl sm:text-7xl font-bold tracking-tighter leading-[0.95]">
@@ -53,7 +53,7 @@ export default function Hero() {
             <Stat n={meta.n_matches} label="Matches modeled" />
             <Stat n={`${(meta.n_sims).toLocaleString()}×`} label="Sims per match" />
             <Stat n={`${(meta.n_sims * meta.n_matches / 1000).toFixed(0)}k`} label="Outcomes" />
-            <Stat n="0.188" label="Backtest RPS" sub="vs 0.21 market" />
+            <Stat n={rpsAll.toFixed(3)} label="Backtest RPS" sub="vs ~0.21 market" />
           </div>
         </div>
       </div>
