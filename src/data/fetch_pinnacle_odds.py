@@ -26,11 +26,12 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 from tenacity import retry, stop_after_attempt, wait_exponential
+
+from src.data.devig import shin_devig
 
 OUT_PATH = Path("data/processed/market_odds_history.parquet")
 HEADERS = {
@@ -73,26 +74,6 @@ class OddsRow:
     source: str
     tournament: str
     vig_pct: float
-
-
-def shin_devig(o_h: float, o_d: float, o_a: float, iters: int = 200) -> tuple[float, float, float]:
-    """Shin's (1992) de-vig. Solve for insider-trading proportion z.
-
-    Returns true probabilities (p_h, p_d, p_a) summing to 1.
-    """
-    p_raw = np.array([1 / o_h, 1 / o_d, 1 / o_a], dtype=float)
-    p_raw = p_raw / p_raw.sum() * (p_raw.sum())  # keep raw scale
-    pi = p_raw / p_raw.sum()  # normalized booky probs
-    z = 0.0
-    for _ in range(iters):
-        sq = np.sqrt(z * z + 4 * (1 - z) * pi * pi / max(p_raw.sum(), 1e-9))
-        p_true = (sq - z) / (2 * (1 - z) + 1e-12)
-        p_true = p_true / p_true.sum()
-        new_z = max(0.0, min(0.5, (p_true.sum() - 1) + z))
-        if abs(new_z - z) < 1e-9:
-            break
-        z = new_z
-    return float(p_true[0]), float(p_true[1]), float(p_true[2])
 
 
 @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=2, min=3, max=15))
