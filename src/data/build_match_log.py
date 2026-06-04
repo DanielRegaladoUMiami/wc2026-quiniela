@@ -20,6 +20,8 @@ from pathlib import Path
 import pandas as pd
 import polars as pl
 
+from src.data.team_names import CANONICAL
+
 KAGGLE_RESULTS = Path("data/raw/matches/kaggle_martj42/results.csv")
 OUT = Path("data/processed/matches.parquet")
 
@@ -101,6 +103,10 @@ def load_kaggle_martj42() -> pl.DataFrame:
             .alias("neutral_venue"),
             pl.col("date").alias("date_str"),
             pl.col("date").str.strptime(pl.Date, "%Y-%m-%d").alias("date"),
+            # Normalize team names to the canonical (bracket) spelling so the log,
+            # features and market odds all line up — see src/data/team_names.py.
+            pl.col("home_team").replace(CANONICAL).alias("home_team"),
+            pl.col("away_team").replace(CANONICAL).alias("away_team"),
         )
         .with_columns(
             pl.struct(["date_str", "home_team", "away_team"])

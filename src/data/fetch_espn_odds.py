@@ -31,6 +31,7 @@ import pandas as pd
 import requests
 
 from src.data.devig import american_to_decimal, shin_devig, vig_pct
+from src.data.team_names import canonical
 
 SCOREBOARD = "https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/scoreboard"
 HEADERS = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_5) wc2026-quiniela/0.1"}
@@ -54,19 +55,6 @@ HIST_TOURNAMENTS: dict[str, tuple[str, date, date]] = {
     "Copa24": ("conmebol.america", date(2024, 6, 20), date(2024, 7, 14)),
 }
 
-# ESPN display name -> our canonical team name (only where they differ).
-NAME_ALIASES = {
-    "Czech Republic": "Czechia",
-    "Korea Republic": "South Korea",
-    "IR Iran": "Iran",
-    "Türkiye": "Turkey",
-    "Turkiye": "Turkey",
-    "Côte d'Ivoire": "Ivory Coast",
-    "Cote d'Ivoire": "Ivory Coast",
-    "USA": "United States",
-    "Bosnia & Herzegovina": "Bosnia-Herzegovina",
-}
-
 
 @dataclass
 class OddsRow:
@@ -85,9 +73,7 @@ class OddsRow:
 
 
 def _canon(name: str | None) -> str | None:
-    if not name:
-        return name
-    return NAME_ALIASES.get(name, name)
+    return canonical(name)
 
 
 def _price(side: dict | None) -> float | None:
