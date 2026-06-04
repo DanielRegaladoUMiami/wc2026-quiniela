@@ -32,12 +32,27 @@ from src.models.stacker import reweight_score_matrix
 from src.sims.tournament import TournamentSim
 
 
+def _load_market(market_weight: float) -> dict[tuple[str, str], np.ndarray]:
+    """Devigged market 1X2 per (home, away) for the live WC2026 slate, if available."""
+    market_path = Path("data/processed/market_odds_wc2026.parquet")
+    market: dict[tuple[str, str], np.ndarray] = {}
+    if market_weight > 0 and market_path.exists():
+        mdf = pl.read_parquet(market_path).to_pandas()
+        for _, r in mdf.iterrows():
+            market[(r["home_team"], r["away_team"])] = np.array(
+                [r["p_home_market"], r["p_draw_market"], r["p_away_market"]], dtype=float
+            )
+        print(f"  Loaded market odds for {len(market)} matches (anchor weight={market_weight})")
+    return market
+
+
 def build_predictor(
     asof: date,
     gbm_path: str,
     bayesian_path: str | None,
     xi: float = 0.0019,
     stacker_path: str | None = None,
+    market_weight: float = 0.45,
 ):
     matches = pl.read_parquet("data/processed/matches.parquet").to_pandas()
     print(f"  Fitting Dixon-Coles on {len(matches):,} matches with asof={asof}…")
@@ -67,6 +82,7 @@ def build_predictor(
         for _, r in features_wc.iterrows()
         if pd.notna(r.get("home_team"))
     }
+    market_by_pair = _load_market(market_weight)
 
     def predict(home: str, away: str) -> np.ndarray:
         try:
@@ -114,6 +130,14 @@ def build_predictor(
                 probs_stack.append(bay_1x2)
             blended = np.mean(probs_stack, axis=0)
             blended = blended / blended.sum()
+
+        # Anchor to the sharp market like a real book: shade the model toward the
+        # de-vigged closing line where we have it (group-stage matches only).
+        mkt = market_by_pair.get((home, away))
+        if mkt is not None:
+            blended = (1.0 - market_weight) * blended + market_weight * mkt
+            blended = blended / blended.sum()
+
         sm = reweight_score_matrix(sm, blended)
         return sm
 
@@ -128,17 +152,29 @@ def build_predictor(
 def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--n", type=int, default=10000)
-    p.add_argument("--asof", default="2026-05-18")
+    p.add_argument(
+        "--asof", default="2026-06-10", help="train on matches strictly before this date"
+    )
     p.add_argument("--gbm-path", default="data/models/lgbm_pre_euro24.txt")
     p.add_argument("--bayesian-path", default="data/models/bayesian_wc2026.nc")
     p.add_argument("--stacker-path", default="data/models/stacker.pkl")
+    p.add_argument(
+        "--market-weight",
+        type=float,
+        default=0.45,
+        help="shade toward the de-vigged market (0=pure model, 1=pure market)",
+    )
     p.add_argument("--seed", type=int, default=42)
     args = p.parse_args()
 
     asof = pd.Timestamp(args.asof).date()
     print(f"Building stacked predictor (DC + LightGBM + Bayesian + Stacker) asof={asof}…")
     predict, strength = build_predictor(
-        asof, args.gbm_path, args.bayesian_path, stacker_path=args.stacker_path
+        asof,
+        args.gbm_path,
+        args.bayesian_path,
+        stacker_path=args.stacker_path,
+        market_weight=args.market_weight,
     )
 
     print(f"Running {args.n:,} Monte Carlo tournament simulations…")
