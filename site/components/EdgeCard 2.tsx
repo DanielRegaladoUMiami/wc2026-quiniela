@@ -1,5 +1,4 @@
 import FlagImg from "@/components/FlagImg";
-import L from "@/components/L";
 import type { EdgeMatch } from "@/lib/types";
 
 const pct = (x: number) => Math.round(x * 100);
@@ -13,7 +12,7 @@ export default function EdgeCard({ m, rank }: { m: EdgeMatch; rank: number }) {
 
   const rows = [
     { k: "home", label: m.home_team, model: m.p_home_model, mkt: m.p_home_market },
-    { k: "draw", label: <L es="Empate" en="Draw" />, model: m.p_draw_model, mkt: m.p_draw_market },
+    { k: "draw", label: "Draw", model: m.p_draw_model, mkt: m.p_draw_market },
     { k: "away", label: m.away_team, model: m.p_away_model, mkt: m.p_away_market },
   ];
 
@@ -70,10 +69,10 @@ export default function EdgeCard({ m, rank }: { m: EdgeMatch; rank: number }) {
 
         <div className="mt-3 flex items-center gap-4 border-t-2 border-dotted border-[color:var(--color-line-soft)] pt-2 text-[10px] text-[color:var(--color-ink-soft)]">
           <span className="flex items-center gap-1">
-            <span className="inline-block h-2 w-3 bg-[color:var(--color-blue)] border border-[color:var(--color-ink)]" /> <L es="modelo" en="model" />
+            <span className="inline-block h-2 w-3 bg-[color:var(--color-blue)] border border-[color:var(--color-ink)]" /> model
           </span>
           <span className="flex items-center gap-1">
-            <span className="inline-block h-2.5 w-[3px] bg-[color:var(--color-red)]" /> <L es="la línea" en="the line" />
+            <span className="inline-block h-2.5 w-[3px] bg-[color:var(--color-red)]" /> the line
           </span>
         </div>
       </div>

@@ -84,8 +84,11 @@ export default function BracketSVG({ advancement, teams }: { advancement: Advanc
         );
       })}
 
-      <text x={labelW + ROUNDS.length * colW + 40} y={20} textAnchor="middle" fontSize={11} fill="#d63a2a" letterSpacing={2} fontFamily="var(--font-display)">
+      <text data-l="en" x={labelW + ROUNDS.length * colW + 40} y={20} textAnchor="middle" fontSize={11} fill="#d63a2a" letterSpacing={2} fontFamily="var(--font-display)">
         CHAMPION
+      </text>
+      <text data-l="es" x={labelW + ROUNDS.length * colW + 40} y={20} textAnchor="middle" fontSize={11} fill="#d63a2a" letterSpacing={2} fontFamily="var(--font-display)">
+        CAMPEÓN
       </text>
     </svg>
   );

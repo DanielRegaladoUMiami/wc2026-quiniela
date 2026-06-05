@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import L from "@/components/L";
 
 const TARGET = new Date("2026-06-11T17:00:00-05:00").getTime();
 
@@ -13,7 +14,7 @@ function compute(): { d: number; h: number; m: number; s: number; live: boolean 
   return { d, h, m, s, live: false };
 }
 
-const Cell = ({ n, label }: { n: number; label: string }) => (
+const Cell = ({ n, label }: { n: number; label: ReactNode }) => (
   <div className="flex flex-col items-center">
     <div className="display text-3xl sm:text-5xl tabular-nums text-[color:var(--color-ink)]">
       {n.toString().padStart(2, "0")}
@@ -33,13 +34,13 @@ export default function Countdown() {
 
   return (
     <div className="sticker inline-flex items-center gap-4 sm:gap-6 rounded-none px-5 py-4">
-      <Cell n={t.d} label="Days" />
+      <Cell n={t.d} label={<L es="Días" en="Days" />} />
       <div className="display text-2xl text-[color:var(--color-red)]">:</div>
-      <Cell n={t.h} label="Hours" />
+      <Cell n={t.h} label={<L es="Horas" en="Hours" />} />
       <div className="display text-2xl text-[color:var(--color-red)]">:</div>
-      <Cell n={t.m} label="Min" />
+      <Cell n={t.m} label={<L es="Min" en="Min" />} />
       <div className="display text-2xl text-[color:var(--color-red)]">:</div>
-      <Cell n={t.s} label="Sec" />
+      <Cell n={t.s} label={<L es="Seg" en="Sec" />} />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
+import L from "@/components/L";
 
 export default function ProbDonut({
   pH,
@@ -42,7 +43,9 @@ export default function ProbDonut({
         </PieChart>
       </ResponsiveContainer>
       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-        <div className="text-xs text-[color:var(--color-ink-soft)]">Most likely</div>
+        <div className="text-xs text-[color:var(--color-ink-soft)]">
+          <L es="Más probable" en="Most likely" />
+        </div>
         <div className="display text-lg">
           {pH >= pD && pH >= pA ? home : pA >= pD ? away : "Draw"}
         </div>

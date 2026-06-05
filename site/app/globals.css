@@ -123,3 +123,7 @@ body {
 .led { background: var(--color-blue); }
 .led-track { background: rgba(33, 26, 14, 0.1); }
 .hairline { border-color: var(--color-line-soft); }
+
+/* bilingual toggle: show only the active language's <L> spans (see components/L.tsx) */
+html.lang-en [data-l="es"] { display: none; }
+html.lang-es [data-l="en"] { display: none; }

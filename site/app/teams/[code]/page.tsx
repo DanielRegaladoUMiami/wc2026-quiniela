@@ -3,6 +3,7 @@ import Link from "next/link";
 import FlagImg from "@/components/FlagImg";
 import ConfederationChip from "@/components/ConfederationChip";
 import ProbabilityBar from "@/components/ProbabilityBar";
+import L from "@/components/L";
 import {
   getTeams,
   getTeamByCode,
@@ -63,25 +64,25 @@ export default async function TeamPage({ params }: { params: Promise<{ code: str
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
               <ConfederationChip conf={team.conf} />
-              <span className="text-xs text-[color:var(--color-ink-soft)]">Group {team.group}</span>
+              <span className="text-xs text-[color:var(--color-ink-soft)]"><L es="Grupo" en="Group" /> {team.group}</span>
               <span className="text-xs text-[color:var(--color-ink-soft)]">·</span>
               <span className="text-xs text-[color:var(--color-ink-soft)]">FIFA #{team.fifa_rank}</span>
             </div>
             <h1 className="display text-5xl sm:text-7xl text-[color:var(--color-ink)]">{team.team}</h1>
             <p className="text-[color:var(--color-ink-soft)] italic mt-2 text-lg">{team.nickname}</p>
-            <p className="text-[color:var(--color-ink-soft)] text-sm mt-1">Best WC finish: {team.best_wc}</p>
+            <p className="text-[color:var(--color-ink-soft)] text-sm mt-1"><L es="Mejor actuación en Mundiales:" en="Best WC finish:" /> {team.best_wc}</p>
           </div>
           <div className="md:text-right">
             <div className="text-xs uppercase tracking-wider text-[color:var(--color-ink-soft)]">P(Champion)</div>
             <div className="display text-5xl text-[color:var(--color-red)]">{fmtPct(team.p_champion ?? 0, 1)}</div>
-            <div className="text-xs text-[color:var(--color-ink-soft)] mt-1">across {getMeta().n_sims.toLocaleString()} sims</div>
+            <div className="text-xs text-[color:var(--color-ink-soft)] mt-1"><L es="en" en="across" /> {getMeta().n_sims.toLocaleString()} <L es="simulaciones" en="sims" /></div>
           </div>
         </div>
       </section>
 
       {/* Advancement waterfall */}
       <section className="mx-auto max-w-7xl px-6 py-12">
-        <h2 className="display text-2xl mb-6 text-[color:var(--color-ink)]">Advancement waterfall</h2>
+        <h2 className="display text-2xl mb-6 text-[color:var(--color-ink)]"><L es="Cascada de avance" en="Advancement waterfall" /></h2>
         <div className="space-y-3 max-w-3xl">
           {rounds.map((r, i) => (
             <ProbabilityBar
@@ -99,7 +100,7 @@ export default async function TeamPage({ params }: { params: Promise<{ code: str
 
       {/* Group fixtures */}
       <section className="mx-auto max-w-7xl px-6 py-6">
-        <h2 className="display text-2xl mb-4 text-[color:var(--color-ink)]">Group stage fixtures</h2>
+        <h2 className="display text-2xl mb-4 text-[color:var(--color-ink)]"><L es="Partidos de fase de grupos" en="Group stage fixtures" /></h2>
         <div className="grid sm:grid-cols-3 gap-4">
           {groupFixtures.map((f) => {
             const p = probMap.get(f.num);
@@ -122,21 +123,24 @@ export default async function TeamPage({ params }: { params: Promise<{ code: str
                   {oppTeam && <FlagImg iso2={oppTeam.iso2} size={32} />}
                   <span className="display text-sm leading-none text-[color:var(--color-ink)]">{opp}</span>
                 </div>
-                <div className="mt-3 text-xs text-[color:var(--color-ink-soft)]">
+                <div data-l="en" className="mt-3 text-xs text-[color:var(--color-ink-soft)]">
                   Expected score <span className="text-[color:var(--color-ink)] tabular-nums">{xg.toFixed(1)} – {xgOpp.toFixed(1)}</span>
+                </div>
+                <div data-l="es" className="mt-3 text-xs text-[color:var(--color-ink-soft)]">
+                  Marcador esperado <span className="text-[color:var(--color-ink)] tabular-nums">{xg.toFixed(1)} – {xgOpp.toFixed(1)}</span>
                 </div>
                 <div className="mt-3 grid grid-cols-3 gap-1 text-[11px] text-center">
                   <div className="border-2 border-[color:var(--color-ink)] bg-[color:var(--color-green)] py-1">
                     <div className="display text-sm leading-none text-[color:var(--color-card)]">{fmtPct(pWin)}</div>
-                    <div className="text-[color:var(--color-card)]">Win</div>
+                    <div className="text-[color:var(--color-card)]"><L es="Gana" en="Win" /></div>
                   </div>
                   <div className="border-2 border-[color:var(--color-ink)] bg-[color:var(--color-yellow)] py-1">
                     <div className="display text-sm leading-none text-[color:var(--color-ink)]">{fmtPct(pDraw)}</div>
-                    <div className="text-[color:var(--color-ink-soft)]">Draw</div>
+                    <div className="text-[color:var(--color-ink-soft)]"><L es="Empata" en="Draw" /></div>
                   </div>
                   <div className="border-2 border-[color:var(--color-ink)] bg-[color:var(--color-red)] py-1">
                     <div className="display text-sm leading-none text-[color:var(--color-card)]">{fmtPct(pLose)}</div>
-                    <div className="text-[color:var(--color-card)]">Lose</div>
+                    <div className="text-[color:var(--color-card)]"><L es="Pierde" en="Lose" /></div>
                   </div>
                 </div>
               </Link>
@@ -147,7 +151,8 @@ export default async function TeamPage({ params }: { params: Promise<{ code: str
 
       {/* Group rivals */}
       <section className="mx-auto max-w-7xl px-6 py-12">
-        <h2 className="display text-2xl mb-4 text-[color:var(--color-ink)]">Group {team.group} rivals</h2>
+        <h2 data-l="en" className="display text-2xl mb-4 text-[color:var(--color-ink)]">Group {team.group} rivals</h2>
+        <h2 data-l="es" className="display text-2xl mb-4 text-[color:var(--color-ink)]">Rivales del Grupo {team.group}</h2>
         <div className="grid sm:grid-cols-3 gap-3">
           {groupTeams.map((t) => (
             <Link key={t.fifa_code} href={`/teams/${t.fifa_code.toLowerCase()}`} className="sticker sticker-hover p-3 flex items-center gap-3">

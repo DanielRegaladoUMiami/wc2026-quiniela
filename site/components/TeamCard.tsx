@@ -1,6 +1,7 @@
 import Link from "next/link";
 import FlagImg from "./FlagImg";
 import ConfederationChip from "./ConfederationChip";
+import L from "@/components/L";
 import { Team, fmtPct } from "@/lib/types";
 
 export default function TeamCard({ team, priority }: { team: Team; priority?: boolean }) {
@@ -26,11 +27,15 @@ export default function TeamCard({ team, priority }: { team: Team; priority?: bo
           <div className="mt-1 flex items-center gap-3 text-[11px] text-[color:var(--color-ink-soft)]">
             <span>FIFA #{team.fifa_rank}</span>
             <span className="text-[color:var(--color-line-soft)]">·</span>
-            <span>Group {team.group}</span>
+            <span>
+              <L es="Grupo" en="Group" /> {team.group}
+            </span>
           </div>
         </div>
         <div className="text-right">
-          <div className="text-[10px] uppercase tracking-wider text-[color:var(--color-ink-soft)]">Champion</div>
+          <div className="text-[10px] uppercase tracking-wider text-[color:var(--color-ink-soft)]">
+            <L es="Campeón" en="Champion" />
+          </div>
           <div className="display text-2xl text-[color:var(--color-red)] tabular-nums">
             {fmtPct(team.p_champion ?? 0, 1)}
           </div>
@@ -38,7 +43,9 @@ export default function TeamCard({ team, priority }: { team: Team; priority?: bo
       </div>
       <div className="mt-3">
         <div className="flex justify-between text-[11px] text-[color:var(--color-ink-soft)] mb-1">
-          <span>Advance from group</span>
+          <span>
+            <L es="Avanza de grupo" en="Advance from group" />
+          </span>
           <span className="text-[color:var(--color-ink)] tabular-nums">{fmtPct(team.p_advance_group ?? 0)}</span>
         </div>
         <div className="relative h-2 border-2 border-[color:var(--color-ink)] bar-track">

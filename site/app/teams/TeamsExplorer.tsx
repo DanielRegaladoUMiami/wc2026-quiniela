@@ -1,5 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
+import L from "@/components/L";
 import TeamCard from "@/components/TeamCard";
 import { Team } from "@/lib/types";
 import { CONFEDERATIONS } from "@/lib/utils";
@@ -42,7 +43,7 @@ export default function TeamsExplorer({ teams }: { teams: Team[] }) {
               : "bg-[color:var(--color-yellow)] text-[color:var(--color-ink)] hover:bg-[color:var(--color-ink)] hover:text-[color:var(--color-yellow)]"
           }`}
         >
-          ALL ({teams.length})
+          <L es="TODOS" en="ALL" /> ({teams.length})
         </button>
         {CONFEDERATIONS.map((c) => {
           const n = teams.filter((t) => t.conf === c).length;
@@ -87,7 +88,12 @@ export default function TeamsExplorer({ teams }: { teams: Team[] }) {
         ))}
       </div>
       {filtered.length === 0 && (
-        <div className="text-center text-[color:var(--color-ink-soft)] py-20">No teams match those filters.</div>
+        <div className="text-center text-[color:var(--color-ink-soft)] py-20">
+          <L
+            es="Ningún equipo coincide con esos filtros."
+            en="No teams match those filters."
+          />
+        </div>
       )}
     </div>
   );

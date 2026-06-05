@@ -1,5 +1,6 @@
 import Link from "next/link";
 import FlagImg from "@/components/FlagImg";
+import L from "@/components/L";
 import ProbabilityBar from "@/components/ProbabilityBar";
 import { teamsByGroup, getAdvancement, fmtPct } from "@/lib/data";
 
@@ -13,10 +14,14 @@ export default function GroupsPage() {
   return (
     <div className="mx-auto max-w-7xl px-6 py-12">
       <header className="mb-8">
-        <h1 className="display text-4xl sm:text-5xl tracking-tight text-[color:var(--color-ink)]">GROUPS</h1>
+        <h1 className="display text-4xl sm:text-5xl tracking-tight text-[color:var(--color-ink)]">
+          <L es="GRUPOS" en="GROUPS" />
+        </h1>
         <p className="text-[color:var(--color-ink-soft)] mt-2 max-w-2xl">
-          12 groups of 4. The top 2 from each group advance automatically; the 8 best third-place
-          teams also reach the Round of 32.
+          <L
+            es="12 grupos de 4. Los 2 primeros de cada grupo avanzan automáticamente; los 8 mejores terceros también llegan a los dieciseisavos de final."
+            en="12 groups of 4. The top 2 from each group advance automatically; the 8 best third-place teams also reach the Round of 32."
+          />
         </p>
       </header>
 
@@ -26,8 +31,11 @@ export default function GroupsPage() {
           return (
             <div key={g} className="sticker rounded-none overflow-hidden">
               <div className="halftone flex items-center justify-between gap-2 border-b-2 border-[color:var(--color-ink)] bg-[color:var(--color-red)] px-3 py-1.5 text-[color:var(--color-card)]">
-                <h2 className="display text-xl leading-none">Group {g}</h2>
-                <span className="display text-[10px] leading-none tracking-wider">Advance · 3rd</span>
+                <h2 data-l="en" className="display text-xl leading-none">Group {g}</h2>
+                <h2 data-l="es" className="display text-xl leading-none">Grupo {g}</h2>
+                <span className="display text-[10px] leading-none tracking-wider">
+                  <L es="Avanza · 3.º" en="Advance · 3rd" />
+                </span>
               </div>
               <div className="space-y-3 p-4">
                 {teams.map((t) => {

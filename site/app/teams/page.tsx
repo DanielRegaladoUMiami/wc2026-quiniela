@@ -1,3 +1,4 @@
+import L from "@/components/L";
 import { getTeams } from "@/lib/data";
 import TeamsExplorer from "./TeamsExplorer";
 
@@ -8,12 +9,23 @@ export default function TeamsPage() {
   return (
     <div className="mx-auto max-w-7xl px-6 py-12">
       <header className="mb-8">
-        <h1 className="display text-5xl sm:text-7xl leading-[0.82] text-[color:var(--color-ink)]">
+        <h1
+          data-l="en"
+          className="display text-5xl sm:text-7xl leading-[0.82] text-[color:var(--color-ink)]"
+        >
           THE 48 <span className="text-[color:var(--color-red)]">TEAMS</span>
         </h1>
+        <h1
+          data-l="es"
+          className="display text-5xl sm:text-7xl leading-[0.82] text-[color:var(--color-ink)]"
+        >
+          LOS 48 <span className="text-[color:var(--color-red)]">EQUIPOS</span>
+        </h1>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[color:var(--color-ink-soft)]">
-          Every nation that qualified for the expanded 2026 format. Filter by confederation, sort by
-          model conviction.
+          <L
+            es="Cada selección que clasificó al formato ampliado de 2026. Filtra por confederación y ordena por convicción del modelo."
+            en="Every nation that qualified for the expanded 2026 format. Filter by confederation, sort by model conviction."
+          />
         </p>
       </header>
       <TeamsExplorer teams={teams} />

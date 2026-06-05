@@ -1,5 +1,7 @@
 "use client";
 
+import L from "@/components/L";
+
 function poissonPmf(k: number, lambda: number): number {
   if (lambda <= 0) return k === 0 ? 1 : 0;
   let logP = -lambda + k * Math.log(lambda);
@@ -76,17 +78,25 @@ export default function ScoreHeatmap({ lambdaH, lambdaA }: { lambdaH: number; la
         ))}
         <div className="flex mt-2 text-[10px] text-[color:var(--color-ink-soft)]">
           <div className="w-6" />
-          <div className="flex-1 text-center">Away goals →</div>
+          <div className="flex-1 text-center">
+            <L es="Goles visitante →" en="Away goals →" />
+          </div>
         </div>
       </div>
       <div className="text-xs text-[color:var(--color-ink-soft)] mt-3">
-        Modal scoreline: <span className="text-[color:var(--color-red)] font-semibold tabular-nums">{argmax.h}–{argmax.a}</span>
+        <L es="Marcador más probable: " en="Modal scoreline: " />
+        <span className="text-[color:var(--color-red)] font-semibold tabular-nums">{argmax.h}–{argmax.a}</span>
         <span className="text-[color:var(--color-ink-soft)] mx-2">·</span>
-        <span>{(max * 100).toFixed(2)}% mass</span>
+        <span>{(max * 100).toFixed(2)}<L es="% de la masa" en="% mass" /></span>
       </div>
-      <div className="text-[10px] text-[color:var(--color-ink-soft)] mt-1">
+      <div data-l="en" className="text-[10px] text-[color:var(--color-ink-soft)] mt-1">
         Independent-Poisson approximation (λ<sub>home</sub> × λ<sub>away</sub>). The correlated
         Dixon-Coles / Monte-Carlo joint is served on match pages in the live build.
+      </div>
+      <div data-l="es" className="text-[10px] text-[color:var(--color-ink-soft)] mt-1">
+        Aproximación de Poisson independiente (λ<sub>home</sub> × λ<sub>away</sub>). La conjunta
+        correlacionada de Dixon-Coles / Monte-Carlo se sirve en las páginas de partido en la versión
+        en vivo.
       </div>
     </div>
   );

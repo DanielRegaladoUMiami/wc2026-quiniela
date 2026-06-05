@@ -26,9 +26,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} ${anton.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} ${anton.variable} lang-en h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{var l=localStorage.getItem('wc-lang')||'en';var d=document.documentElement;d.classList.remove('lang-en','lang-es');d.classList.add('lang-'+l);}catch(e){}",
+          }}
+        />
         <NavBar />
         <main className="flex-1">{children}</main>
         <Footer />

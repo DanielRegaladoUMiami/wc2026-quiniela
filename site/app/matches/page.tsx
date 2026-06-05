@@ -1,3 +1,4 @@
+import L from "@/components/L";
 import { getFixtures, getMatchProbs, getTeams } from "@/lib/data";
 import MatchesTable from "./MatchesTable";
 
@@ -10,12 +11,23 @@ export default function MatchesPage() {
   return (
     <div className="mx-auto max-w-7xl px-6 py-12">
       <header className="mb-8">
-        <h1 className="display text-5xl sm:text-6xl text-[color:var(--color-ink)]">
+        <h1
+          data-l="en"
+          className="display text-5xl sm:text-6xl text-[color:var(--color-ink)]"
+        >
           THE <span className="text-[color:var(--color-red)]">104 MATCHES</span>
         </h1>
+        <h1
+          data-l="es"
+          className="display text-5xl sm:text-6xl text-[color:var(--color-ink)]"
+        >
+          LOS <span className="text-[color:var(--color-red)]">104 PARTIDOS</span>
+        </h1>
         <p className="mt-2 max-w-2xl text-[color:var(--color-ink-soft)]">
-          Every fixture with 1X2 probabilities, expected goals, venue and altitude.
-          Filter by stage or group, sort by any column.
+          <L
+            en="Every fixture with 1X2 probabilities, expected goals, venue and altitude. Filter by stage or group, sort by any column."
+            es="Cada partido con probabilidades 1X2, goles esperados, sede y altitud. Filtra por fase o grupo, y ordena por cualquier columna."
+          />
         </p>
       </header>
       <MatchesTable fixtures={fixtures} probs={probs} teams={teams} />

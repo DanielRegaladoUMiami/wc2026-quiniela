@@ -1,13 +1,15 @@
 import Link from "next/link";
+import L from "@/components/L";
+import LangToggle from "@/components/LangToggle";
 
 const links = [
-  { href: "/", label: "EDGE" },
-  { href: "/bracket", label: "BRACKET" },
-  { href: "/groups", label: "GROUPS" },
-  { href: "/teams", label: "TEAMS" },
-  { href: "/matches", label: "MATCHES" },
-  { href: "/backtest", label: "BACKTEST" },
-  { href: "/methodology", label: "METHOD" },
+  { href: "/", es: "EDGE", en: "EDGE" },
+  { href: "/bracket", es: "LLAVE", en: "BRACKET" },
+  { href: "/groups", es: "GRUPOS", en: "GROUPS" },
+  { href: "/teams", es: "EQUIPOS", en: "TEAMS" },
+  { href: "/matches", es: "PARTIDOS", en: "MATCHES" },
+  { href: "/backtest", es: "BACKTEST", en: "BACKTEST" },
+  { href: "/methodology", es: "MÉTODO", en: "METHOD" },
 ];
 
 export default function NavBar() {
@@ -19,24 +21,27 @@ export default function NavBar() {
         </Link>
         <ul className="flex items-center gap-0.5 overflow-x-auto">
           {links.map((l) => (
-            <li key={l.label}>
+            <li key={l.en}>
               <Link
                 href={l.href}
                 className="display block px-2.5 py-1 text-sm leading-none whitespace-nowrap text-[color:var(--color-card)] hover:bg-[color:var(--color-ink)] hover:text-[color:var(--color-yellow)] transition-colors"
               >
-                {l.label}
+                <L es={l.es} en={l.en} />
               </Link>
             </li>
           ))}
         </ul>
-        <a
-          href="https://github.com/DanielRegaladoUMiami/wc2026-quiniela"
-          target="_blank"
-          rel="noreferrer"
-          className="display hidden md:block shrink-0 px-2.5 py-1 text-sm leading-none text-[color:var(--color-ink)] bg-[color:var(--color-yellow)] border-2 border-[color:var(--color-ink)] hover:bg-[color:var(--color-card)]"
-        >
-          GITHUB
-        </a>
+        <div className="flex items-center gap-2 shrink-0">
+          <LangToggle />
+          <a
+            href="https://github.com/DanielRegaladoUMiami/wc2026-quiniela"
+            target="_blank"
+            rel="noreferrer"
+            className="display hidden md:block px-2.5 py-1 text-sm leading-none text-[color:var(--color-ink)] bg-[color:var(--color-yellow)] border-2 border-[color:var(--color-ink)] hover:bg-[color:var(--color-card)]"
+          >
+            GITHUB
+          </a>
+        </div>
       </nav>
     </header>
   );
