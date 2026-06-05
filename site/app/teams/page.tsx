@@ -8,9 +8,11 @@ export default function TeamsPage() {
   return (
     <div className="mx-auto max-w-7xl px-6 py-12">
       <header className="mb-8">
-        <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight">All 48 teams</h1>
-        <p className="text-slate-400 mt-2 max-w-2xl">
-          Every nation that qualified for the 2026 expanded format. Filter by confederation, sort by
+        <h1 className="display text-5xl sm:text-7xl leading-[0.82] text-[color:var(--color-ink)]">
+          THE 48 <span className="text-[color:var(--color-red)]">TEAMS</span>
+        </h1>
+        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[color:var(--color-ink-soft)]">
+          Every nation that qualified for the expanded 2026 format. Filter by confederation, sort by
           model conviction.
         </p>
       </header>

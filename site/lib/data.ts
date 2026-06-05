@@ -11,6 +11,7 @@ import type {
   RoundOcc,
   BacktestRow,
   Meta,
+  EdgeMatch,
 } from "./types";
 
 export * from "./types";
@@ -37,6 +38,7 @@ export const getRoundOccupancy = () => cached("occ", () => readJson<RoundOcc[]>(
 export const getMeta = () => cached("meta", () => readJson<Meta>("meta.json"));
 export const getBacktestWC = () => cached("btw", () => readJson<BacktestRow[]>("backtest_wc2022.json"));
 export const getBacktestEU = () => cached("bte", () => readJson<BacktestRow[]>("backtest_euro2024.json"));
+export const getEdge = () => cached("edge", () => readJson<EdgeMatch[]>("edge.json"));
 
 export function getTeamByCode(code: string): Team | undefined {
   return getTeams().find((t) => t.fifa_code.toLowerCase() === code.toLowerCase());

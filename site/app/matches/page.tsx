@@ -10,8 +10,10 @@ export default function MatchesPage() {
   return (
     <div className="mx-auto max-w-7xl px-6 py-12">
       <header className="mb-8">
-        <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight">All 104 matches</h1>
-        <p className="text-slate-400 mt-2 max-w-2xl">
+        <h1 className="display text-5xl sm:text-6xl text-[color:var(--color-ink)]">
+          THE <span className="text-[color:var(--color-red)]">104 MATCHES</span>
+        </h1>
+        <p className="mt-2 max-w-2xl text-[color:var(--color-ink-soft)]">
           Every fixture with 1X2 probabilities, expected goals, venue and altitude.
           Filter by stage or group, sort by any column.
         </p>

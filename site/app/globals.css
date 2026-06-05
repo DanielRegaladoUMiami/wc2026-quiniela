@@ -1,75 +1,125 @@
 @import "tailwindcss";
 
+/* ============================================================
+   PANINI PRINT — a World Cup sticker album.
+   Warm cream paper, halftone dots, flat vintage primaries,
+   bold condensed poster type, hard ink borders. No glow.
+   ============================================================ */
+
 @theme {
-  --color-primary-50: #ecfdf5;
-  --color-primary-100: #d1fae5;
-  --color-primary-400: #34d399;
-  --color-primary-500: #10b981;
-  --color-primary-600: #059669;
-  --color-primary-700: #047857;
-  --color-accent-300: #fcd34d;
-  --color-accent-400: #fbbf24;
-  --color-accent-500: #f59e0b;
-  --color-ink-50: #f8fafc;
-  --color-ink-100: #f1f5f9;
-  --color-ink-200: #e2e8f0;
-  --color-ink-300: #cbd5e1;
-  --color-ink-400: #94a3b8;
-  --color-ink-500: #64748b;
-  --color-ink-600: #475569;
-  --color-ink-700: #334155;
-  --color-ink-800: #1e293b;
-  --color-ink-900: #0f172a;
-  --color-ink-950: #020617;
-  --color-surface: #0b1220;
-  --color-surface-elevated: #111a2e;
-  --color-line: rgba(148, 163, 184, 0.12);
+  --color-paper: #f1e6c9;
+  --color-paper-deep: #e8d9b0;
+  --color-card: #fbf5e6;
+  --color-ink: #211a0e;
+  --color-ink-soft: #6e5f3c;
+  --color-red: #d63a2a;
+  --color-green: #2f8f4e;
+  --color-blue: #225fa0;
+  --color-yellow: #efb22f;
+  --color-line: #211a0e;
+  --color-line-soft: rgba(33, 26, 14, 0.18);
+
+  /* back-compat aliases so not-yet-converted pages keep rendering */
+  --color-surface: #f1e6c9;
+  --color-surface-elevated: #fbf5e6;
+  --color-amber: #d63a2a;
+  --color-amber-bright: #d63a2a;
+  --color-amber-dim: #6e5f3c;
+  --color-amber-ghost: rgba(33, 26, 14, 0.5);
+
+  --font-display: var(--font-anton), Impact, "Arial Narrow", sans-serif;
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-space-grotesk), var(--font-geist-sans), sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-crt: var(--font-anton), Impact, sans-serif;
 }
 
-html, body {
-  background:
-    radial-gradient(1200px 600px at 80% -10%, rgba(16, 185, 129, 0.10), transparent 60%),
-    radial-gradient(900px 500px at -10% 30%, rgba(245, 158, 11, 0.06), transparent 60%),
-    var(--color-surface);
-  color: var(--color-ink-100);
+html,
+body {
+  background-color: var(--color-paper);
+  background-image: radial-gradient(circle, rgba(33, 26, 14, 0.06) 1px, transparent 1.4px);
+  background-size: 6px 6px;
+  color: var(--color-ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
 }
 
-* { border-color: var(--color-line); }
+* {
+  border-color: var(--color-line-soft);
+}
 
+.display {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 0.92;
+  font-weight: 400;
+}
+
+/* a collectible sticker: cream face, hard ink border, offset block shadow */
+.sticker {
+  background: var(--color-card);
+  border: 2px solid var(--color-ink);
+  box-shadow: 4px 4px 0 0 var(--color-ink);
+  position: relative;
+}
+.sticker-hover {
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.sticker-hover:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0 0 var(--color-ink);
+}
+
+/* halftone dot texture for header bands */
+.halftone {
+  background-image: radial-gradient(circle, rgba(33, 26, 14, 0.22) 1.3px, transparent 1.5px);
+  background-size: 5px 5px;
+}
+.halftone-light {
+  background-image: radial-gradient(circle, rgba(251, 245, 230, 0.4) 1.2px, transparent 1.4px);
+  background-size: 5px 5px;
+}
+
+/* flat bold meters */
+.bar-track {
+  background: rgba(33, 26, 14, 0.1);
+}
+
+/* foil-stamp rosette for the edge number */
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border: 2px solid var(--color-ink);
+  background: var(--color-yellow);
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  box-shadow: 2px 2px 0 0 var(--color-ink);
+}
+
+/* amber scrollbar -> ink */
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-track { background: var(--color-paper-deep); }
+::-webkit-scrollbar-thumb { background: var(--color-ink); border: 3px solid var(--color-paper-deep); }
+
+/* ---- legacy helpers remapped so old pages don't break before conversion ---- */
+.glow,
+.glow-green,
+.glow-soft { text-shadow: none; }
+.crt { font-family: var(--font-display); text-transform: uppercase; }
+.cursor::after { content: ""; }
+.panel {
+  background: var(--color-card);
+  border: 2px solid var(--color-ink);
+  box-shadow: 4px 4px 0 0 var(--color-ink);
+}
 .glass {
-  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
-  border: 1px solid var(--color-line);
-  backdrop-filter: blur(10px);
+  background: var(--color-card);
+  border: 2px solid var(--color-ink);
 }
-
-.font-display { font-family: var(--font-display); font-feature-settings: "ss01", "cv11"; letter-spacing: -0.02em; }
-
-.gradient-text {
-  background: linear-gradient(135deg, #34d399 0%, #fbbf24 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.hairline { border-color: var(--color-line); }
-
-/* Subtle scrollbar */
-::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(148,163,184,0.18); border-radius: 6px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(148,163,184,0.3); }
-
-@keyframes shimmer {
-  0% { background-position: -1000px 0; }
-  100% { background-position: 1000px 0; }
-}
-.skeleton {
-  background: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.07), rgba(255,255,255,0.03));
-  background-size: 1000px 100%;
-  animation: shimmer 2.4s linear infinite;
-}
+.font-display { font-family: var(--font-display); text-transform: uppercase; }
+.gradient-text { color: var(--color-red); }
+.led { background: var(--color-blue); }
+.led-track { background: rgba(33, 26, 14, 0.1); }
+.hairline { border-color: var(--color-line-soft); }

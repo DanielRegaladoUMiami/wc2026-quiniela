@@ -17,30 +17,31 @@ export default function ProbabilityBar({
   delay?: number;
 }) {
   const pct = Math.min(100, Math.max(0, (value / max) * 100));
-  const palette = {
-    emerald: "from-emerald-400 to-emerald-600",
-    amber: "from-amber-300 to-amber-500",
-    sky: "from-sky-400 to-sky-600",
-    rose: "from-rose-400 to-rose-600",
-    slate: "from-slate-400 to-slate-600",
+  const fill = {
+    emerald: "var(--color-blue)",
+    amber: "var(--color-yellow)",
+    sky: "var(--color-blue)",
+    rose: "var(--color-red)",
+    slate: "var(--color-ink-soft)",
   }[color];
 
   return (
     <div className="w-full">
       {(label || rightLabel) && (
-        <div className="flex justify-between text-xs text-slate-400 mb-1">
+        <div className="flex justify-between text-xs text-[color:var(--color-ink-soft)] mb-1">
           <span>{label}</span>
-          <span className="text-slate-200 tabular-nums">{rightLabel}</span>
+          <span className="text-[color:var(--color-ink)] tabular-nums">{rightLabel}</span>
         </div>
       )}
       <div
-        className="relative overflow-hidden rounded-full bg-white/5 ring-1 ring-white/5"
+        className="relative overflow-hidden border-2 border-[color:var(--color-ink)] bar-track"
         style={{ height }}
       >
         <div
-          className={`h-full rounded-full bg-gradient-to-r ${palette} pb-anim`}
+          className="h-full pb-anim"
           style={{
             width: `${pct}%`,
+            backgroundColor: fill,
             animationDelay: `${delay}s`,
           }}
         />

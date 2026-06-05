@@ -14,6 +14,27 @@ export type Team = {
   p_advance_group: number;
 };
 
+export type EdgeMatch = {
+  date: string;
+  home_team: string;
+  away_team: string;
+  home_iso2: string;
+  away_iso2: string;
+  home_code: string;
+  away_code: string;
+  p_home_model: number;
+  p_draw_model: number;
+  p_away_model: number;
+  p_home_market: number;
+  p_draw_market: number;
+  p_away_market: number;
+  edge_home: number;
+  edge_draw: number;
+  edge_away: number;
+  best_edge_side: "home" | "draw" | "away";
+  best_edge_pts: number;
+};
+
 export type Fixture = {
   num: number;
   date: string;

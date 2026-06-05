@@ -52,29 +52,29 @@ export default function MatchesTable({
           <Chip key={g} active={group === g} onClick={() => setGroup(g === group ? null : g)}>Grp {g}</Chip>
         ))}
         <input
-          placeholder="Team or city..."
+          placeholder="Team or venue..."
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          className="ml-auto bg-white/5 border border-[color:var(--color-line)] rounded-md px-3 py-1.5 text-sm w-48 focus:outline-none focus:border-emerald-500/40"
+          className="ml-auto bg-[color:var(--color-card)] border-2 border-[color:var(--color-ink)] rounded-none px-3 py-1.5 text-sm w-48 text-[color:var(--color-ink)] placeholder:text-[color:var(--color-ink-soft)] focus:outline-none"
         />
       </div>
 
-      <div className="glass rounded-xl overflow-hidden">
-        <div className="grid grid-cols-12 gap-3 px-4 py-2.5 text-[10px] uppercase tracking-wider text-slate-500 border-b border-[color:var(--color-line)]">
+      <div className="sticker rounded-none overflow-hidden">
+        <div className="halftone grid grid-cols-12 gap-3 px-4 py-2.5 text-[10px] uppercase tracking-wider text-[color:var(--color-card)] bg-[color:var(--color-red)] border-b-2 border-[color:var(--color-ink)]">
           <div className="col-span-2">Date</div>
           <div className="col-span-3">Home</div>
           <div className="col-span-3">Away</div>
           <div className="col-span-3">1 / X / 2</div>
           <div className="col-span-1 text-right">Venue</div>
         </div>
-        <div className="divide-y divide-[color:var(--color-line)]/50">
+        <div className="divide-y-2 divide-[color:var(--color-line-soft)]">
           {rows.map((f) => (
             <MatchRow key={f.num} fixture={f} prob={probMap.get(f.num)} teamMap={teamMap} />
           ))}
         </div>
-        {rows.length === 0 && <div className="py-20 text-center text-slate-500 text-sm">No matches match those filters.</div>}
+        {rows.length === 0 && <div className="py-20 text-center text-[color:var(--color-ink-soft)] text-sm">No matches match those filters.</div>}
       </div>
-      <div className="text-xs text-slate-500 mt-3">{rows.length} of {fixtures.length} matches</div>
+      <div className="text-xs text-[color:var(--color-ink-soft)] mt-3">{rows.length} of {fixtures.length} matches</div>
     </div>
   );
 }
@@ -83,8 +83,10 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
   return (
     <button
       onClick={onClick}
-      className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
-        active ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-300" : "border-[color:var(--color-line)] text-slate-400 hover:text-white hover:border-white/20"
+      className={`display text-xs px-3 py-1.5 rounded-none border-2 border-[color:var(--color-ink)] transition-colors ${
+        active
+          ? "bg-[color:var(--color-ink)] text-[color:var(--color-yellow)]"
+          : "bg-[color:var(--color-yellow)] text-[color:var(--color-ink)] hover:bg-[color:var(--color-ink)] hover:text-[color:var(--color-yellow)]"
       }`}
     >
       {children}

@@ -36,11 +36,13 @@ export default function TeamsExplorer({ teams }: { teams: Team[] }) {
       <div className="flex flex-wrap gap-2 items-center mb-6">
         <button
           onClick={() => setConf(null)}
-          className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
-            conf === null ? "bg-white/10 border-white/20 text-white" : "border-[color:var(--color-line)] text-slate-400 hover:text-white hover:border-white/20"
+          className={`display text-sm px-3 py-1.5 rounded-none border-2 border-[color:var(--color-ink)] transition-colors ${
+            conf === null
+              ? "bg-[color:var(--color-ink)] text-[color:var(--color-yellow)]"
+              : "bg-[color:var(--color-yellow)] text-[color:var(--color-ink)] hover:bg-[color:var(--color-ink)] hover:text-[color:var(--color-yellow)]"
           }`}
         >
-          All ({teams.length})
+          ALL ({teams.length})
         </button>
         {CONFEDERATIONS.map((c) => {
           const n = teams.filter((t) => t.conf === c).length;
@@ -49,8 +51,10 @@ export default function TeamsExplorer({ teams }: { teams: Team[] }) {
             <button
               key={c}
               onClick={() => setConf(c === conf ? null : c)}
-              className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
-                conf === c ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-300" : "border-[color:var(--color-line)] text-slate-400 hover:text-white hover:border-white/20"
+              className={`display text-sm px-3 py-1.5 rounded-none border-2 border-[color:var(--color-ink)] transition-colors ${
+                conf === c
+                  ? "bg-[color:var(--color-ink)] text-[color:var(--color-yellow)]"
+                  : "bg-[color:var(--color-yellow)] text-[color:var(--color-ink)] hover:bg-[color:var(--color-ink)] hover:text-[color:var(--color-yellow)]"
               }`}
             >
               {c} ({n})
@@ -62,16 +66,16 @@ export default function TeamsExplorer({ teams }: { teams: Team[] }) {
             placeholder="Search teams..."
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            className="bg-white/5 border border-[color:var(--color-line)] rounded-md px-3 py-1.5 text-sm w-44 focus:outline-none focus:border-emerald-500/40"
+            className="bg-[color:var(--color-card)] border-2 border-[color:var(--color-ink)] rounded-none px-3 py-1.5 text-sm w-44 text-[color:var(--color-ink)] placeholder:text-[color:var(--color-ink-soft)] focus:outline-none focus:border-[color:var(--color-red)]"
           />
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as SortKey)}
-            className="bg-white/5 border border-[color:var(--color-line)] rounded-md px-3 py-1.5 text-sm focus:outline-none"
+            className="display bg-[color:var(--color-card)] border-2 border-[color:var(--color-ink)] rounded-none px-3 py-1.5 text-sm text-[color:var(--color-ink)] focus:outline-none focus:border-[color:var(--color-red)]"
           >
             <option value="champion">Sort: Champion %</option>
             <option value="advance">Sort: Advance %</option>
-            <option value="rank">Sort: FIFA rank</option>
+            <option value="rank">Sort: FIFA Rank</option>
             <option value="name">Sort: Name</option>
           </select>
         </div>
@@ -83,7 +87,7 @@ export default function TeamsExplorer({ teams }: { teams: Team[] }) {
         ))}
       </div>
       {filtered.length === 0 && (
-        <div className="text-center text-slate-500 py-20">No teams match those filters.</div>
+        <div className="text-center text-[color:var(--color-ink-soft)] py-20">No teams match those filters.</div>
       )}
     </div>
   );

@@ -18,16 +18,16 @@ export default function BacktestChart({ wc, eu }: { wc: BacktestRow[]; eu: Backt
     <div className="h-64">
       <ResponsiveContainer>
         <LineChart data={data} margin={{ top: 5, right: 16, left: 0, bottom: 0 }}>
-          <CartesianGrid stroke="rgba(148,163,184,0.08)" />
-          <XAxis dataKey="i" tick={{ fill: "#64748b", fontSize: 11 }} axisLine={{ stroke: "rgba(148,163,184,0.2)" }} />
-          <YAxis tick={{ fill: "#64748b", fontSize: 11 }} axisLine={{ stroke: "rgba(148,163,184,0.2)" }} domain={["auto", "auto"]} />
+          <CartesianGrid stroke="rgba(33,26,14,0.12)" />
+          <XAxis dataKey="i" tick={{ fill: "#6e5f3c", fontSize: 11 }} axisLine={{ stroke: "rgba(33,26,14,0.4)" }} />
+          <YAxis tick={{ fill: "#6e5f3c", fontSize: 11 }} axisLine={{ stroke: "rgba(33,26,14,0.4)" }} domain={["auto", "auto"]} />
           <Tooltip
-            contentStyle={{ background: "#0b1220", border: "1px solid rgba(148,163,184,0.2)", borderRadius: 8, fontSize: 12 }}
+            contentStyle={{ background: "#fbf5e6", border: "2px solid #211a0e", borderRadius: 0, fontSize: 12, color: "#211a0e" }}
             formatter={(v) => (typeof v === "number" ? v.toFixed(3) : String(v))}
             labelFormatter={(l) => `Match ${l}`}
           />
-          <ReferenceLine y={1.0986} stroke="#fbbf24" strokeDasharray="3 3" label={{ value: "Uniform (log 3)", fill: "#fbbf24", fontSize: 10 }} />
-          <Line type="monotone" dataKey="avg" stroke="#10b981" strokeWidth={2} dot={false} />
+          <ReferenceLine y={1.0986} stroke="#efb22f" strokeWidth={2} strokeDasharray="3 3" label={{ value: "Uniform (log 3)", fill: "#211a0e", fontSize: 10 }} />
+          <Line type="monotone" dataKey="avg" stroke="#225fa0" strokeWidth={2} dot={false} />
         </LineChart>
       </ResponsiveContainer>
     </div>

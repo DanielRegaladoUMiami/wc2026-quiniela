@@ -40,68 +40,64 @@ export default async function MatchPage({ params }: { params: Promise<{ num: str
 
   return (
     <div>
-      <section className="relative overflow-hidden border-b border-[color:var(--color-line)]">
-        <div className="absolute inset-0 -z-10 opacity-30">
-          <div className="absolute top-0 left-0 h-80 w-80 rounded-full bg-emerald-500/30 blur-[120px]" />
-          <div className="absolute top-0 right-0 h-80 w-80 rounded-full bg-amber-400/20 blur-[120px]" />
-        </div>
+      <section className="relative overflow-hidden border-b-2 border-[color:var(--color-ink)]">
         <div className="mx-auto max-w-7xl px-6 py-12">
-          <Link href="/matches" className="text-xs text-slate-500 hover:text-white">← All matches</Link>
-          <div className="mt-4 text-xs text-slate-400">
+          <Link href="/matches" className="display text-xs text-[color:var(--color-red)] hover:text-[color:var(--color-ink)]">← ALL MATCHES</Link>
+          <div className="mt-4 text-xs text-[color:var(--color-ink-soft)]">
             Match {fixture.num} · {fmtDate(fixture.date)} · {fixture.stadium}, {fixture.city}
-            {fixture.altitude_m > 1000 && <span className="ml-2 text-amber-400">Altitude +{fixture.altitude_m}m</span>}
+            {fixture.altitude_m > 1000 && <span className="ml-2 text-[color:var(--color-red)]">Altitude +{fixture.altitude_m}m</span>}
           </div>
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-6 items-center">
             <div className="flex flex-col sm:items-start items-center text-center sm:text-left gap-3">
-              {home && <FlagImg iso2={home.iso2} size={120} priority />}
-              <h1 className="font-display text-3xl sm:text-4xl font-bold">{fixture.home}</h1>
-              <div className="font-display text-4xl gradient-text">{fmtPct(pH)}</div>
+              {home && <FlagImg iso2={home.iso2} size={120} priority className="!rounded-none border-2 border-[color:var(--color-ink)] !ring-0" />}
+              <h1 className="display text-3xl sm:text-4xl text-[color:var(--color-ink)]">{fixture.home}</h1>
+              <div className="display text-4xl text-[color:var(--color-red)]">{fmtPct(pH)}</div>
             </div>
             <div className="text-center">
-              <div className="text-xs text-slate-500 uppercase tracking-wider">Expected</div>
-              <div className="font-display text-5xl font-bold tabular-nums">{xgH.toFixed(1)} <span className="text-slate-700">–</span> {xgA.toFixed(1)}</div>
-              <div className="text-xs text-slate-500 mt-2">Draw {fmtPct(pD)}</div>
-              <div className="mt-4 inline-block rounded-full bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 text-xs text-emerald-300">
+              <div className="text-xs text-[color:var(--color-ink-soft)] uppercase tracking-wider">Expected</div>
+              <div className="display text-5xl tabular-nums text-[color:var(--color-ink)]">{xgH.toFixed(1)} <span className="text-[color:var(--color-ink-soft)]">–</span> {xgA.toFixed(1)}</div>
+              <div className="text-xs text-[color:var(--color-ink-soft)] mt-2">Draw {fmtPct(pD)}</div>
+              <div className="display mt-4 inline-block bg-[color:var(--color-yellow)] border-2 border-[color:var(--color-ink)] px-3 py-1 text-xs text-[color:var(--color-ink)]">
                 Pick: {pick}
               </div>
             </div>
             <div className="flex flex-col sm:items-end items-center text-center sm:text-right gap-3">
-              {away && <FlagImg iso2={away.iso2} size={120} />}
-              <h1 className="font-display text-3xl sm:text-4xl font-bold">{fixture.away}</h1>
-              <div className="font-display text-4xl gradient-text">{fmtPct(pA)}</div>
+              {away && <FlagImg iso2={away.iso2} size={120} className="!rounded-none border-2 border-[color:var(--color-ink)] !ring-0" />}
+              <h1 className="display text-3xl sm:text-4xl text-[color:var(--color-ink)]">{fixture.away}</h1>
+              <div className="display text-4xl text-[color:var(--color-red)]">{fmtPct(pA)}</div>
             </div>
           </div>
         </div>
       </section>
 
       <section className="mx-auto max-w-7xl px-6 py-12 grid lg:grid-cols-2 gap-8">
-        <div className="glass rounded-xl p-6">
-          <h2 className="font-display text-xl font-bold mb-4">1X2 distribution</h2>
+        <div className="sticker p-6">
+          <h2 className="display text-xl mb-4 text-[color:var(--color-ink)]">1X2 DISTRIBUTION</h2>
           <ProbDonut pH={pH} pD={pD} pA={pA} home={fixture.home} away={fixture.away} />
         </div>
-        <div className="glass rounded-xl p-6">
-          <h2 className="font-display text-xl font-bold mb-1">Score-line heatmap</h2>
-          <p className="text-xs text-slate-500 mb-4">Joint Poisson(λ_home, λ_away) with Dixon-Coles low-score correction.</p>
+        <div className="sticker p-6">
+          <h2 className="display text-xl mb-1 text-[color:var(--color-ink)]">SCORE MAP</h2>
+          <p className="text-xs text-[color:var(--color-ink-soft)] mb-4">Joint Poisson(λ_home, λ_away) with Dixon-Coles correction for low scores.</p>
           <ScoreHeatmap lambdaH={xgH} lambdaA={xgA} />
         </div>
       </section>
 
       <section className="mx-auto max-w-7xl px-6 pb-16 grid sm:grid-cols-3 gap-4">
-        <Card title="Venue">
-          <div className="font-medium">{fixture.stadium}</div>
-          <div className="text-sm text-slate-400">{fixture.city}, {fixture.country}</div>
-          <div className="text-xs text-slate-500 mt-2">Roof: {fixture.roof}{fixture.indoor ? " · indoor" : ""}</div>
+        <Card title="Stadium">
+          <div className="font-medium text-[color:var(--color-ink)]">{fixture.stadium}</div>
+          <div className="text-sm text-[color:var(--color-ink-soft)]">{fixture.city}, {fixture.country}</div>
+          <div className="text-xs text-[color:var(--color-ink-soft)] mt-2">Roof: {fixture.roof}{fixture.indoor ? " · indoor" : ""}</div>
         </Card>
         <Card title="Altitude">
-          <div className="font-display text-3xl font-bold tabular-nums">{fixture.altitude_m}m</div>
-          <div className="text-xs text-slate-500 mt-1">{fixture.altitude_m > 1500 ? "High-altitude penalty applied to non-acclimated teams" : "Sea-level effect negligible"}</div>
+          <div className="display text-3xl tabular-nums text-[color:var(--color-ink)]">{fixture.altitude_m}m</div>
+          <div className="text-xs text-[color:var(--color-ink-soft)] mt-1">{fixture.altitude_m > 1500 ? "Altitude penalty applied to unacclimatized teams" : "Negligible sea-level effect"}</div>
         </Card>
-        <Card title="How to play this">
-          <p className="text-sm text-slate-300">
-            {pick.toLowerCase()}. The score most concentrated in the joint distribution is roughly{" "}
-            <span className="text-emerald-300 font-medium">{Math.round(xgH)}–{Math.round(xgA)}</span>.
+        <Card title="How to play it">
+          <p className="text-sm text-[color:var(--color-ink)]">
+            {pick.toLowerCase()}. The most likely scoreline in the joint distribution is approximately{" "}
+            <span className="text-[color:var(--color-red)] font-bold">{Math.round(xgH)}–{Math.round(xgA)}</span>.
           </p>
-          <p className="text-xs text-slate-500 mt-2">Contrarian alternative: the draw at {fmtPct(pD)} if your pool rewards bracket-busters.</p>
+          <p className="text-xs text-[color:var(--color-ink-soft)] mt-2">Contrarian alternative: the draw at {fmtPct(pD)} if your Quiniela rewards upsets.</p>
         </Card>
       </section>
     </div>
@@ -110,8 +106,8 @@ export default async function MatchPage({ params }: { params: Promise<{ num: str
 
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="glass rounded-xl p-5">
-      <div className="text-[10px] uppercase tracking-wider text-slate-500 mb-2">{title}</div>
+    <div className="sticker p-5">
+      <div className="display text-[10px] uppercase tracking-wider text-[color:var(--color-ink-soft)] mb-2">{title}</div>
       {children}
     </div>
   );

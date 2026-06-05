@@ -15,9 +15,9 @@ export default function ProbDonut({
   away: string;
 }) {
   const data = [
-    { name: home, value: pH, fill: "#10b981" },
-    { name: "Draw", value: pD, fill: "#64748b" },
-    { name: away, value: pA, fill: "#fbbf24" },
+    { name: home, value: pH, fill: "#225fa0" },
+    { name: "Draw", value: pD, fill: "#6e5f3c" },
+    { name: away, value: pA, fill: "#efb22f" },
   ];
   return (
     <div className="h-64 relative">
@@ -29,28 +29,28 @@ export default function ProbDonut({
             outerRadius={100}
             startAngle={90}
             endAngle={-270}
-            stroke="rgba(11,18,32,1)"
+            stroke="#211a0e"
             strokeWidth={4}
             dataKey="value"
           >
             {data.map((d, i) => <Cell key={i} fill={d.fill} />)}
           </Pie>
           <Tooltip
-            contentStyle={{ background: "#0b1220", border: "1px solid rgba(148,163,184,0.2)", borderRadius: 8, fontSize: 12 }}
+            contentStyle={{ background: "#fbf5e6", border: "2px solid #211a0e", borderRadius: 0, fontSize: 12, color: "#211a0e" }}
             formatter={(v) => (typeof v === "number" ? `${(v * 100).toFixed(1)}%` : String(v))}
           />
         </PieChart>
       </ResponsiveContainer>
       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-        <div className="text-xs text-slate-500">Most likely</div>
-        <div className="font-display text-lg font-bold">
+        <div className="text-xs text-[color:var(--color-ink-soft)]">Most likely</div>
+        <div className="display text-lg">
           {pH >= pD && pH >= pA ? home : pA >= pD ? away : "Draw"}
         </div>
       </div>
       <div className="flex gap-4 justify-center mt-2 text-xs">
-        <Legend color="#10b981" label={home} val={pH} />
-        <Legend color="#64748b" label="Draw" val={pD} />
-        <Legend color="#fbbf24" label={away} val={pA} />
+        <Legend color="#225fa0" label={home} val={pH} />
+        <Legend color="#6e5f3c" label="Draw" val={pD} />
+        <Legend color="#efb22f" label={away} val={pA} />
       </div>
     </div>
   );
@@ -59,9 +59,9 @@ export default function ProbDonut({
 function Legend({ color, label, val }: { color: string; label: string; val: number }) {
   return (
     <div className="flex items-center gap-1.5">
-      <span className="h-2 w-2 rounded-full" style={{ background: color }} />
-      <span className="text-slate-400">{label}</span>
-      <span className="text-slate-200 tabular-nums">{(val * 100).toFixed(1)}%</span>
+      <span className="h-2 w-2 border border-[color:var(--color-ink)]" style={{ background: color }} />
+      <span className="text-[color:var(--color-ink-soft)]">{label}</span>
+      <span className="text-[color:var(--color-ink)] tabular-nums">{(val * 100).toFixed(1)}%</span>
     </div>
   );
 }

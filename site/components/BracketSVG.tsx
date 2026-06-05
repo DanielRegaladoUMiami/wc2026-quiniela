@@ -21,12 +21,6 @@ export default function BracketSVG({ advancement, teams }: { advancement: Advanc
 
   return (
     <svg viewBox={`0 0 ${w} ${h}`} className="w-full min-w-[820px]">
-      <defs>
-        <linearGradient id="barGrad" x1="0" x2="1">
-          <stop offset="0%" stopColor="#10b981" />
-          <stop offset="100%" stopColor="#fbbf24" />
-        </linearGradient>
-      </defs>
       {/* headers */}
       {ROUNDS.map((r, i) => (
         <text
@@ -34,9 +28,9 @@ export default function BracketSVG({ advancement, teams }: { advancement: Advanc
           x={labelW + i * colW + colW / 2}
           y={20}
           textAnchor="middle"
-          className="fill-slate-400"
+          fill="#6e5f3c"
           fontSize={11}
-          fontFamily="var(--font-space-grotesk)"
+          fontFamily="var(--font-display)"
           letterSpacing={2}
         >
           {r.label.toUpperCase()}
@@ -49,10 +43,10 @@ export default function BracketSVG({ advancement, teams }: { advancement: Advanc
         return (
           <g key={a.team}>
             {/* Team label */}
-            <text x={0} y={y + 14} fontSize={13} fontWeight={600} className="fill-slate-100" fontFamily="var(--font-space-grotesk)">
+            <text x={0} y={y + 14} fontSize={13} fontWeight={600} fill="#211a0e" fontFamily="var(--font-display)">
               {a.team}
             </text>
-            <text x={0} y={y + 28} fontSize={10} className="fill-slate-500">
+            <text x={0} y={y + 28} fontSize={10} fill="#6e5f3c">
               {t?.fifa_code} · #{t?.fifa_rank}
             </text>
 
@@ -63,14 +57,14 @@ export default function BracketSVG({ advancement, teams }: { advancement: Advanc
               const barW = Math.max(2, v * (colW - 20));
               return (
                 <g key={r.key}>
-                  <rect x={cx} y={y + 6} width={colW - 20} height={24} rx={4} fill="rgba(255,255,255,0.04)" />
-                  <rect x={cx} y={y + 6} width={barW} height={24} rx={4} fill="url(#barGrad)" opacity={0.85} />
+                  <rect x={cx} y={y + 6} width={colW - 20} height={24} fill="rgba(33,26,14,0.1)" stroke="#211a0e" strokeWidth={2} />
+                  <rect x={cx} y={y + 6} width={barW} height={24} fill="#225fa0" stroke="#211a0e" strokeWidth={2} />
                   <text
                     x={cx + 6}
                     y={y + 21}
                     fontSize={10}
-                    className="fill-slate-100"
-                    fontFamily="ui-monospace, monospace"
+                    fill="#fbf5e6"
+                    fontFamily="var(--font-mono)"
                     fontWeight={500}
                   >
                     {fmtPct(v, 0)}
@@ -81,8 +75,8 @@ export default function BracketSVG({ advancement, teams }: { advancement: Advanc
 
             {/* Champion badge */}
             <g transform={`translate(${labelW + ROUNDS.length * colW + 10}, ${y + 6})`}>
-              <rect width={60} height={24} rx={4} fill="rgba(251,191,36,0.12)" stroke="rgba(251,191,36,0.3)" />
-              <text x={30} y={16} textAnchor="middle" fontSize={11} className="fill-amber-300" fontFamily="ui-monospace, monospace" fontWeight={600}>
+              <rect width={60} height={24} fill="#efb22f" stroke="#211a0e" strokeWidth={2} />
+              <text x={30} y={16} textAnchor="middle" fontSize={11} fill="#211a0e" fontFamily="var(--font-mono)" fontWeight={600}>
                 {fmtPct(a.p_champion, 1)}
               </text>
             </g>
@@ -90,7 +84,7 @@ export default function BracketSVG({ advancement, teams }: { advancement: Advanc
         );
       })}
 
-      <text x={labelW + ROUNDS.length * colW + 40} y={20} textAnchor="middle" fontSize={11} className="fill-amber-300" letterSpacing={2} fontFamily="var(--font-space-grotesk)">
+      <text x={labelW + ROUNDS.length * colW + 40} y={20} textAnchor="middle" fontSize={11} fill="#d63a2a" letterSpacing={2} fontFamily="var(--font-display)">
         CHAMPION
       </text>
     </svg>

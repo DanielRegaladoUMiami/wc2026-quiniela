@@ -5,13 +5,18 @@ export const metadata = { title: "Methodology" };
 
 export default function MethodologyPage() {
   return (
-    <article className="mx-auto max-w-3xl px-6 py-16 prose-invert">
-      <header className="mb-10">
-        <div className="text-xs uppercase tracking-[0.2em] text-emerald-400 mb-2">Methodology</div>
-        <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight">How the ensemble works</h1>
-        <p className="text-slate-400 mt-3">
-          Living document. Updated as models are implemented (Days 6–10 of the build plan).
-        </p>
+    <article className="mx-auto max-w-3xl px-6 py-16">
+      <header className="sticker mb-10 overflow-hidden">
+        <div className="halftone border-b-2 border-[color:var(--color-ink)] bg-[color:var(--color-red)] px-5 py-2">
+          <span className="display text-sm text-[color:var(--color-card)]">METHOD · HOW THE ENSEMBLE WORKS</span>
+        </div>
+        <div className="p-5 sm:p-8">
+          <div className="text-xs uppercase tracking-[0.2em] text-[color:var(--color-ink-soft)] mb-2">Methodology</div>
+          <h1 className="display text-4xl sm:text-5xl text-[color:var(--color-ink)]">How the ensemble works</h1>
+          <p className="text-[color:var(--color-ink-soft)] mt-3">
+            Living document. Updated as models are implemented (Days 6–10 of the build plan).
+          </p>
+        </div>
       </header>
 
       <Section title="Goal">
@@ -25,7 +30,7 @@ export default function MethodologyPage() {
         <p>
           Classical model for football scorelines, fixing the under-prediction of low-score draws (0-0, 1-1) by a
           small correction parameter ρ. Fit with exponential time decay (ξ ≈ 0.0019 ≈ 1-year half-life) using{" "}
-          <a href="https://github.com/martineastwood/penaltyblog">penaltyblog</a>.
+          <a className="text-[color:var(--color-red)] font-bold" href="https://github.com/martineastwood/penaltyblog">penaltyblog</a>.
         </p>
         <MathBlock>{String.raw`P(\text{home}=i, \text{away}=j) = \tau(i,j) \cdot \frac{e^{-\lambda_h}\lambda_h^i}{i!} \cdot \frac{e^{-\lambda_a}\lambda_a^j}{j!}`}</MathBlock>
       </Section>
@@ -58,8 +63,8 @@ export default function MethodologyPage() {
       </Section>
 
       <Section title="Anti-leakage protocol">
-        <ul className="list-disc pl-5 space-y-1 text-slate-300">
-          <li>All historical features stamped with <code>feature_date &lt; match_date</code> (CI-enforced assertion).</li>
+        <ul className="list-disc pl-5 space-y-1 text-[color:var(--color-ink)]">
+          <li>All historical features stamped with <code className="font-mono text-[color:var(--color-red)]">feature_date &lt; match_date</code> (CI-enforced assertion).</li>
           <li>Elo reconstructed from per-match diffs, never current snapshot.</li>
           <li>FBref stats truncated to match date, not season totals.</li>
           <li>Transfermarkt values snapshotted by date.</li>
@@ -68,7 +73,7 @@ export default function MethodologyPage() {
       </Section>
 
       <Section title="Metrics">
-        <ul className="list-disc pl-5 space-y-1 text-slate-300">
+        <ul className="list-disc pl-5 space-y-1 text-[color:var(--color-ink)]">
           <li><strong>Ranked Probability Score (RPS)</strong> — primary, target &lt; 0.21.</li>
           <li>Log loss on 1X2.</li>
           <li>Brier on BTTS / Over 2.5.</li>
@@ -82,8 +87,8 @@ export default function MethodologyPage() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mt-10 first:mt-0">
-      <h2 className="font-display text-2xl font-bold tracking-tight mb-3">{title}</h2>
-      <div className="text-slate-300 leading-relaxed space-y-3">{children}</div>
+      <h2 className="display text-2xl text-[color:var(--color-ink)] mb-3">{title}</h2>
+      <div className="text-[color:var(--color-ink)] leading-relaxed space-y-3">{children}</div>
     </section>
   );
 }

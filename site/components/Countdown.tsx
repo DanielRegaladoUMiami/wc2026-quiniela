@@ -15,10 +15,10 @@ function compute(): { d: number; h: number; m: number; s: number; live: boolean 
 
 const Cell = ({ n, label }: { n: number; label: string }) => (
   <div className="flex flex-col items-center">
-    <div className="font-display text-3xl sm:text-5xl font-bold tabular-nums tracking-tight">
+    <div className="display text-3xl sm:text-5xl tabular-nums text-[color:var(--color-ink)]">
       {n.toString().padStart(2, "0")}
     </div>
-    <div className="text-[10px] sm:text-xs uppercase tracking-[0.2em] text-slate-500 mt-1">
+    <div className="display text-[10px] sm:text-xs tracking-[0.2em] text-[color:var(--color-ink-soft)] mt-1">
       {label}
     </div>
   </div>
@@ -32,13 +32,13 @@ export default function Countdown() {
   }, []);
 
   return (
-    <div className="inline-flex items-center gap-4 sm:gap-6 rounded-xl glass px-5 py-4">
+    <div className="sticker inline-flex items-center gap-4 sm:gap-6 rounded-none px-5 py-4">
       <Cell n={t.d} label="Days" />
-      <div className="text-slate-700 text-2xl font-thin">:</div>
+      <div className="display text-2xl text-[color:var(--color-red)]">:</div>
       <Cell n={t.h} label="Hours" />
-      <div className="text-slate-700 text-2xl font-thin">:</div>
+      <div className="display text-2xl text-[color:var(--color-red)]">:</div>
       <Cell n={t.m} label="Min" />
-      <div className="text-slate-700 text-2xl font-thin">:</div>
+      <div className="display text-2xl text-[color:var(--color-red)]">:</div>
       <Cell n={t.s} label="Sec" />
     </div>
   );

@@ -4,7 +4,7 @@ export default function ConfederationChip({ conf, size = "sm" }: { conf: string;
   const cls = confColor(conf);
   const text = size === "xs" ? "text-[10px] px-1.5 py-0.5" : "text-xs px-2 py-0.5";
   return (
-    <span className={`inline-flex items-center rounded-full border font-medium ${cls} ${text}`}>
+    <span className={`display inline-flex items-center rounded-none border-2 leading-none ${cls} ${text}`}>
       {conf}
     </span>
   );

@@ -57,34 +57,31 @@ export default async function TeamPage({ params }: { params: Promise<{ code: str
   return (
     <div>
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-[color:var(--color-line)]">
-        <div className="absolute inset-0 -z-10 opacity-30">
-          <div className="absolute top-0 right-0 h-80 w-80 rounded-full bg-emerald-500/30 blur-[120px]" />
-        </div>
+      <section className="relative overflow-hidden border-b-2 border-[color:var(--color-ink)]">
         <div className="mx-auto max-w-7xl px-6 py-12 flex flex-col md:flex-row md:items-end gap-8">
           <FlagImg iso2={team.iso2} size={180} priority />
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
               <ConfederationChip conf={team.conf} />
-              <span className="text-xs text-slate-400">Group {team.group}</span>
-              <span className="text-xs text-slate-400">·</span>
-              <span className="text-xs text-slate-400">FIFA #{team.fifa_rank}</span>
+              <span className="text-xs text-[color:var(--color-ink-soft)]">Group {team.group}</span>
+              <span className="text-xs text-[color:var(--color-ink-soft)]">·</span>
+              <span className="text-xs text-[color:var(--color-ink-soft)]">FIFA #{team.fifa_rank}</span>
             </div>
-            <h1 className="font-display text-5xl sm:text-7xl font-bold tracking-tighter">{team.team}</h1>
-            <p className="text-slate-300 italic mt-2 text-lg">{team.nickname}</p>
-            <p className="text-slate-500 text-sm mt-1">Best WC finish: {team.best_wc}</p>
+            <h1 className="display text-5xl sm:text-7xl text-[color:var(--color-ink)]">{team.team}</h1>
+            <p className="text-[color:var(--color-ink-soft)] italic mt-2 text-lg">{team.nickname}</p>
+            <p className="text-[color:var(--color-ink-soft)] text-sm mt-1">Best WC finish: {team.best_wc}</p>
           </div>
           <div className="md:text-right">
-            <div className="text-xs uppercase tracking-wider text-slate-500">P(Champion)</div>
-            <div className="font-display text-5xl font-bold gradient-text">{fmtPct(team.p_champion ?? 0, 1)}</div>
-            <div className="text-xs text-slate-500 mt-1">across {getMeta().n_sims.toLocaleString()} sims</div>
+            <div className="text-xs uppercase tracking-wider text-[color:var(--color-ink-soft)]">P(Champion)</div>
+            <div className="display text-5xl text-[color:var(--color-red)]">{fmtPct(team.p_champion ?? 0, 1)}</div>
+            <div className="text-xs text-[color:var(--color-ink-soft)] mt-1">across {getMeta().n_sims.toLocaleString()} sims</div>
           </div>
         </div>
       </section>
 
       {/* Advancement waterfall */}
       <section className="mx-auto max-w-7xl px-6 py-12">
-        <h2 className="font-display text-2xl font-bold mb-6">Advancement waterfall</h2>
+        <h2 className="display text-2xl mb-6 text-[color:var(--color-ink)]">Advancement waterfall</h2>
         <div className="space-y-3 max-w-3xl">
           {rounds.map((r, i) => (
             <ProbabilityBar
@@ -102,7 +99,7 @@ export default async function TeamPage({ params }: { params: Promise<{ code: str
 
       {/* Group fixtures */}
       <section className="mx-auto max-w-7xl px-6 py-6">
-        <h2 className="font-display text-2xl font-bold mb-4">Group stage fixtures</h2>
+        <h2 className="display text-2xl mb-4 text-[color:var(--color-ink)]">Group stage fixtures</h2>
         <div className="grid sm:grid-cols-3 gap-4">
           {groupFixtures.map((f) => {
             const p = probMap.get(f.num);
@@ -118,28 +115,28 @@ export default async function TeamPage({ params }: { params: Promise<{ code: str
               <Link
                 key={f.num}
                 href={`/matches/${f.num}`}
-                className="glass rounded-xl p-4 hover:border-emerald-500/30 transition-colors block"
+                className="sticker sticker-hover p-4 block"
               >
-                <div className="text-[11px] text-slate-500">{fmtDate(f.date)} · {isHome ? "vs" : "@"}</div>
+                <div className="text-[11px] text-[color:var(--color-ink-soft)]">{fmtDate(f.date)} · {isHome ? "vs" : "@"}</div>
                 <div className="flex items-center gap-2 mt-2">
                   {oppTeam && <FlagImg iso2={oppTeam.iso2} size={32} />}
-                  <span className="font-semibold">{opp}</span>
+                  <span className="display text-sm leading-none text-[color:var(--color-ink)]">{opp}</span>
                 </div>
-                <div className="mt-3 text-xs text-slate-400">
-                  Expected score <span className="text-slate-100 tabular-nums">{xg.toFixed(1)} – {xgOpp.toFixed(1)}</span>
+                <div className="mt-3 text-xs text-[color:var(--color-ink-soft)]">
+                  Expected score <span className="text-[color:var(--color-ink)] tabular-nums">{xg.toFixed(1)} – {xgOpp.toFixed(1)}</span>
                 </div>
                 <div className="mt-3 grid grid-cols-3 gap-1 text-[11px] text-center">
-                  <div className="rounded bg-emerald-500/10 py-1">
-                    <div className="text-emerald-300 font-semibold">{fmtPct(pWin)}</div>
-                    <div className="text-slate-500">Win</div>
+                  <div className="border-2 border-[color:var(--color-ink)] bg-[color:var(--color-green)] py-1">
+                    <div className="display text-sm leading-none text-[color:var(--color-card)]">{fmtPct(pWin)}</div>
+                    <div className="text-[color:var(--color-card)]">Win</div>
                   </div>
-                  <div className="rounded bg-white/5 py-1">
-                    <div className="font-semibold">{fmtPct(pDraw)}</div>
-                    <div className="text-slate-500">Draw</div>
+                  <div className="border-2 border-[color:var(--color-ink)] bg-[color:var(--color-yellow)] py-1">
+                    <div className="display text-sm leading-none text-[color:var(--color-ink)]">{fmtPct(pDraw)}</div>
+                    <div className="text-[color:var(--color-ink-soft)]">Draw</div>
                   </div>
-                  <div className="rounded bg-amber-500/10 py-1">
-                    <div className="text-amber-300 font-semibold">{fmtPct(pLose)}</div>
-                    <div className="text-slate-500">Lose</div>
+                  <div className="border-2 border-[color:var(--color-ink)] bg-[color:var(--color-red)] py-1">
+                    <div className="display text-sm leading-none text-[color:var(--color-card)]">{fmtPct(pLose)}</div>
+                    <div className="text-[color:var(--color-card)]">Lose</div>
                   </div>
                 </div>
               </Link>
@@ -150,18 +147,18 @@ export default async function TeamPage({ params }: { params: Promise<{ code: str
 
       {/* Group rivals */}
       <section className="mx-auto max-w-7xl px-6 py-12">
-        <h2 className="font-display text-2xl font-bold mb-4">Group {team.group} rivals</h2>
+        <h2 className="display text-2xl mb-4 text-[color:var(--color-ink)]">Group {team.group} rivals</h2>
         <div className="grid sm:grid-cols-3 gap-3">
           {groupTeams.map((t) => (
-            <Link key={t.fifa_code} href={`/teams/${t.fifa_code.toLowerCase()}`} className="glass rounded-lg p-3 flex items-center gap-3 hover:border-emerald-500/30">
+            <Link key={t.fifa_code} href={`/teams/${t.fifa_code.toLowerCase()}`} className="sticker sticker-hover p-3 flex items-center gap-3">
               <FlagImg iso2={t.iso2} size={36} />
               <div className="flex-1 min-w-0">
-                <div className="font-medium truncate">{t.team}</div>
-                <div className="text-xs text-slate-500">FIFA #{t.fifa_rank}</div>
+                <div className="display text-sm leading-none truncate text-[color:var(--color-ink)]">{t.team}</div>
+                <div className="text-xs text-[color:var(--color-ink-soft)] mt-1">FIFA #{t.fifa_rank}</div>
               </div>
               <div className="text-right">
-                <div className="text-[10px] text-slate-500">Advance</div>
-                <div className="text-sm font-semibold text-emerald-300">{fmtPct(t.p_advance_group ?? 0)}</div>
+                <div className="text-[10px] text-[color:var(--color-ink-soft)]">Advance</div>
+                <div className="display text-sm leading-none text-[color:var(--color-blue)]">{fmtPct(t.p_advance_group ?? 0)}</div>
               </div>
             </Link>
           ))}

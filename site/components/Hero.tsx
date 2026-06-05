@@ -9,24 +9,19 @@ export default function Hero() {
   const rpsAll = averageRPS([...getBacktestWC(), ...getBacktestEU()]);
   return (
     <section className="relative overflow-hidden">
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-[-20%] right-[-10%] h-[600px] w-[600px] rounded-full bg-emerald-500/20 blur-[120px]" />
-        <div className="absolute bottom-[-30%] left-[-10%] h-[500px] w-[500px] rounded-full bg-amber-400/10 blur-[120px]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.04),transparent_60%)]" />
-      </div>
       <div className="mx-auto max-w-7xl px-6 pt-20 pb-16 sm:pt-28 sm:pb-24">
         <div className="flex flex-col items-start gap-6 max-w-3xl">
-          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/5 px-3 py-1 text-xs text-emerald-300">
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+          <span className="inline-flex items-center gap-2 border-2 border-[color:var(--color-ink)] bg-[color:var(--color-yellow)] px-3 py-1 text-xs display text-[color:var(--color-ink)]">
+            <span className="relative inline-flex h-1.5 w-1.5 bg-[color:var(--color-red)] border border-[color:var(--color-ink)]" />
             Updated {meta.generated_at.slice(0, 10)} · {meta.sim_run}
           </span>
 
-          <h1 className="font-display text-5xl sm:text-7xl font-bold tracking-tighter leading-[0.95]">
+          <h1 className="display text-5xl sm:text-7xl leading-[0.95] text-[color:var(--color-ink)]">
             The math behind <br />
-            <span className="gradient-text">the 2026 World Cup.</span>
+            <span className="text-[color:var(--color-red)]">the 2026 World Cup.</span>
           </h1>
 
-          <p className="text-lg text-slate-300 max-w-2xl leading-relaxed">
+          <p className="text-lg text-[color:var(--color-ink-soft)] max-w-2xl leading-relaxed">
             Open-source probabilistic predictions for every match of the FIFA World Cup 2026.
             A four-model ensemble, Monte Carlo bracket, and pool-EV optimizer — all transparent and reproducible.
           </p>
@@ -36,14 +31,14 @@ export default function Hero() {
           <div className="flex flex-wrap gap-3 pt-2">
             <Link
               href="/bracket"
-              className="inline-flex items-center gap-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-5 py-2.5 text-sm font-semibold transition-colors"
+              className="display inline-flex items-center gap-2 rounded-none bg-[color:var(--color-blue)] border-2 border-[color:var(--color-ink)] text-[color:var(--color-card)] hover:bg-[color:var(--color-ink)] hover:text-[color:var(--color-yellow)] px-5 py-2.5 text-sm transition-colors"
             >
               Explore the bracket
               <span aria-hidden>→</span>
             </Link>
             <Link
               href="/methodology"
-              className="inline-flex items-center rounded-lg border border-[color:var(--color-line)] hover:border-emerald-500/40 hover:bg-white/5 px-5 py-2.5 text-sm font-medium transition-colors"
+              className="display inline-flex items-center rounded-none border-2 border-[color:var(--color-ink)] bg-[color:var(--color-yellow)] text-[color:var(--color-ink)] hover:bg-[color:var(--color-ink)] hover:text-[color:var(--color-yellow)] px-5 py-2.5 text-sm transition-colors"
             >
               How it works
             </Link>
@@ -64,9 +59,9 @@ export default function Hero() {
 function Stat({ n, label, sub }: { n: number | string; label: string; sub?: string }) {
   return (
     <div>
-      <div className="font-display text-2xl sm:text-3xl font-bold tabular-nums">{n}</div>
-      <div className="text-xs text-slate-500 mt-0.5">{label}</div>
-      {sub && <div className="text-[10px] text-emerald-400 mt-0.5">{sub}</div>}
+      <div className="display text-2xl sm:text-3xl tabular-nums text-[color:var(--color-ink)]">{n}</div>
+      <div className="text-xs text-[color:var(--color-ink-soft)] mt-0.5">{label}</div>
+      {sub && <div className="text-[10px] text-[color:var(--color-red)] mt-0.5">{sub}</div>}
     </div>
   );
 }

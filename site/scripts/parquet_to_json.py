@@ -81,6 +81,28 @@ def main() -> None:
     occ = occ.rename(columns={"home": "team"})
     df_to_json(occ, OUT / "round_occupancy.json")
 
+    # Edge board: pure-model vs de-vigged market for the live WC2026 slate.
+    try:
+        edge = pd.read_parquet(ROOT / "data" / "processed" / "edge_wc2026.parquet")
+        codes = teams[["team", "iso2", "fifa_code", "conf"]].drop_duplicates("team")
+        edge = edge.merge(
+            codes.rename(
+                columns={"team": "home_team", "iso2": "home_iso2", "fifa_code": "home_code", "conf": "home_conf"}
+            ),
+            on="home_team",
+            how="left",
+        ).merge(
+            codes.rename(
+                columns={"team": "away_team", "iso2": "away_iso2", "fifa_code": "away_code", "conf": "away_conf"}
+            ),
+            on="away_team",
+            how="left",
+        )
+        edge = edge.sort_values("best_edge_pts", ascending=False)
+        df_to_json(edge, OUT / "edge.json")
+    except Exception as e:  # noqa
+        print(f"  (skip edge: {e})")
+
     meta = {
         "sim_run": "sim_run_202605190049",
         "n_sims": int(n_sims),
