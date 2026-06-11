@@ -1,0 +1,1943 @@
+{
+  "generated_at": "2026-06-11 00:38 UTC",
+  "sim_run": "sim_run_202605211148",
+  "n_sims": 5000,
+  "rubric": "fifa_quiniela_mx",
+  "bracket_rubric": "espn_bracket",
+  "market_anchored": false,
+  "square_money_weight": 0.5,
+  "contrarian_weight": 0.3,
+  "rho": -0.0565,
+  "caveats": [
+    "Model freshness: predictions come from `sim_run_202605211148`; the sim was generated from training data as of its run date — re-run `src.predict_wc2026` after a data refresh for kickoff-fresh numbers.",
+    "Score matrices for totals/exact-score EV are DC-tau joints implied by the blended 1X2 (rho=-0.0565); the sim's expected-goal columns are not used.",
+    "No de-vigged market snapshot on disk (`data/processed/market_odds_wc2026.parquet`); picks are model-only and the public estimate uses the model as its sharp prior."
+  ],
+  "entries": [
+    {
+      "label": "chalk",
+      "expected_points": 206.59,
+      "expected_pool_rank_pct": 0.211,
+      "reasoning": "**Chalk entry**: maximizes E[points] per match independently. Best when pool is small or scoring rewards accuracy over differentiation.",
+      "diagnostics": {
+        "total_overlap": 55.84609999999999
+      },
+      "picks": [
+        {
+          "match_num": 1,
+          "home_team": "Mexico",
+          "away_team": "South Africa",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.0552
+        },
+        {
+          "match_num": 2,
+          "home_team": "South Korea",
+          "away_team": "Czechia",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.1096
+        },
+        {
+          "match_num": 3,
+          "home_team": "Ghana",
+          "away_team": "Panama",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.573
+        },
+        {
+          "match_num": 4,
+          "home_team": "Canada",
+          "away_team": "Bosnia and Herzegovina",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.8092
+        },
+        {
+          "match_num": 5,
+          "home_team": "United States",
+          "away_team": "Paraguay",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.5506
+        },
+        {
+          "match_num": 6,
+          "home_team": "England",
+          "away_team": "Ghana",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.3854
+        },
+        {
+          "match_num": 7,
+          "home_team": "Brazil",
+          "away_team": "Morocco",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.2393
+        },
+        {
+          "match_num": 8,
+          "home_team": "Qatar",
+          "away_team": "Switzerland",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.1399
+        },
+        {
+          "match_num": 9,
+          "home_team": "Netherlands",
+          "away_team": "Japan",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.2286
+        },
+        {
+          "match_num": 10,
+          "home_team": "Panama",
+          "away_team": "Croatia",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.8896
+        },
+        {
+          "match_num": 11,
+          "home_team": "Haiti",
+          "away_team": "Scotland",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.0341
+        },
+        {
+          "match_num": 12,
+          "home_team": "Australia",
+          "away_team": "Turkey",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.5609
+        },
+        {
+          "match_num": 13,
+          "home_team": "Germany",
+          "away_team": "Curacao",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.5233
+        },
+        {
+          "match_num": 14,
+          "home_team": "Sweden",
+          "away_team": "Tunisia",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.2407
+        },
+        {
+          "match_num": 15,
+          "home_team": "Spain",
+          "away_team": "Cape Verde",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.8195
+        },
+        {
+          "match_num": 16,
+          "home_team": "Ivory Coast",
+          "away_team": "Ecuador",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.9063
+        },
+        {
+          "match_num": 17,
+          "home_team": "Belgium",
+          "away_team": "Egypt",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.4715
+        },
+        {
+          "match_num": 18,
+          "home_team": "Saudi Arabia",
+          "away_team": "Uruguay",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.0467
+        },
+        {
+          "match_num": 19,
+          "home_team": "Czechia",
+          "away_team": "South Africa",
+          "result": "A",
+          "totals": "OVER",
+          "ev": 3.0291
+        },
+        {
+          "match_num": 20,
+          "home_team": "Switzerland",
+          "away_team": "Bosnia and Herzegovina",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.3034
+        },
+        {
+          "match_num": 21,
+          "home_team": "Iran",
+          "away_team": "New Zealand",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.5671
+        },
+        {
+          "match_num": 22,
+          "home_team": "Mexico",
+          "away_team": "South Korea",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.3536
+        },
+        {
+          "match_num": 23,
+          "home_team": "France",
+          "away_team": "Senegal",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 2.7253
+        },
+        {
+          "match_num": 24,
+          "home_team": "Canada",
+          "away_team": "Qatar",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.37
+        },
+        {
+          "match_num": 25,
+          "home_team": "United States",
+          "away_team": "Australia",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.3714
+        },
+        {
+          "match_num": 26,
+          "home_team": "Scotland",
+          "away_team": "Morocco",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.8916
+        },
+        {
+          "match_num": 27,
+          "home_team": "Iraq",
+          "away_team": "Norway",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.0327
+        },
+        {
+          "match_num": 28,
+          "home_team": "Argentina",
+          "away_team": "Algeria",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.9923
+        },
+        {
+          "match_num": 29,
+          "home_team": "Turkey",
+          "away_team": "Paraguay",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.3166
+        },
+        {
+          "match_num": 30,
+          "home_team": "Brazil",
+          "away_team": "Haiti",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.4932
+        },
+        {
+          "match_num": 31,
+          "home_team": "Germany",
+          "away_team": "Ivory Coast",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.8237
+        },
+        {
+          "match_num": 32,
+          "home_team": "Netherlands",
+          "away_team": "Sweden",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.2178
+        },
+        {
+          "match_num": 33,
+          "home_team": "Austria",
+          "away_team": "Jordan",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 2.8606
+        },
+        {
+          "match_num": 34,
+          "home_team": "Portugal",
+          "away_team": "DR Congo",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 2.9194
+        },
+        {
+          "match_num": 35,
+          "home_team": "Ecuador",
+          "away_team": "Curacao",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.4355
+        },
+        {
+          "match_num": 36,
+          "home_team": "Tunisia",
+          "away_team": "Japan",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.0892
+        },
+        {
+          "match_num": 37,
+          "home_team": "Belgium",
+          "away_team": "Iran",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 2.6412
+        },
+        {
+          "match_num": 38,
+          "home_team": "Spain",
+          "away_team": "Saudi Arabia",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.7624
+        },
+        {
+          "match_num": 39,
+          "home_team": "France",
+          "away_team": "Iraq",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.4892
+        },
+        {
+          "match_num": 40,
+          "home_team": "Uzbekistan",
+          "away_team": "Colombia",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.0661
+        },
+        {
+          "match_num": 41,
+          "home_team": "New Zealand",
+          "away_team": "Egypt",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.8796
+        },
+        {
+          "match_num": 42,
+          "home_team": "Uruguay",
+          "away_team": "Cape Verde",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.9021
+        },
+        {
+          "match_num": 43,
+          "home_team": "Norway",
+          "away_team": "Senegal",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 2.3131
+        },
+        {
+          "match_num": 44,
+          "home_team": "Argentina",
+          "away_team": "Austria",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.8381
+        },
+        {
+          "match_num": 45,
+          "home_team": "Portugal",
+          "away_team": "Uzbekistan",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.1409
+        },
+        {
+          "match_num": 46,
+          "home_team": "England",
+          "away_team": "Croatia",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.5445
+        },
+        {
+          "match_num": 47,
+          "home_team": "Jordan",
+          "away_team": "Algeria",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.741
+        },
+        {
+          "match_num": 48,
+          "home_team": "Colombia",
+          "away_team": "DR Congo",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.8028
+        },
+        {
+          "match_num": 49,
+          "home_team": "South Africa",
+          "away_team": "South Korea",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.7993
+        },
+        {
+          "match_num": 50,
+          "home_team": "Czechia",
+          "away_team": "Mexico",
+          "result": "A",
+          "totals": "OVER",
+          "ev": 3.0268
+        },
+        {
+          "match_num": 51,
+          "home_team": "Switzerland",
+          "away_team": "Canada",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.5044
+        },
+        {
+          "match_num": 52,
+          "home_team": "Bosnia and Herzegovina",
+          "away_team": "Qatar",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 2.8742
+        },
+        {
+          "match_num": 53,
+          "home_team": "Colombia",
+          "away_team": "Portugal",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.3002
+        },
+        {
+          "match_num": 54,
+          "home_team": "DR Congo",
+          "away_team": "Uzbekistan",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.6697
+        },
+        {
+          "match_num": 55,
+          "home_team": "Scotland",
+          "away_team": "Brazil",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.0158
+        },
+        {
+          "match_num": 56,
+          "home_team": "Morocco",
+          "away_team": "Haiti",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.2852
+        },
+        {
+          "match_num": 57,
+          "home_team": "Panama",
+          "away_team": "England",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.1084
+        },
+        {
+          "match_num": 58,
+          "home_team": "Croatia",
+          "away_team": "Ghana",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.2619
+        },
+        {
+          "match_num": 59,
+          "home_team": "Turkey",
+          "away_team": "United States",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 2.754
+        },
+        {
+          "match_num": 60,
+          "home_team": "Paraguay",
+          "away_team": "Australia",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.2278
+        },
+        {
+          "match_num": 61,
+          "home_team": "Curacao",
+          "away_team": "Ivory Coast",
+          "result": "A",
+          "totals": "OVER",
+          "ev": 2.9016
+        },
+        {
+          "match_num": 62,
+          "home_team": "Ecuador",
+          "away_team": "Germany",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.3501
+        },
+        {
+          "match_num": 63,
+          "home_team": "Tunisia",
+          "away_team": "Netherlands",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.0284
+        },
+        {
+          "match_num": 64,
+          "home_team": "Japan",
+          "away_team": "Sweden",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.9905
+        },
+        {
+          "match_num": 65,
+          "home_team": "Cape Verde",
+          "away_team": "Saudi Arabia",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.3484
+        },
+        {
+          "match_num": 66,
+          "home_team": "Uruguay",
+          "away_team": "Spain",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.9734
+        },
+        {
+          "match_num": 67,
+          "home_team": "New Zealand",
+          "away_team": "Belgium",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.0318
+        },
+        {
+          "match_num": 68,
+          "home_team": "Egypt",
+          "away_team": "Iran",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.578
+        },
+        {
+          "match_num": 69,
+          "home_team": "Norway",
+          "away_team": "France",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.5447
+        },
+        {
+          "match_num": 70,
+          "home_team": "Senegal",
+          "away_team": "Iraq",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.8165
+        },
+        {
+          "match_num": 71,
+          "home_team": "Algeria",
+          "away_team": "Austria",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.528
+        },
+        {
+          "match_num": 72,
+          "home_team": "Jordan",
+          "away_team": "Argentina",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.1721
+        }
+      ]
+    },
+    {
+      "label": "moderate_contrarian",
+      "expected_points": 206.11,
+      "expected_pool_rank_pct": 0.198,
+      "reasoning": "**Moderate contrarian** (λ=0.3): swaps 6 match(es) toward EV-positive picks the public underweights. Trades a small E[points] hit for tail-rank upside in mid-sized pools.",
+      "diagnostics": {
+        "n_swapped_from_chalk": 6.0
+      },
+      "picks": [
+        {
+          "match_num": 1,
+          "home_team": "Mexico",
+          "away_team": "South Africa",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.0552
+        },
+        {
+          "match_num": 2,
+          "home_team": "South Korea",
+          "away_team": "Czechia",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.1096
+        },
+        {
+          "match_num": 3,
+          "home_team": "Ghana",
+          "away_team": "Panama",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.573
+        },
+        {
+          "match_num": 4,
+          "home_team": "Canada",
+          "away_team": "Bosnia and Herzegovina",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.8092
+        },
+        {
+          "match_num": 5,
+          "home_team": "United States",
+          "away_team": "Paraguay",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.5506
+        },
+        {
+          "match_num": 6,
+          "home_team": "England",
+          "away_team": "Ghana",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.3854
+        },
+        {
+          "match_num": 7,
+          "home_team": "Brazil",
+          "away_team": "Morocco",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.1763
+        },
+        {
+          "match_num": 8,
+          "home_team": "Qatar",
+          "away_team": "Switzerland",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.1399
+        },
+        {
+          "match_num": 9,
+          "home_team": "Netherlands",
+          "away_team": "Japan",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.1452
+        },
+        {
+          "match_num": 10,
+          "home_team": "Panama",
+          "away_team": "Croatia",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.8896
+        },
+        {
+          "match_num": 11,
+          "home_team": "Haiti",
+          "away_team": "Scotland",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.0341
+        },
+        {
+          "match_num": 12,
+          "home_team": "Australia",
+          "away_team": "Turkey",
+          "result": "D",
+          "totals": "UNDER",
+          "ev": 2.5525
+        },
+        {
+          "match_num": 13,
+          "home_team": "Germany",
+          "away_team": "Curacao",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.5233
+        },
+        {
+          "match_num": 14,
+          "home_team": "Sweden",
+          "away_team": "Tunisia",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.2407
+        },
+        {
+          "match_num": 15,
+          "home_team": "Spain",
+          "away_team": "Cape Verde",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.8195
+        },
+        {
+          "match_num": 16,
+          "home_team": "Ivory Coast",
+          "away_team": "Ecuador",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.9063
+        },
+        {
+          "match_num": 17,
+          "home_team": "Belgium",
+          "away_team": "Egypt",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.4715
+        },
+        {
+          "match_num": 18,
+          "home_team": "Saudi Arabia",
+          "away_team": "Uruguay",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.0467
+        },
+        {
+          "match_num": 19,
+          "home_team": "Czechia",
+          "away_team": "South Africa",
+          "result": "A",
+          "totals": "OVER",
+          "ev": 3.0291
+        },
+        {
+          "match_num": 20,
+          "home_team": "Switzerland",
+          "away_team": "Bosnia and Herzegovina",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.3034
+        },
+        {
+          "match_num": 21,
+          "home_team": "Iran",
+          "away_team": "New Zealand",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.5671
+        },
+        {
+          "match_num": 22,
+          "home_team": "Mexico",
+          "away_team": "South Korea",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.3536
+        },
+        {
+          "match_num": 23,
+          "home_team": "France",
+          "away_team": "Senegal",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 2.7253
+        },
+        {
+          "match_num": 24,
+          "home_team": "Canada",
+          "away_team": "Qatar",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.37
+        },
+        {
+          "match_num": 25,
+          "home_team": "United States",
+          "away_team": "Australia",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.3714
+        },
+        {
+          "match_num": 26,
+          "home_team": "Scotland",
+          "away_team": "Morocco",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.8916
+        },
+        {
+          "match_num": 27,
+          "home_team": "Iraq",
+          "away_team": "Norway",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.0327
+        },
+        {
+          "match_num": 28,
+          "home_team": "Argentina",
+          "away_team": "Algeria",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.9923
+        },
+        {
+          "match_num": 29,
+          "home_team": "Turkey",
+          "away_team": "Paraguay",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.3166
+        },
+        {
+          "match_num": 30,
+          "home_team": "Brazil",
+          "away_team": "Haiti",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.4932
+        },
+        {
+          "match_num": 31,
+          "home_team": "Germany",
+          "away_team": "Ivory Coast",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.8237
+        },
+        {
+          "match_num": 32,
+          "home_team": "Netherlands",
+          "away_team": "Sweden",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.2178
+        },
+        {
+          "match_num": 33,
+          "home_team": "Austria",
+          "away_team": "Jordan",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 2.8606
+        },
+        {
+          "match_num": 34,
+          "home_team": "Portugal",
+          "away_team": "DR Congo",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 2.9194
+        },
+        {
+          "match_num": 35,
+          "home_team": "Ecuador",
+          "away_team": "Curacao",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.4355
+        },
+        {
+          "match_num": 36,
+          "home_team": "Tunisia",
+          "away_team": "Japan",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.0892
+        },
+        {
+          "match_num": 37,
+          "home_team": "Belgium",
+          "away_team": "Iran",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 2.6412
+        },
+        {
+          "match_num": 38,
+          "home_team": "Spain",
+          "away_team": "Saudi Arabia",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.7624
+        },
+        {
+          "match_num": 39,
+          "home_team": "France",
+          "away_team": "Iraq",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.4892
+        },
+        {
+          "match_num": 40,
+          "home_team": "Uzbekistan",
+          "away_team": "Colombia",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.0661
+        },
+        {
+          "match_num": 41,
+          "home_team": "New Zealand",
+          "away_team": "Egypt",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.8796
+        },
+        {
+          "match_num": 42,
+          "home_team": "Uruguay",
+          "away_team": "Cape Verde",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.9021
+        },
+        {
+          "match_num": 43,
+          "home_team": "Norway",
+          "away_team": "Senegal",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 2.3131
+        },
+        {
+          "match_num": 44,
+          "home_team": "Argentina",
+          "away_team": "Austria",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.8381
+        },
+        {
+          "match_num": 45,
+          "home_team": "Portugal",
+          "away_team": "Uzbekistan",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.1409
+        },
+        {
+          "match_num": 46,
+          "home_team": "England",
+          "away_team": "Croatia",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.5445
+        },
+        {
+          "match_num": 47,
+          "home_team": "Jordan",
+          "away_team": "Algeria",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.741
+        },
+        {
+          "match_num": 48,
+          "home_team": "Colombia",
+          "away_team": "DR Congo",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.8028
+        },
+        {
+          "match_num": 49,
+          "home_team": "South Africa",
+          "away_team": "South Korea",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.7993
+        },
+        {
+          "match_num": 50,
+          "home_team": "Czechia",
+          "away_team": "Mexico",
+          "result": "A",
+          "totals": "OVER",
+          "ev": 3.0268
+        },
+        {
+          "match_num": 51,
+          "home_team": "Switzerland",
+          "away_team": "Canada",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.5044
+        },
+        {
+          "match_num": 52,
+          "home_team": "Bosnia and Herzegovina",
+          "away_team": "Qatar",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 2.8742
+        },
+        {
+          "match_num": 53,
+          "home_team": "Colombia",
+          "away_team": "Portugal",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.2342
+        },
+        {
+          "match_num": 54,
+          "home_team": "DR Congo",
+          "away_team": "Uzbekistan",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.6697
+        },
+        {
+          "match_num": 55,
+          "home_team": "Scotland",
+          "away_team": "Brazil",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.0158
+        },
+        {
+          "match_num": 56,
+          "home_team": "Morocco",
+          "away_team": "Haiti",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.2852
+        },
+        {
+          "match_num": 57,
+          "home_team": "Panama",
+          "away_team": "England",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.1084
+        },
+        {
+          "match_num": 58,
+          "home_team": "Croatia",
+          "away_team": "Ghana",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.2619
+        },
+        {
+          "match_num": 59,
+          "home_team": "Turkey",
+          "away_team": "United States",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 2.754
+        },
+        {
+          "match_num": 60,
+          "home_team": "Paraguay",
+          "away_team": "Australia",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.0724
+        },
+        {
+          "match_num": 61,
+          "home_team": "Curacao",
+          "away_team": "Ivory Coast",
+          "result": "A",
+          "totals": "OVER",
+          "ev": 2.9016
+        },
+        {
+          "match_num": 62,
+          "home_team": "Ecuador",
+          "away_team": "Germany",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.2463
+        },
+        {
+          "match_num": 63,
+          "home_team": "Tunisia",
+          "away_team": "Netherlands",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.0284
+        },
+        {
+          "match_num": 64,
+          "home_team": "Japan",
+          "away_team": "Sweden",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.9905
+        },
+        {
+          "match_num": 65,
+          "home_team": "Cape Verde",
+          "away_team": "Saudi Arabia",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.3484
+        },
+        {
+          "match_num": 66,
+          "home_team": "Uruguay",
+          "away_team": "Spain",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.9734
+        },
+        {
+          "match_num": 67,
+          "home_team": "New Zealand",
+          "away_team": "Belgium",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.0318
+        },
+        {
+          "match_num": 68,
+          "home_team": "Egypt",
+          "away_team": "Iran",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.578
+        },
+        {
+          "match_num": 69,
+          "home_team": "Norway",
+          "away_team": "France",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.5447
+        },
+        {
+          "match_num": 70,
+          "home_team": "Senegal",
+          "away_team": "Iraq",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.8165
+        },
+        {
+          "match_num": 71,
+          "home_team": "Algeria",
+          "away_team": "Austria",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.528
+        },
+        {
+          "match_num": 72,
+          "home_team": "Jordan",
+          "away_team": "Argentina",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.1721
+        }
+      ]
+    },
+    {
+      "label": "high_variance",
+      "expected_points": 205.24,
+      "expected_pool_rank_pct": 0.189,
+      "reasoning": "**High-variance contrarian** (λ=0.6, gap≤0.25): swings only on matches where the contrarian pick costs <0.25 EV; swapped 11 match(es). Designed for large pools where rank differentiation dominates raw accuracy.",
+      "diagnostics": {
+        "n_swapped_from_chalk": 11.0
+      },
+      "picks": [
+        {
+          "match_num": 1,
+          "home_team": "Mexico",
+          "away_team": "South Africa",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.0552
+        },
+        {
+          "match_num": 2,
+          "home_team": "South Korea",
+          "away_team": "Czechia",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.1096
+        },
+        {
+          "match_num": 3,
+          "home_team": "Ghana",
+          "away_team": "Panama",
+          "result": "D",
+          "totals": "UNDER",
+          "ev": 2.402
+        },
+        {
+          "match_num": 4,
+          "home_team": "Canada",
+          "away_team": "Bosnia and Herzegovina",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.8092
+        },
+        {
+          "match_num": 5,
+          "home_team": "United States",
+          "away_team": "Paraguay",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.5506
+        },
+        {
+          "match_num": 6,
+          "home_team": "England",
+          "away_team": "Ghana",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.3854
+        },
+        {
+          "match_num": 7,
+          "home_team": "Brazil",
+          "away_team": "Morocco",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.1763
+        },
+        {
+          "match_num": 8,
+          "home_team": "Qatar",
+          "away_team": "Switzerland",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.1399
+        },
+        {
+          "match_num": 9,
+          "home_team": "Netherlands",
+          "away_team": "Japan",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.1452
+        },
+        {
+          "match_num": 10,
+          "home_team": "Panama",
+          "away_team": "Croatia",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.8896
+        },
+        {
+          "match_num": 11,
+          "home_team": "Haiti",
+          "away_team": "Scotland",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.0341
+        },
+        {
+          "match_num": 12,
+          "home_team": "Australia",
+          "away_team": "Turkey",
+          "result": "D",
+          "totals": "UNDER",
+          "ev": 2.5525
+        },
+        {
+          "match_num": 13,
+          "home_team": "Germany",
+          "away_team": "Curacao",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.5233
+        },
+        {
+          "match_num": 14,
+          "home_team": "Sweden",
+          "away_team": "Tunisia",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.0757
+        },
+        {
+          "match_num": 15,
+          "home_team": "Spain",
+          "away_team": "Cape Verde",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.8195
+        },
+        {
+          "match_num": 16,
+          "home_team": "Ivory Coast",
+          "away_team": "Ecuador",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.9063
+        },
+        {
+          "match_num": 17,
+          "home_team": "Belgium",
+          "away_team": "Egypt",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.4715
+        },
+        {
+          "match_num": 18,
+          "home_team": "Saudi Arabia",
+          "away_team": "Uruguay",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.0467
+        },
+        {
+          "match_num": 19,
+          "home_team": "Czechia",
+          "away_team": "South Africa",
+          "result": "A",
+          "totals": "OVER",
+          "ev": 3.0291
+        },
+        {
+          "match_num": 20,
+          "home_team": "Switzerland",
+          "away_team": "Bosnia and Herzegovina",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.3034
+        },
+        {
+          "match_num": 21,
+          "home_team": "Iran",
+          "away_team": "New Zealand",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.5671
+        },
+        {
+          "match_num": 22,
+          "home_team": "Mexico",
+          "away_team": "South Korea",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.3536
+        },
+        {
+          "match_num": 23,
+          "home_team": "France",
+          "away_team": "Senegal",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 2.7253
+        },
+        {
+          "match_num": 24,
+          "home_team": "Canada",
+          "away_team": "Qatar",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.37
+        },
+        {
+          "match_num": 25,
+          "home_team": "United States",
+          "away_team": "Australia",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.3714
+        },
+        {
+          "match_num": 26,
+          "home_team": "Scotland",
+          "away_team": "Morocco",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.8916
+        },
+        {
+          "match_num": 27,
+          "home_team": "Iraq",
+          "away_team": "Norway",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.0327
+        },
+        {
+          "match_num": 28,
+          "home_team": "Argentina",
+          "away_team": "Algeria",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.9923
+        },
+        {
+          "match_num": 29,
+          "home_team": "Turkey",
+          "away_team": "Paraguay",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.1564
+        },
+        {
+          "match_num": 30,
+          "home_team": "Brazil",
+          "away_team": "Haiti",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.4932
+        },
+        {
+          "match_num": 31,
+          "home_team": "Germany",
+          "away_team": "Ivory Coast",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.8237
+        },
+        {
+          "match_num": 32,
+          "home_team": "Netherlands",
+          "away_team": "Sweden",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.2178
+        },
+        {
+          "match_num": 33,
+          "home_team": "Austria",
+          "away_team": "Jordan",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 2.8606
+        },
+        {
+          "match_num": 34,
+          "home_team": "Portugal",
+          "away_team": "DR Congo",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 2.9194
+        },
+        {
+          "match_num": 35,
+          "home_team": "Ecuador",
+          "away_team": "Curacao",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.4355
+        },
+        {
+          "match_num": 36,
+          "home_team": "Tunisia",
+          "away_team": "Japan",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.0892
+        },
+        {
+          "match_num": 37,
+          "home_team": "Belgium",
+          "away_team": "Iran",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 2.6412
+        },
+        {
+          "match_num": 38,
+          "home_team": "Spain",
+          "away_team": "Saudi Arabia",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.7624
+        },
+        {
+          "match_num": 39,
+          "home_team": "France",
+          "away_team": "Iraq",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.4892
+        },
+        {
+          "match_num": 40,
+          "home_team": "Uzbekistan",
+          "away_team": "Colombia",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.0661
+        },
+        {
+          "match_num": 41,
+          "home_team": "New Zealand",
+          "away_team": "Egypt",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.8796
+        },
+        {
+          "match_num": 42,
+          "home_team": "Uruguay",
+          "away_team": "Cape Verde",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.9021
+        },
+        {
+          "match_num": 43,
+          "home_team": "Norway",
+          "away_team": "Senegal",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 2.3131
+        },
+        {
+          "match_num": 44,
+          "home_team": "Argentina",
+          "away_team": "Austria",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.8381
+        },
+        {
+          "match_num": 45,
+          "home_team": "Portugal",
+          "away_team": "Uzbekistan",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.1409
+        },
+        {
+          "match_num": 46,
+          "home_team": "England",
+          "away_team": "Croatia",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.5445
+        },
+        {
+          "match_num": 47,
+          "home_team": "Jordan",
+          "away_team": "Algeria",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.741
+        },
+        {
+          "match_num": 48,
+          "home_team": "Colombia",
+          "away_team": "DR Congo",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.8028
+        },
+        {
+          "match_num": 49,
+          "home_team": "South Africa",
+          "away_team": "South Korea",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.7993
+        },
+        {
+          "match_num": 50,
+          "home_team": "Czechia",
+          "away_team": "Mexico",
+          "result": "A",
+          "totals": "OVER",
+          "ev": 3.0268
+        },
+        {
+          "match_num": 51,
+          "home_team": "Switzerland",
+          "away_team": "Canada",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.5044
+        },
+        {
+          "match_num": 52,
+          "home_team": "Bosnia and Herzegovina",
+          "away_team": "Qatar",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 2.8742
+        },
+        {
+          "match_num": 53,
+          "home_team": "Colombia",
+          "away_team": "Portugal",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.2342
+        },
+        {
+          "match_num": 54,
+          "home_team": "DR Congo",
+          "away_team": "Uzbekistan",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.6697
+        },
+        {
+          "match_num": 55,
+          "home_team": "Scotland",
+          "away_team": "Brazil",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.0158
+        },
+        {
+          "match_num": 56,
+          "home_team": "Morocco",
+          "away_team": "Haiti",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.2852
+        },
+        {
+          "match_num": 57,
+          "home_team": "Panama",
+          "away_team": "England",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.1084
+        },
+        {
+          "match_num": 58,
+          "home_team": "Croatia",
+          "away_team": "Ghana",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 3.2619
+        },
+        {
+          "match_num": 59,
+          "home_team": "Turkey",
+          "away_team": "United States",
+          "result": "H",
+          "totals": "OVER",
+          "ev": 2.754
+        },
+        {
+          "match_num": 60,
+          "home_team": "Paraguay",
+          "away_team": "Australia",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.0724
+        },
+        {
+          "match_num": 61,
+          "home_team": "Curacao",
+          "away_team": "Ivory Coast",
+          "result": "A",
+          "totals": "OVER",
+          "ev": 2.9016
+        },
+        {
+          "match_num": 62,
+          "home_team": "Ecuador",
+          "away_team": "Germany",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.2463
+        },
+        {
+          "match_num": 63,
+          "home_team": "Tunisia",
+          "away_team": "Netherlands",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.0284
+        },
+        {
+          "match_num": 64,
+          "home_team": "Japan",
+          "away_team": "Sweden",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.9905
+        },
+        {
+          "match_num": 65,
+          "home_team": "Cape Verde",
+          "away_team": "Saudi Arabia",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.1804
+        },
+        {
+          "match_num": 66,
+          "home_team": "Uruguay",
+          "away_team": "Spain",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.9734
+        },
+        {
+          "match_num": 67,
+          "home_team": "New Zealand",
+          "away_team": "Belgium",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.0318
+        },
+        {
+          "match_num": 68,
+          "home_team": "Egypt",
+          "away_team": "Iran",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.578
+        },
+        {
+          "match_num": 69,
+          "home_team": "Norway",
+          "away_team": "France",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 2.5447
+        },
+        {
+          "match_num": 70,
+          "home_team": "Senegal",
+          "away_team": "Iraq",
+          "result": "H",
+          "totals": "UNDER",
+          "ev": 2.8165
+        },
+        {
+          "match_num": 71,
+          "home_team": "Algeria",
+          "away_team": "Austria",
+          "result": "D",
+          "totals": "UNDER",
+          "ev": 2.3252
+        },
+        {
+          "match_num": 72,
+          "home_team": "Jordan",
+          "away_team": "Argentina",
+          "result": "A",
+          "totals": "UNDER",
+          "ev": 3.1721
+        }
+      ]
+    }
+  ],
+  "bracket": {
+    "chalk": {
+      "picks_by_round": {
+        "R32": [
+          "Spain",
+          "Switzerland",
+          "Brazil",
+          "Argentina",
+          "England",
+          "Morocco",
+          "France",
+          "Netherlands",
+          "Portugal",
+          "Croatia",
+          "Mexico",
+          "Germany",
+          "Canada",
+          "Belgium",
+          "Japan",
+          "Colombia",
+          "Ecuador",
+          "Uruguay",
+          "South Korea",
+          "Norway",
+          "Turkey",
+          "Austria",
+          "Iran",
+          "Senegal",
+          "Australia",
+          "Paraguay",
+          "Egypt",
+          "South Africa",
+          "Algeria",
+          "Ivory Coast",
+          "Scotland",
+          "Bosnia and Herzegovina"
+        ],
+        "R16": [
+          "Spain",
+          "France",
+          "Argentina",
+          "Portugal",
+          "England",
+          "Colombia",
+          "Brazil",
+          "Germany",
+          "Switzerland",
+          "Ecuador",
+          "Belgium",
+          "Netherlands",
+          "Japan",
+          "Morocco",
+          "Mexico",
+          "Croatia"
+        ],
+        "QF": [
+          "Argentina",
+          "Spain",
+          "France",
+          "Brazil",
+          "England",
+          "Portugal",
+          "Colombia",
+          "Japan"
+        ],
+        "SF": [
+          "Argentina",
+          "Spain",
+          "France",
+          "Brazil"
+        ],
+        "F": [
+          "Spain",
+          "Argentina"
+        ],
+        "W": [
+          "Spain"
+        ]
+      },
+      "expected_points": 2658.4,
+      "reasoning": "Bracket picks walk forward by round, taking top teams by E[points]. Pure chalk: no contrarian adjustment.\n\n- **R32** (32 pts/slot, 32 picks): E[pts]=839.2\n- **R16** (64 pts/slot, 16 picks): E[pts]=591.6\n- **QF** (128 pts/slot, 8 picks): E[pts]=429.2\n- **SF** (256 pts/slot, 4 picks): E[pts]=338.4\n- **F** (512 pts/slot, 2 picks): E[pts]=273.4\n- **W** (1024 pts/slot, 1 picks): E[pts]=186.6"
+    },
+    "contrarian": {
+      "picks_by_round": {
+        "R32": [
+          "Switzerland",
+          "Spain",
+          "Morocco",
+          "Brazil",
+          "England",
+          "Netherlands",
+          "Argentina",
+          "France",
+          "Croatia",
+          "Mexico",
+          "Canada",
+          "Germany",
+          "Belgium",
+          "Portugal",
+          "Ecuador",
+          "Uruguay",
+          "Japan",
+          "Colombia",
+          "South Korea",
+          "Norway",
+          "Turkey",
+          "Austria",
+          "Iran",
+          "Senegal",
+          "Australia",
+          "Paraguay",
+          "Egypt",
+          "South Africa",
+          "Algeria",
+          "Ivory Coast",
+          "Scotland",
+          "Bosnia and Herzegovina"
+        ],
+        "R16": [
+          "Spain",
+          "France",
+          "Portugal",
+          "England",
+          "Argentina",
+          "Germany",
+          "Switzerland",
+          "Colombia",
+          "Brazil",
+          "Ecuador",
+          "Belgium",
+          "Netherlands",
+          "Morocco",
+          "Mexico",
+          "Japan",
+          "Croatia"
+        ],
+        "QF": [
+          "Argentina",
+          "Spain",
+          "France",
+          "Brazil",
+          "England",
+          "Portugal",
+          "Colombia",
+          "Netherlands"
+        ],
+        "SF": [
+          "Argentina",
+          "Spain",
+          "France",
+          "Brazil"
+        ],
+        "F": [
+          "Spain",
+          "Argentina"
+        ],
+        "W": [
+          "Spain"
+        ]
+      },
+      "expected_points": 2655.8,
+      "reasoning": "Bracket picks walk forward by round, taking top teams by E[points]. Contrarian weight=0.3: discounts each team's EV by its public champion-ownership.\n\n- **R32** (32 pts/slot, 32 picks): E[pts]=839.2\n- **R16** (64 pts/slot, 16 picks): E[pts]=591.6\n- **QF** (128 pts/slot, 8 picks): E[pts]=426.6\n- **SF** (256 pts/slot, 4 picks): E[pts]=338.4\n- **F** (512 pts/slot, 2 picks): E[pts]=273.4\n- **W** (1024 pts/slot, 1 picks): E[pts]=186.6"
+    }
+  }
+}

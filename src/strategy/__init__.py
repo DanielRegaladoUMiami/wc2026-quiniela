@@ -1,6 +1,9 @@
 """Strategy: convert probabilistic model output to optimal pool entries."""
 
-from .bracket_picks import BracketPick, pick_bracket
+# NOTE: make_quiniela is intentionally NOT re-exported here — it is a CLI module
+# (`python -m src.strategy.make_quiniela`) and importing it at package level
+# triggers runpy's double-import warning.
+from .bracket_picks import BracketPick, normalize_advancement, pick_bracket
 from .optimize_entries import Entry, optimize_entries
 from .pool_ev import (
     Rubric,
@@ -24,6 +27,7 @@ __all__ = [
     "estimate_public_picks",
     "expected_points",
     "load_rubric",
+    "normalize_advancement",
     "optimize_entries",
     "pick_bracket",
     "score_matrix_to_dist",

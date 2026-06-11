@@ -265,6 +265,28 @@ def test_pick_bracket_runs(bracket_rubric):
     assert len(out.picks_by_round["R32"]) == 32
 
 
+def test_pick_bracket_accepts_sim_schema(bracket_rubric):
+    """Regression: the simulator's column names must fill every round, not just W."""
+    adv = _make_advancement(32).rename(
+        columns={
+            "p_advance": "p_advance_group",
+            "p_R16": "p_R32_win",
+            "p_QF": "p_R16_win",
+            "p_SF": "p_QF_win",
+            "p_final": "p_SF_win",
+        }
+    )
+    out = pick_bracket(adv, bracket_rubric)
+    assert [len(out.picks_by_round[r]) for r in ("R32", "R16", "QF", "SF", "F", "W")] == [
+        32,
+        16,
+        8,
+        4,
+        2,
+        1,
+    ]
+
+
 def test_pick_bracket_contrarian_changes_picks(bracket_rubric):
     adv = _make_advancement(32)
     public = estimate_public_champion(adv, square_money_weight=0.5)

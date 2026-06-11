@@ -1,0 +1,217 @@
+entry,match_num,home_team,away_team,pick,ev
+chalk,1,Mexico,South Africa,H O2.5,3.0552
+chalk,2,South Korea,Czechia,H O2.5,3.1096
+chalk,3,Ghana,Panama,A U2.5,2.573
+chalk,4,Canada,Bosnia and Herzegovina,H U2.5,2.8092
+chalk,5,United States,Paraguay,A U2.5,2.5506
+chalk,6,England,Ghana,H O2.5,3.3854
+chalk,7,Brazil,Morocco,H U2.5,2.2393
+chalk,8,Qatar,Switzerland,A U2.5,3.1399
+chalk,9,Netherlands,Japan,A U2.5,2.2286
+chalk,10,Panama,Croatia,A U2.5,2.8896
+chalk,11,Haiti,Scotland,A U2.5,3.0341
+chalk,12,Australia,Turkey,A U2.5,2.5609
+chalk,13,Germany,Curacao,H O2.5,3.5233
+chalk,14,Sweden,Tunisia,H U2.5,2.2407
+chalk,15,Spain,Cape Verde,H O2.5,3.8195
+chalk,16,Ivory Coast,Ecuador,A U2.5,2.9063
+chalk,17,Belgium,Egypt,H U2.5,2.4715
+chalk,18,Saudi Arabia,Uruguay,A U2.5,3.0467
+chalk,19,Czechia,South Africa,A O2.5,3.0291
+chalk,20,Switzerland,Bosnia and Herzegovina,H O2.5,3.3034
+chalk,21,Iran,New Zealand,H U2.5,2.5671
+chalk,22,Mexico,South Korea,H U2.5,2.3536
+chalk,23,France,Senegal,H O2.5,2.7253
+chalk,24,Canada,Qatar,H O2.5,3.37
+chalk,25,United States,Australia,A U2.5,2.3714
+chalk,26,Scotland,Morocco,A U2.5,2.8916
+chalk,27,Iraq,Norway,A U2.5,3.0327
+chalk,28,Argentina,Algeria,H U2.5,2.9923
+chalk,29,Turkey,Paraguay,H U2.5,2.3166
+chalk,30,Brazil,Haiti,H O2.5,3.4932
+chalk,31,Germany,Ivory Coast,H U2.5,2.8237
+chalk,32,Netherlands,Sweden,H O2.5,3.2178
+chalk,33,Austria,Jordan,H O2.5,2.8606
+chalk,34,Portugal,DR Congo,H O2.5,2.9194
+chalk,35,Ecuador,Curacao,H O2.5,3.4355
+chalk,36,Tunisia,Japan,A U2.5,3.0892
+chalk,37,Belgium,Iran,H O2.5,2.6412
+chalk,38,Spain,Saudi Arabia,H O2.5,3.7624
+chalk,39,France,Iraq,H O2.5,3.4892
+chalk,40,Uzbekistan,Colombia,A U2.5,3.0661
+chalk,41,New Zealand,Egypt,A U2.5,2.8796
+chalk,42,Uruguay,Cape Verde,H U2.5,2.9021
+chalk,43,Norway,Senegal,H O2.5,2.3131
+chalk,44,Argentina,Austria,H U2.5,2.8381
+chalk,45,Portugal,Uzbekistan,H O2.5,3.1409
+chalk,46,England,Croatia,H U2.5,2.5445
+chalk,47,Jordan,Algeria,A U2.5,2.741
+chalk,48,Colombia,DR Congo,H U2.5,2.8028
+chalk,49,South Africa,South Korea,A U2.5,2.7993
+chalk,50,Czechia,Mexico,A O2.5,3.0268
+chalk,51,Switzerland,Canada,H U2.5,2.5044
+chalk,52,Bosnia and Herzegovina,Qatar,H O2.5,2.8742
+chalk,53,Colombia,Portugal,H U2.5,2.3002
+chalk,54,DR Congo,Uzbekistan,A U2.5,2.6697
+chalk,55,Scotland,Brazil,A U2.5,3.0158
+chalk,56,Morocco,Haiti,H O2.5,3.2852
+chalk,57,Panama,England,A U2.5,3.1084
+chalk,58,Croatia,Ghana,H O2.5,3.2619
+chalk,59,Turkey,United States,H O2.5,2.754
+chalk,60,Paraguay,Australia,A U2.5,2.2278
+chalk,61,Curacao,Ivory Coast,A O2.5,2.9016
+chalk,62,Ecuador,Germany,A U2.5,2.3501
+chalk,63,Tunisia,Netherlands,A U2.5,3.0284
+chalk,64,Japan,Sweden,H U2.5,2.9905
+chalk,65,Cape Verde,Saudi Arabia,A U2.5,2.3484
+chalk,66,Uruguay,Spain,A U2.5,2.9734
+chalk,67,New Zealand,Belgium,A U2.5,3.0318
+chalk,68,Egypt,Iran,A U2.5,2.578
+chalk,69,Norway,France,A U2.5,2.5447
+chalk,70,Senegal,Iraq,H U2.5,2.8165
+chalk,71,Algeria,Austria,A U2.5,2.528
+chalk,72,Jordan,Argentina,A U2.5,3.1721
+moderate_contrarian,1,Mexico,South Africa,H O2.5,3.0552
+moderate_contrarian,2,South Korea,Czechia,H O2.5,3.1096
+moderate_contrarian,3,Ghana,Panama,A U2.5,2.573
+moderate_contrarian,4,Canada,Bosnia and Herzegovina,H U2.5,2.8092
+moderate_contrarian,5,United States,Paraguay,A U2.5,2.5506
+moderate_contrarian,6,England,Ghana,H O2.5,3.3854
+moderate_contrarian,7,Brazil,Morocco,A U2.5,2.1763
+moderate_contrarian,8,Qatar,Switzerland,A U2.5,3.1399
+moderate_contrarian,9,Netherlands,Japan,H U2.5,2.1452
+moderate_contrarian,10,Panama,Croatia,A U2.5,2.8896
+moderate_contrarian,11,Haiti,Scotland,A U2.5,3.0341
+moderate_contrarian,12,Australia,Turkey,D U2.5,2.5525
+moderate_contrarian,13,Germany,Curacao,H O2.5,3.5233
+moderate_contrarian,14,Sweden,Tunisia,H U2.5,2.2407
+moderate_contrarian,15,Spain,Cape Verde,H O2.5,3.8195
+moderate_contrarian,16,Ivory Coast,Ecuador,A U2.5,2.9063
+moderate_contrarian,17,Belgium,Egypt,H U2.5,2.4715
+moderate_contrarian,18,Saudi Arabia,Uruguay,A U2.5,3.0467
+moderate_contrarian,19,Czechia,South Africa,A O2.5,3.0291
+moderate_contrarian,20,Switzerland,Bosnia and Herzegovina,H O2.5,3.3034
+moderate_contrarian,21,Iran,New Zealand,H U2.5,2.5671
+moderate_contrarian,22,Mexico,South Korea,H U2.5,2.3536
+moderate_contrarian,23,France,Senegal,H O2.5,2.7253
+moderate_contrarian,24,Canada,Qatar,H O2.5,3.37
+moderate_contrarian,25,United States,Australia,A U2.5,2.3714
+moderate_contrarian,26,Scotland,Morocco,A U2.5,2.8916
+moderate_contrarian,27,Iraq,Norway,A U2.5,3.0327
+moderate_contrarian,28,Argentina,Algeria,H U2.5,2.9923
+moderate_contrarian,29,Turkey,Paraguay,H U2.5,2.3166
+moderate_contrarian,30,Brazil,Haiti,H O2.5,3.4932
+moderate_contrarian,31,Germany,Ivory Coast,H U2.5,2.8237
+moderate_contrarian,32,Netherlands,Sweden,H O2.5,3.2178
+moderate_contrarian,33,Austria,Jordan,H O2.5,2.8606
+moderate_contrarian,34,Portugal,DR Congo,H O2.5,2.9194
+moderate_contrarian,35,Ecuador,Curacao,H O2.5,3.4355
+moderate_contrarian,36,Tunisia,Japan,A U2.5,3.0892
+moderate_contrarian,37,Belgium,Iran,H O2.5,2.6412
+moderate_contrarian,38,Spain,Saudi Arabia,H O2.5,3.7624
+moderate_contrarian,39,France,Iraq,H O2.5,3.4892
+moderate_contrarian,40,Uzbekistan,Colombia,A U2.5,3.0661
+moderate_contrarian,41,New Zealand,Egypt,A U2.5,2.8796
+moderate_contrarian,42,Uruguay,Cape Verde,H U2.5,2.9021
+moderate_contrarian,43,Norway,Senegal,H O2.5,2.3131
+moderate_contrarian,44,Argentina,Austria,H U2.5,2.8381
+moderate_contrarian,45,Portugal,Uzbekistan,H O2.5,3.1409
+moderate_contrarian,46,England,Croatia,H U2.5,2.5445
+moderate_contrarian,47,Jordan,Algeria,A U2.5,2.741
+moderate_contrarian,48,Colombia,DR Congo,H U2.5,2.8028
+moderate_contrarian,49,South Africa,South Korea,A U2.5,2.7993
+moderate_contrarian,50,Czechia,Mexico,A O2.5,3.0268
+moderate_contrarian,51,Switzerland,Canada,H U2.5,2.5044
+moderate_contrarian,52,Bosnia and Herzegovina,Qatar,H O2.5,2.8742
+moderate_contrarian,53,Colombia,Portugal,A U2.5,2.2342
+moderate_contrarian,54,DR Congo,Uzbekistan,A U2.5,2.6697
+moderate_contrarian,55,Scotland,Brazil,A U2.5,3.0158
+moderate_contrarian,56,Morocco,Haiti,H O2.5,3.2852
+moderate_contrarian,57,Panama,England,A U2.5,3.1084
+moderate_contrarian,58,Croatia,Ghana,H O2.5,3.2619
+moderate_contrarian,59,Turkey,United States,H O2.5,2.754
+moderate_contrarian,60,Paraguay,Australia,H U2.5,2.0724
+moderate_contrarian,61,Curacao,Ivory Coast,A O2.5,2.9016
+moderate_contrarian,62,Ecuador,Germany,H U2.5,2.2463
+moderate_contrarian,63,Tunisia,Netherlands,A U2.5,3.0284
+moderate_contrarian,64,Japan,Sweden,H U2.5,2.9905
+moderate_contrarian,65,Cape Verde,Saudi Arabia,A U2.5,2.3484
+moderate_contrarian,66,Uruguay,Spain,A U2.5,2.9734
+moderate_contrarian,67,New Zealand,Belgium,A U2.5,3.0318
+moderate_contrarian,68,Egypt,Iran,A U2.5,2.578
+moderate_contrarian,69,Norway,France,A U2.5,2.5447
+moderate_contrarian,70,Senegal,Iraq,H U2.5,2.8165
+moderate_contrarian,71,Algeria,Austria,A U2.5,2.528
+moderate_contrarian,72,Jordan,Argentina,A U2.5,3.1721
+high_variance,1,Mexico,South Africa,H O2.5,3.0552
+high_variance,2,South Korea,Czechia,H O2.5,3.1096
+high_variance,3,Ghana,Panama,D U2.5,2.402
+high_variance,4,Canada,Bosnia and Herzegovina,H U2.5,2.8092
+high_variance,5,United States,Paraguay,A U2.5,2.5506
+high_variance,6,England,Ghana,H O2.5,3.3854
+high_variance,7,Brazil,Morocco,A U2.5,2.1763
+high_variance,8,Qatar,Switzerland,A U2.5,3.1399
+high_variance,9,Netherlands,Japan,H U2.5,2.1452
+high_variance,10,Panama,Croatia,A U2.5,2.8896
+high_variance,11,Haiti,Scotland,A U2.5,3.0341
+high_variance,12,Australia,Turkey,D U2.5,2.5525
+high_variance,13,Germany,Curacao,H O2.5,3.5233
+high_variance,14,Sweden,Tunisia,A U2.5,2.0757
+high_variance,15,Spain,Cape Verde,H O2.5,3.8195
+high_variance,16,Ivory Coast,Ecuador,A U2.5,2.9063
+high_variance,17,Belgium,Egypt,H U2.5,2.4715
+high_variance,18,Saudi Arabia,Uruguay,A U2.5,3.0467
+high_variance,19,Czechia,South Africa,A O2.5,3.0291
+high_variance,20,Switzerland,Bosnia and Herzegovina,H O2.5,3.3034
+high_variance,21,Iran,New Zealand,H U2.5,2.5671
+high_variance,22,Mexico,South Korea,H U2.5,2.3536
+high_variance,23,France,Senegal,H O2.5,2.7253
+high_variance,24,Canada,Qatar,H O2.5,3.37
+high_variance,25,United States,Australia,A U2.5,2.3714
+high_variance,26,Scotland,Morocco,A U2.5,2.8916
+high_variance,27,Iraq,Norway,A U2.5,3.0327
+high_variance,28,Argentina,Algeria,H U2.5,2.9923
+high_variance,29,Turkey,Paraguay,A U2.5,2.1564
+high_variance,30,Brazil,Haiti,H O2.5,3.4932
+high_variance,31,Germany,Ivory Coast,H U2.5,2.8237
+high_variance,32,Netherlands,Sweden,H O2.5,3.2178
+high_variance,33,Austria,Jordan,H O2.5,2.8606
+high_variance,34,Portugal,DR Congo,H O2.5,2.9194
+high_variance,35,Ecuador,Curacao,H O2.5,3.4355
+high_variance,36,Tunisia,Japan,A U2.5,3.0892
+high_variance,37,Belgium,Iran,H O2.5,2.6412
+high_variance,38,Spain,Saudi Arabia,H O2.5,3.7624
+high_variance,39,France,Iraq,H O2.5,3.4892
+high_variance,40,Uzbekistan,Colombia,A U2.5,3.0661
+high_variance,41,New Zealand,Egypt,A U2.5,2.8796
+high_variance,42,Uruguay,Cape Verde,H U2.5,2.9021
+high_variance,43,Norway,Senegal,H O2.5,2.3131
+high_variance,44,Argentina,Austria,H U2.5,2.8381
+high_variance,45,Portugal,Uzbekistan,H O2.5,3.1409
+high_variance,46,England,Croatia,H U2.5,2.5445
+high_variance,47,Jordan,Algeria,A U2.5,2.741
+high_variance,48,Colombia,DR Congo,H U2.5,2.8028
+high_variance,49,South Africa,South Korea,A U2.5,2.7993
+high_variance,50,Czechia,Mexico,A O2.5,3.0268
+high_variance,51,Switzerland,Canada,H U2.5,2.5044
+high_variance,52,Bosnia and Herzegovina,Qatar,H O2.5,2.8742
+high_variance,53,Colombia,Portugal,A U2.5,2.2342
+high_variance,54,DR Congo,Uzbekistan,A U2.5,2.6697
+high_variance,55,Scotland,Brazil,A U2.5,3.0158
+high_variance,56,Morocco,Haiti,H O2.5,3.2852
+high_variance,57,Panama,England,A U2.5,3.1084
+high_variance,58,Croatia,Ghana,H O2.5,3.2619
+high_variance,59,Turkey,United States,H O2.5,2.754
+high_variance,60,Paraguay,Australia,H U2.5,2.0724
+high_variance,61,Curacao,Ivory Coast,A O2.5,2.9016
+high_variance,62,Ecuador,Germany,H U2.5,2.2463
+high_variance,63,Tunisia,Netherlands,A U2.5,3.0284
+high_variance,64,Japan,Sweden,H U2.5,2.9905
+high_variance,65,Cape Verde,Saudi Arabia,H U2.5,2.1804
+high_variance,66,Uruguay,Spain,A U2.5,2.9734
+high_variance,67,New Zealand,Belgium,A U2.5,3.0318
+high_variance,68,Egypt,Iran,A U2.5,2.578
+high_variance,69,Norway,France,A U2.5,2.5447
+high_variance,70,Senegal,Iraq,H U2.5,2.8165
+high_variance,71,Algeria,Austria,D U2.5,2.3252
+high_variance,72,Jordan,Argentina,A U2.5,3.1721

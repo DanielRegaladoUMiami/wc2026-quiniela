@@ -35,6 +35,32 @@ def _round_slots(round_name: str) -> int:
     return {"R32": 32, "R16": 16, "QF": 8, "SF": 4, "F": 2, "W": 1}[round_name]
 
 
+# The simulator names cumulative reach-probabilities by the round *won*
+# (p_R32_win = P(win the R32 tie) = P(reach R16)); this optimizer keys columns
+# by the round *reached*. Same quantities, shifted names.
+SIM_TO_BRACKET_COLS = {
+    "p_advance_group": "p_advance",
+    "p_R32_win": "p_R16",
+    "p_R16_win": "p_QF",
+    "p_QF_win": "p_SF",
+    "p_SF_win": "p_final",
+}
+
+
+def normalize_advancement(advancement: pd.DataFrame) -> pd.DataFrame:
+    """Accept either the simulator's advancement schema or this module's.
+
+    Renames sim columns onto the bracket contract, but only where the target
+    name is absent, so already-conforming frames pass through unchanged.
+    """
+    renames = {
+        src: dst
+        for src, dst in SIM_TO_BRACKET_COLS.items()
+        if src in advancement.columns and dst not in advancement.columns
+    }
+    return advancement.rename(columns=renames) if renames else advancement
+
+
 def pick_bracket(
     advancement: pd.DataFrame,
     rubric: Rubric,
@@ -45,12 +71,15 @@ def pick_bracket(
 
     `advancement` columns required:
         team, p_R16, p_QF, p_SF, p_final, p_champion  (subset OK if rubric matches)
+        The simulator's schema (p_advance_group, p_R32_win, …) is also accepted
+        and normalized via `normalize_advancement`.
     `public_picks`:  optional DataFrame with columns team, public_p_champion (used
         as a proxy for ownership in every late round).
     """
     if rubric.type != "knockout_bracket":
         raise ValueError("pick_bracket requires a knockout_bracket rubric")
 
+    advancement = normalize_advancement(advancement)
     rounds = rubric.config["rounds"]
     pub_by_team: dict[str, float] = {}
     if public_picks is not None and "public_p_champion" in public_picks.columns:
