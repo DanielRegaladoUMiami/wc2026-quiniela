@@ -100,9 +100,18 @@ make data
 
 pytest
 
+# generate the quiniela deliverable from the latest tracked sim run —
+# 3 pool entries (chalk / moderate / high-variance) + bracket picks,
+# written to data/picks/<sim_run>/{quiniela.md, quiniela.json, entries.csv}
+make quiniela
+
 # launch local dashboard (later)
 gradio web/app.py
 ```
+
+The picks artifact stamps its own provenance: which sim run it came from, whether it was
+anchored to a de-vigged market snapshot, and every caveat that applies. If
+`market_anchored` is `false` in `quiniela.json`, the picks are model-only.
 
 ## Methodology
 

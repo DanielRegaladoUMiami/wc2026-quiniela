@@ -1,15 +1,15 @@
-.PHONY: help install data data-refresh features train sim web live-update test lint format clean
+.PHONY: help install data data-refresh features train sim quiniela web test lint format clean
 
 help:
 	@echo "Available targets:"
 	@echo "  install      - sync uv environment with dev extras"
 	@echo "  data         - fetch all raw data + build unified match log"
-	@echo "  data-refresh - re-fetch volatile sources (Elo, FIFA, Kalshi, Wikipedia)"
+	@echo "  data-refresh - re-fetch volatile sources (Elo, odds, Kalshi, Wikipedia)"
 	@echo "  features     - build feature store from raw data"
-	@echo "  train        - fit all models (Dixon-Coles, Bayesian, LightGBM, stacker)"
-	@echo "  sim          - run Monte Carlo bracket (50k sims)"
+	@echo "  train        - regenerate OOF predictions + fit the stacker"
+	@echo "  sim          - full prediction pipeline + Monte Carlo bracket (50k sims)"
+	@echo "  quiniela     - generate pool entries + bracket picks from the latest sim run"
 	@echo "  web          - launch Gradio app locally"
-	@echo "  live-update  - end-to-end live pipeline (post-match)"
 	@echo "  test         - run pytest"
 	@echo "  lint         - ruff check + mypy"
 	@echo "  format       - ruff format"
@@ -19,50 +19,46 @@ install:
 	uv sync --extra dev
 
 data:
-	python -m src.data.fetch_kaggle_martj42
-	python -m src.data.fetch_rsssf
-	python -m src.data.fetch_elo
-	python -m src.data.fetch_fifa_ranking
-	python -m src.data.fetch_statsbomb
-	python -m src.data.fetch_transfermarkt
-	python -m src.data.fetch_wikipedia_squads
-	python -m src.data.fetch_kalshi
-	python -m src.data.build_match_log
+	uv run python -m src.data.fetch_kaggle_martj42
+	uv run python -m src.data.fetch_elo
+	uv run python -m src.data.fetch_statsbomb
+	uv run python -m src.data.fetch_transfermarkt
+	uv run python -m src.data.fetch_wiki_squads
+	uv run python -m src.data.fetch_kalshi_markets
+	uv run python -m src.data.build_match_log
 
 data-refresh:
-	python -m src.data.fetch_elo
-	python -m src.data.fetch_fifa_ranking
-	python -m src.data.fetch_kalshi
-	python -m src.data.fetch_wikipedia_squads
-	python -m src.data.build_match_log
+	uv run python -m src.data.fetch_elo
+	uv run python -m src.data.fetch_espn_odds
+	uv run python -m src.data.fetch_kalshi_markets
+	uv run python -m src.data.fetch_wiki_squads
+	uv run python -m src.data.build_match_log
 
 features:
-	python -m src.features.build_table
+	uv run python -m src.features.build_table
 
 train:
-	python -m src.models.dixon_coles --fit
-	python -m src.models.bayesian --fit
-	python -m src.models.gbm --fit
-	python -m src.models.stacker --fit
+	uv run python -m src.eval.generate_oof
+	uv run python -m src.models.train_stacker
 
 sim:
-	python -m src.sims.tournament --n 50000 --fixtures wc2026
+	uv run python -m src.predict_wc2026 --n 50000
+
+quiniela:
+	uv run python -m src.strategy.make_quiniela
 
 web:
-	gradio web/app.py
-
-live-update:
-	python -m src.live.update_loop
+	uv run gradio web/app.py
 
 test:
-	pytest -ra
+	uv run pytest -ra
 
 lint:
-	ruff check src tests
-	mypy src
+	uv run ruff check src tests
+	uv run mypy src
 
 format:
-	ruff format src tests web
+	uv run ruff format src tests web
 
 clean:
 	rm -rf .pytest_cache .ruff_cache .mypy_cache .coverage htmlcov build dist

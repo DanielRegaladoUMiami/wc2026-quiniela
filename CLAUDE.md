@@ -56,13 +56,14 @@ These are real and verified — do not assume the repo is clean:
 - **Data is stale**: last played match is 2026-03-31; the June pre-WC window must be re-pulled.
 - **No sharp market on disk**: Kalshi snapshot is the wrong (novelty) market; Pinnacle empty.
   The market anchor + devig + **CLV** are the highest-EV work. Odds via the-odds-api.com.
-- **Served stacker uses `IdentityCalibrator`** (real calibrators are computed then discarded).
+- **Committed `stacker.pkl` predates the calibrator fix**: `train_stacker` now ships real
+  Platt calibrators (no more `IdentityCalibrator`), but retraining needs
+  `data/processed/oof_predictions.parquet` regenerated first (`make train`).
 - **Bayesian joint is independent-Poisson** (only Dixon-Coles is correlated) → misprices
-  draws / correct-score / BTTS / totals. Apply DC `tau` before the sim.
-- **Makefile targets drift from real module names** (`fetch_kalshi`→`fetch_kalshi_markets`,
-  `fetch_wikipedia_squads`→`fetch_wiki_squads`; `fetch_rsssf`/`fetch_fifa_ranking`/
-  `src.live.update_loop` don't exist). Use real module names; fix the Makefile when touched.
-- **sim→optimizer schema mismatch** breaks the bracket optimizer (only champion slot fills).
+  draws / correct-score / BTTS / totals inside the sim. The picks layer is immune:
+  `src.models.dc_joint` rebuilds DC-tau joints from the blended 1X2.
+- ~~Makefile module-name drift~~ and ~~sim→optimizer schema mismatch~~ — **fixed** (June 2026).
+  The quiniela deliverable is `make quiniela` → `data/picks/<sim_run>/`.
 - Availability (`data/manual/injuries.csv`, `lineups_predicted.csv`) are empty stubs.
 
 ## Commands
@@ -73,6 +74,7 @@ uv run ruff check src tests && uv run ruff format --check src tests   # lint (CI
 uv run pytest -ra                            # tests
 uv run python -m src.data.build_match_log    # rebuild unified match log
 uv run python -m src.sims.tournament --n 50000 --fixtures wc2026      # Monte Carlo bracket
+uv run python -m src.strategy.make_quiniela  # picks deliverable → data/picks/<sim_run>/
 uv run gradio web/app.py                     # local dashboard
 ```
 

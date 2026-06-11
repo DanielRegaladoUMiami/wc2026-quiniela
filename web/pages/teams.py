@@ -41,8 +41,8 @@ def _render_cards(df: pd.DataFrame, conf_filter: str = "All") -> str:
         best = r.get("best_wc", "")
         p_ch = r.get("p_champion")
         p_adv = r.get("p_advance_group")
-        p_ch_pct = f"{p_ch*100:.1f}%" if pd.notna(p_ch) else "—"
-        p_adv_pct = f"{p_adv*100:.0f}%" if pd.notna(p_adv) else "—"
+        p_ch_pct = f"{p_ch * 100:.1f}%" if pd.notna(p_ch) else "—"
+        p_adv_pct = f"{p_adv * 100:.0f}%" if pd.notna(p_adv) else "—"
         rank_str = f"#{int(rank)}" if pd.notna(rank) else "—"
         cards.append(f"""
 <div style="background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%); border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); transition: transform 0.15s, box-shadow 0.15s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.04)';">

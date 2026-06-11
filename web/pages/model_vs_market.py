@@ -9,9 +9,11 @@ from web.components import PALETTE, backtest
 
 
 def _rps_row(p_home: float, p_draw: float, p_away: float, outcome: int) -> float:
-    o = np.zeros(3); o[int(outcome)] = 1.0
+    o = np.zeros(3)
+    o[int(outcome)] = 1.0
     p = np.array([p_home, p_draw, p_away])
-    c_p = np.cumsum(p); c_o = np.cumsum(o)
+    c_p = np.cumsum(p)
+    c_o = np.cumsum(o)
     return float(np.mean((c_p - c_o) ** 2))
 
 
@@ -32,20 +34,35 @@ def _line(wc22: pd.DataFrame | None, eu24: pd.DataFrame | None) -> go.Figure:
     fig = go.Figure()
     if wc22 is not None:
         d = _enrich(wc22)
-        fig.add_scatter(x=list(range(1, len(d) + 1)), y=d["cum_ll"],
-                        mode="lines+markers", name="WC 2022",
-                        line=dict(color=PALETTE["primary"], width=2))
+        fig.add_scatter(
+            x=list(range(1, len(d) + 1)),
+            y=d["cum_ll"],
+            mode="lines+markers",
+            name="WC 2022",
+            line=dict(color=PALETTE["primary"], width=2),
+        )
     if eu24 is not None:
         d = _enrich(eu24)
-        fig.add_scatter(x=list(range(1, len(d) + 1)), y=d["cum_ll"],
-                        mode="lines+markers", name="Euro 2024",
-                        line=dict(color=PALETTE["accent"], width=2))
-    fig.add_hline(y=0.21, line_dash="dash", line_color=PALETTE["muted"],
-                  annotation_text="Bookmaker closing ≈ 0.21 RPS", annotation_position="top right")
+        fig.add_scatter(
+            x=list(range(1, len(d) + 1)),
+            y=d["cum_ll"],
+            mode="lines+markers",
+            name="Euro 2024",
+            line=dict(color=PALETTE["accent"], width=2),
+        )
+    fig.add_hline(
+        y=0.21,
+        line_dash="dash",
+        line_color=PALETTE["muted"],
+        annotation_text="Bookmaker closing ≈ 0.21 RPS",
+        annotation_position="top right",
+    )
     fig.update_layout(
-        template="plotly_white", height=420,
+        template="plotly_white",
+        height=420,
         title="Cumulative log-loss across backtests (lower is better)",
-        xaxis_title="Match #", yaxis_title="Mean log-loss",
+        xaxis_title="Match #",
+        yaxis_title="Mean log-loss",
         margin=dict(l=10, r=10, t=50, b=10),
     )
     return fig

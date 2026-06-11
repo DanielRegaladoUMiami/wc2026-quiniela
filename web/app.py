@@ -1,4 +1,5 @@
 """FIFA World Cup 2026 — Gradio dashboard."""
+
 from __future__ import annotations
 
 import sys

@@ -1,4 +1,5 @@
 """Shared helpers for the WC2026 Gradio dashboard."""
+
 from __future__ import annotations
 
 import functools

@@ -17,21 +17,39 @@ from web.components import (
 
 
 def _bar_fig(rows: pd.DataFrame) -> go.Figure:
-    labels = [f"{r.home} vs {r.away}<br><sub>{r.date_str} • {r.venue}</sub>"
-              for r in rows.itertuples()]
+    labels = [
+        f"{r.home} vs {r.away}<br><sub>{r.date_str} • {r.venue}</sub>" for r in rows.itertuples()
+    ]
     fig = go.Figure()
-    fig.add_bar(name="Home", y=labels, x=rows.p_home_win, orientation="h",
-                marker_color=PALETTE["home"],
-                hovertemplate="%{y}<br>P(home win)=%{x:.1%}<extra></extra>")
-    fig.add_bar(name="Draw", y=labels, x=rows.p_draw, orientation="h",
-                marker_color=PALETTE["draw"],
-                hovertemplate="%{y}<br>P(draw)=%{x:.1%}<extra></extra>")
-    fig.add_bar(name="Away", y=labels, x=rows.p_away_win, orientation="h",
-                marker_color=PALETTE["away"],
-                hovertemplate="%{y}<br>P(away win)=%{x:.1%}<extra></extra>")
+    fig.add_bar(
+        name="Home",
+        y=labels,
+        x=rows.p_home_win,
+        orientation="h",
+        marker_color=PALETTE["home"],
+        hovertemplate="%{y}<br>P(home win)=%{x:.1%}<extra></extra>",
+    )
+    fig.add_bar(
+        name="Draw",
+        y=labels,
+        x=rows.p_draw,
+        orientation="h",
+        marker_color=PALETTE["draw"],
+        hovertemplate="%{y}<br>P(draw)=%{x:.1%}<extra></extra>",
+    )
+    fig.add_bar(
+        name="Away",
+        y=labels,
+        x=rows.p_away_win,
+        orientation="h",
+        marker_color=PALETTE["away"],
+        hovertemplate="%{y}<br>P(away win)=%{x:.1%}<extra></extra>",
+    )
     fig.update_layout(
-        barmode="stack", template="plotly_white",
-        height=80 + 70 * len(rows), margin=dict(l=10, r=10, t=30, b=10),
+        barmode="stack",
+        template="plotly_white",
+        height=80 + 70 * len(rows),
+        margin=dict(l=10, r=10, t=30, b=10),
         legend=dict(orientation="h", y=1.08, x=0.5, xanchor="center"),
         xaxis=dict(tickformat=".0%", range=[0, 1], showgrid=False),
         yaxis=dict(showgrid=False, autorange="reversed"),
@@ -40,30 +58,41 @@ def _bar_fig(rows: pd.DataFrame) -> go.Figure:
 
 
 def _picks_table(rows: pd.DataFrame) -> pd.DataFrame:
-    out = pd.DataFrame({
-        "Match": [f"{r.home} vs {r.away}" for r in rows.itertuples()],
-        "Date": rows.date_str.values,
-        "Venue": rows.venue.values,
-        "1X2 pick": [
-            ("Home " + r.home) if r.p_home_win == max(r.p_home_win, r.p_draw, r.p_away_win)
-            else ("Draw" if r.p_draw >= r.p_away_win else f"Away {r.away}")
-            for r in rows.itertuples()
-        ],
-        "Confidence": [f"{max(r.p_home_win, r.p_draw, r.p_away_win):.0%}" for r in rows.itertuples()],
-        "Exact score": [
-            f"{round(r.expected_home_goals)}-{round(r.expected_away_goals)}"
-            for r in rows.itertuples()
-        ],
-        "xG": [f"{r.expected_home_goals:.2f} – {r.expected_away_goals:.2f}" for r in rows.itertuples()],
-    })
+    out = pd.DataFrame(
+        {
+            "Match": [f"{r.home} vs {r.away}" for r in rows.itertuples()],
+            "Date": rows.date_str.values,
+            "Venue": rows.venue.values,
+            "1X2 pick": [
+                ("Home " + r.home)
+                if r.p_home_win == max(r.p_home_win, r.p_draw, r.p_away_win)
+                else ("Draw" if r.p_draw >= r.p_away_win else f"Away {r.away}")
+                for r in rows.itertuples()
+            ],
+            "Confidence": [
+                f"{max(r.p_home_win, r.p_draw, r.p_away_win):.0%}" for r in rows.itertuples()
+            ],
+            "Exact score": [
+                f"{round(r.expected_home_goals)}-{round(r.expected_away_goals)}"
+                for r in rows.itertuples()
+            ],
+            "xG": [
+                f"{r.expected_home_goals:.2f} – {r.expected_away_goals:.2f}"
+                for r in rows.itertuples()
+            ],
+        }
+    )
     return out
 
 
 def build_page() -> None:
     today = date.today()
     days_to = (TOURNAMENT_START - today).days
-    countdown = (f"Tournament starts in **{days_to} days** "
-                 f"({TOURNAMENT_START.isoformat()})") if days_to > 0 else "**Tournament live**"
+    countdown = (
+        (f"Tournament starts in **{days_to} days** ({TOURNAMENT_START.isoformat()})")
+        if days_to > 0
+        else "**Tournament live**"
+    )
 
     gr.Markdown(
         f"""
