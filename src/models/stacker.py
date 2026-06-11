@@ -23,7 +23,11 @@ from sklearn.linear_model import LogisticRegression
 
 
 class IdentityCalibrator:
-    """No-op calibrator that exposes a sklearn-like predict_proba on a single feature."""
+    """No-op calibrator that exposes a sklearn-like predict_proba on a single feature.
+
+    No longer shipped by `train_stacker` (real Platt calibrators are saved now);
+    kept so legacy `stacker.pkl` artifacts still unpickle.
+    """
 
     def predict_proba(self, x: np.ndarray) -> np.ndarray:
         p = np.asarray(x).reshape(-1)

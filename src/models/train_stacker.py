@@ -5,13 +5,19 @@ Strategy:
   2. Build feature matrix X = concat of 9 columns; y = outcome.
   3. Time-based split: train on older tournaments, validate on newer.
   4. Fit `LogisticRegression(multi_class='multinomial')` with C=1.0.
-  5. Calibrate output per class with IsotonicRegression on validation.
+  5. Calibrate output per class with sigmoid (Platt) on the validation fold —
+     isotonic needs more OOF rows than we have.
   6. Save the trained Stacker via `src.models.stacker.save`.
+
+The SHIPPED artifact is exactly the configuration evaluated on validation:
+train-fold meta + val-fold Platt calibrators. The meta deliberately does NOT
+refit on all OOF rows — that would leave no held-out fold to calibrate on
+without leakage, which is how the old IdentityCalibrator bug happened.
 
 Reports RPS / log-loss on:
   - simple average baseline
   - logistic blend (no calibration)
-  - logistic blend + isotonic
+  - logistic blend + sigmoid (= the shipped stacker)
 """
 
 from __future__ import annotations
@@ -24,7 +30,7 @@ import polars as pl
 from sklearn.linear_model import LogisticRegression
 
 from src.eval.rps import log_loss_1x2, mean_rps
-from src.models.stacker import IdentityCalibrator, Stacker
+from src.models.stacker import Stacker
 from src.models.stacker import save as save_stacker
 
 BASE_COLS = [
@@ -108,21 +114,16 @@ def main() -> int:
     cal_va /= cal_va.sum(axis=1, keepdims=True)
     _evaluate("logistic stack + sigmoid", cal_va, y_va)
 
-    print("\n=== Final fit on ALL OOF (no calibration — limited OOF for isotonic) ===")
-    X_all, y_all, _ = _to_matrix(df)
-    lr_final = LogisticRegression(C=1.0, max_iter=2000)
-    lr_final.fit(X_all, y_all)
-    cals_final = [IdentityCalibrator() for _ in range(3)]
-
     print("\nLogReg weights (sign + magnitude per (input, output class)):")
     print(
         pd.DataFrame(lr.coef_, columns=BASE_COLS, index=["home_win", "draw", "away_win"]).round(2)
     )
 
+    print("\n=== Shipping train-fold meta + val-fold Platt calibrators ===")
     stacker = Stacker(
         base_names=["dc", "gbm", "bay"],
-        meta=lr_final,
-        calibrators=cals_final,
+        meta=lr,
+        calibrators=sig_cals,
     )
     out = Path("data/models/stacker.pkl")
     save_stacker(stacker, out)
